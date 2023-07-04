@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/star_system_schema.json",
+  "canEnterViaWarpDrive": true,
+  "startHere": false,
+  "mapRestricted": false,
+  "Skybox": {
+    "destroyStarField": false,
+    "useCube": true,
+    "rightPath": "systems/sky.png",
+    "leftPath": "systems/sky.png",
+    "topPath": "systems/sky.png",
+    "bottomPath": "systems/sky.png",
+    "frontPath": "systems/sky.png",
+    "backPath": "systems/sky.png"
+  }
+}

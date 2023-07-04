@@ -1,0 +1,57 @@
+{
+	"$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
+	"name": "Core",
+	"starSystem": "Trifid.QuasarProject",
+	"Base": {
+		"surfaceGravity": 4750,
+		"surfaceSize": 2000,
+		"hasMapMarker": false,
+		"gravityFallOff": "inverseSquared",
+		"centerOfSolarSystem": true
+	},
+	"Orbit": {
+		"isStatic": true
+	},
+	"Star": {
+		"size": 1,
+		"tint": {
+			"r": 0,
+			"g": 0,
+			"b": 0,
+			"a": 255
+		},
+		"solarLuminosity": 1.5,
+		"lightRadius": 100000,
+		"lightTint": {
+			"r": 238,
+			"g": 162,
+			"b": 58,
+			"a": 255
+		},
+		"stellarDeathType": "none",
+		"hasAtmosphere": false
+	},
+	"Props": {
+		"singularities": [
+			{
+				"type": "blackHole",
+				"horizonRadius": 2000,
+				"distortRadius": 4000,
+				"renderQueueOverride": 3500
+			}
+		],
+		"details": [
+			{
+				"assetBundle": "planets/trifid_quasarproject",
+				"path": "Assets/Quasar/tests/accretiondisktest.prefab",
+				"scale": 50000,
+				"rotation": {
+					"x": 45,
+					"y": 0,
+					"z": 0
+				},
+				"keepLoaded": true
+			}
+		]
+	}
+}

@@ -1,0 +1,44 @@
+ManifestFileVersion: 0
+CRC: 904516509
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fa8696bef84a52fe2ad6e21ee31c1798
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 225077d44bdd85bc779d4cae619d1b56
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fbb2498122f7e23a2e87544333cb528f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c1e03d384261f6f301ef6513a478c3a8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7e26fe096438ebdcab107a6aed898ce0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cfd736a3952486c93e9a5d8f58c79c3, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Quasar/tests/accretiondisktest.prefab
+- Assets/Quasar/tests/ringtest1.prefab
+Dependencies: []

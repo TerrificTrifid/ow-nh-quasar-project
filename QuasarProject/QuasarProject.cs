@@ -26,6 +26,13 @@ namespace QuasarProject
             {
                 if (loadScene != OWScene.SolarSystem) return;
                 ModHelper.Console.WriteLine("Loaded into solar system!", MessageType.Success);
+
+                ModHelper.Events.Unity.FireOnNextUpdate(() => {
+
+                    // fix dumb ship gravity
+                    Locator.GetShipTransform().Find("Volumes/ShipGravityVolume").GetComponent<ShipDirectionalForceVolume>()._insideSpeedLimiter = true;
+
+                });
             };
         }
     }

@@ -1,0 +1,56 @@
+{
+	"$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
+	"name": "Ring",
+	"starSystem": "Trifid.QuasarProject",
+	"Base": {
+		"surfaceGravity": 0,
+		"surfaceSize": 1,
+		"hasMapMarker": false,
+		"invulnerableToSun": true
+	},
+	"Spawn": {
+		"playerSpawn": {
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": -20350
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"startWithSuit": true
+		},
+		"shipSpawn": {
+			"position": {
+				"x": 50,
+				"y": 0,
+				"z": -20350
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			}
+		}
+	},
+	"Orbit": {
+		"isStatic": true,
+		"siderealPeriod": 2
+	},
+	"Props": {
+		"details": [
+			{
+				"assetBundle": "planets/trifid_quasarproject",
+				"path": "Assets/Quasar/tests/ringtest1.prefab",
+				"keepLoaded": true,
+				"rotation": {
+					"x": 90,
+					"y": 0,
+					"z": 0
+				}
+			}
+		]
+	}
+}
