@@ -8,6 +8,9 @@
 		"hasMapMarker": false,
 		"invulnerableToSun": true
 	},
+	"ReferenceFrame": {
+		"enabled": false
+	},
 	"Spawn": {
 		"playerSpawn": {
 			"position": {
@@ -36,8 +39,7 @@
 		}
 	},
 	"Orbit": {
-		"isStatic": true,
-		"siderealPeriod": 2
+		"isStatic": true
 	},
 	"Props": {
 		"details": [

@@ -4,13 +4,18 @@
 	"starSystem": "Trifid.QuasarProject",
 	"Base": {
 		"surfaceGravity": 4750,
+		"soiOverride": 15000,
 		"surfaceSize": 2000,
 		"hasMapMarker": false,
 		"gravityFallOff": "inverseSquared",
 		"centerOfSolarSystem": true
 	},
+	"ReferenceFrame": {
+		"enabled": false
+	},
 	"Orbit": {
-		"isStatic": true
+		"isStatic": true,
+		"siderealPeriod": -2
 	},
 	"Star": {
 		"size": 1,
