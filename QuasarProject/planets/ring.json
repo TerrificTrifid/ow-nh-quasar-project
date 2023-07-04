@@ -11,9 +11,9 @@
 	"Spawn": {
 		"playerSpawn": {
 			"position": {
-				"x": 0,
-				"y": 0,
-				"z": -20350
+				"x": 60.93604,
+				"y": -9.557279,
+				"z": -20360.01
 			},
 			"rotation": {
 				"x": 0,
@@ -49,6 +49,16 @@
 					"x": 90,
 					"y": 0,
 					"z": 0
+				}
+			},
+			{
+				"assetBundle": "planets/trifid_quasarproject",
+				"path": "Assets/Quasar/tests/HamsterBall.prefab",
+				"parentPath": "ringtest1",
+				"position": {
+					"x": 60.93604,
+					"y": -9.557279,
+					"z": -20360.01
 				}
 			}
 		]

@@ -1,5 +1,7 @@
 ﻿<Project>
   <PropertyGroup>
     <OutputPath>$(AppData)\OuterWildsModManager\OWML\Mods\Trifid.QuasarProject</OutputPath>
+    <PostBuildEvent>xcopy /y "$(OutputPath)/QuasarProject.dll" "D:\Documents\ow-nh-qp-unity-assets\Assets\Dlls"</PostBuildEvent>
   </PropertyGroup>
+  
 </Project>
