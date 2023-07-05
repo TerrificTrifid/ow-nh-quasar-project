@@ -6,7 +6,7 @@ namespace QuasarProject
 {
     // using vision torch item for reference
     [UsedInUnityProject]
-    public class HamsterBall : OWItem
+    public class HamsterBallItem : OWItem
     {
         public override string GetDisplayName()
         {
