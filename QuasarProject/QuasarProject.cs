@@ -31,6 +31,7 @@ namespace QuasarProject
                 ModHelper.Events.Unity.FireOnNextUpdate(() =>
                 {
                     // TODO add hamster ball to player
+                    Locator.GetPlayerBody().gameObject.AddComponent<HamsterBallController>();
                 });
             };
         }
