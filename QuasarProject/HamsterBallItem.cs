@@ -4,7 +4,13 @@ using UnityEngine;
 
 namespace QuasarProject
 {
-    // using vision torch item for reference
+    /// <summary>
+    /// controls the hamster ball
+    /// 
+    /// using vision torch item for reference
+    ///
+    /// TODO: button prompts. where is this done in base game? its not on the item.
+    /// </summary>
     [UsedInUnityProject]
     public class HamsterBallItem : OWItem
     {
@@ -35,21 +41,26 @@ namespace QuasarProject
         {
             base.DropItem(position, normal, parent, sector, customDropTarget);
             enabled = false;
+            HamsterBallController.Instance.SetActive(false);
         }
 
         public override void SocketItem(Transform socketTransform, Sector sector)
         {
             base.SocketItem(socketTransform, sector);
             enabled = false;
+            HamsterBallController.Instance.SetActive(false);
+        }
+
+        public override bool CheckIsDroppable()
+        {
+            return !HamsterBallController.Instance.IsActive();
         }
 
         private void Update()
         {
             if (OWInput.IsNewlyPressed(InputLibrary.toolActionPrimary, InputMode.Character))
             {
-                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
-                // test
-                Locator.GetPlayerBody().AddForce(Locator.GetPlayerBody().GetVelocity() * 1000f);
+                HamsterBallController.Instance.SetActive(!HamsterBallController.Instance.IsActive());
             }
         }
     }
