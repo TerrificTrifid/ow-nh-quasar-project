@@ -1,4 +1,5 @@
-﻿using OWML.Common;
+﻿using NewHorizons;
+using OWML.Common;
 using OWML.ModHelper;
 
 namespace QuasarProject

@@ -1,10 +1,8 @@
-using OWML.Common;
-using OWML.ModHelper;
-using System;
-using System.Runtime.CompilerServices;
+using NewHorizons;
 
 namespace QuasarProject
 {
+    [UsedInUnityProject]
     public class HamsterBall : OWItem
     {
         public override string GetDisplayName()
