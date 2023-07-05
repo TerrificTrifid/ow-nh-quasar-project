@@ -1,4 +1,5 @@
 using NewHorizons;
+using NewHorizons.Handlers;
 
 namespace QuasarProject
 {
@@ -7,7 +8,7 @@ namespace QuasarProject
     {
         public override string GetDisplayName()
         {
-            return "Hamster Ball";
+            return TranslationHandler.GetTranslation("Hamster Ball", TranslationHandler.TextType.UI);
         }
         public HamsterBall() {
             

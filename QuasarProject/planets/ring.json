@@ -4,6 +4,7 @@
 	"starSystem": "Trifid.QuasarProject",
 	"Base": {
 		"surfaceGravity": 0,
+		"soiOverride": 22000,
 		"surfaceSize": 1,
 		"hasMapMarker": false,
 		"invulnerableToSun": true
