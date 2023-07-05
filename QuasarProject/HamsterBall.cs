@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace QuasarProject
 {
+    // using vision torch item for reference
     [UsedInUnityProject]
     public class HamsterBall : OWItem
     {
@@ -12,43 +13,44 @@ namespace QuasarProject
             return TranslationHandler.GetTranslation("Hamster Ball", TranslationHandler.TextType.UI);
         }
 
-        public HamsterBall()
+        public override void Awake()
         {
-            this.onPickedUp += new OWEvent<OWItem>.OWCallback(this.OnPickup);
-
-            //blocks scout launcher
-            this._type = ItemType.VisionTorch;
+            // prevents scout equip
+            _type = ItemType.VisionTorch;
+            base.Awake();
         }
 
-        private void OnPickup(OWItem instance)
+        private void Start()
         {
-            base.enabled = true;
-            Locator.GetToolModeSwapper().EquipToolMode(ToolMode.Item);
+            enabled = false;
+        }
+
+        public override void PickUpItem(Transform holdTranform)
+        {
+            base.PickUpItem(holdTranform);
+            enabled = true;
         }
 
         public override void DropItem(Vector3 position, Vector3 normal, Transform parent, Sector sector, IItemDropTarget customDropTarget)
         {
             base.DropItem(position, normal, parent, sector, customDropTarget);
-            base.enabled = false;
-            Locator.GetToolModeSwapper().EquipToolMode(ToolMode.None);
+            enabled = false;
+        }
+
+        public override void SocketItem(Transform socketTransform, Sector sector)
+        {
+            base.SocketItem(socketTransform, sector);
+            enabled = false;
         }
 
         private void Update()
-
         {
-            bool canbeused = Locator.GetToolModeSwapper().IsInToolMode(ToolMode.Item);
-            this.wasUsing = this.Using;
-            this.Using = (OWInput.IsPressed(InputLibrary.toolActionPrimary, InputMode.Character, 0f));
-
-            if (this.Using && !this.wasUsing && canbeused)
+            if (OWInput.IsNewlyPressed(InputLibrary.toolActionPrimary, InputMode.Character))
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
-                Locator.GetPlayerBody().GetComponent<Rigidbody>().AddForce(Locator.GetPlayerBody().GetComponent<Rigidbody>().velocity * 1000f);
+                // test
+                Locator.GetPlayerBody().AddForce(Locator.GetPlayerBody().GetVelocity() * 1000f);
             }
         }
-
-
-        bool Using;
-        bool wasUsing;
     }
 }
