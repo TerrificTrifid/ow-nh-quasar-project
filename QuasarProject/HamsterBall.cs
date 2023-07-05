@@ -1,6 +1,5 @@
 using NewHorizons;
 using NewHorizons.Handlers;
-using static StencilPreviewImageEffect;
 using UnityEngine;
 
 namespace QuasarProject
@@ -12,13 +11,13 @@ namespace QuasarProject
         {
             return TranslationHandler.GetTranslation("Hamster Ball", TranslationHandler.TextType.UI);
         }
-        public HamsterBall() {
-            
+
+        public HamsterBall()
+        {
             this.onPickedUp += new OWEvent<OWItem>.OWCallback(this.OnPickup);
 
             //blocks scout launcher
             this._type = ItemType.VisionTorch;
-
         }
 
         private void OnPickup(OWItem instance)
@@ -26,12 +25,14 @@ namespace QuasarProject
             base.enabled = true;
             Locator.GetToolModeSwapper().EquipToolMode(ToolMode.Item);
         }
+
         public override void DropItem(Vector3 position, Vector3 normal, Transform parent, Sector sector, IItemDropTarget customDropTarget)
         {
             base.DropItem(position, normal, parent, sector, customDropTarget);
             base.enabled = false;
             Locator.GetToolModeSwapper().EquipToolMode(ToolMode.None);
         }
+
         private void Update()
 
         {
@@ -49,6 +50,5 @@ namespace QuasarProject
 
         bool Using;
         bool wasUsing;
-
     }
 }
