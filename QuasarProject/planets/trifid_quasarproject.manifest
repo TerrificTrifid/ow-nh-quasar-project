@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3374337213
+CRC: 1483509429
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: aed237daeaf78faf8e433e79b5e44f5c
+    Hash: cf8c56602ed8be9219001528ddaf5288
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 19443859815da987e5e8c21f754ca04d
+    Hash: 2abe6c96ba340f69f9f5ffd0fa1ba2f4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -36,16 +36,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 0cfd736a3952486c93e9a5d8f58c79c3, type: 3}
 - Class: 114
-  Script: {fileID: 517736967, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+  Script: {fileID: -1553317914, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
 - Class: 115
-  Script: {instanceID: 0}
-- Class: 135
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Quasar/tests/accretiondisktest.prefab
-- Assets/Quasar/tests/ringtest1.prefab
-- Assets/Quasar/tests/HamsterBall.prefab
+- Assets/Quasar/tests/HamsterBallItem.prefab
 - Assets/Quasar/Ring_v1.prefab
+- Assets/Quasar/tests/HamsterBall.prefab
 - Assets/Quasar/Quasar.prefab
 Dependencies: []
