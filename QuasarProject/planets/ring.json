@@ -46,7 +46,7 @@
 		"details": [
 			{
 				"assetBundle": "planets/trifid_quasarproject",
-				"path": "Assets/Quasar/tests/ringtest1.prefab",
+				"path": "Assets/Quasar/Ring_v1.prefab",
 				"keepLoaded": true,
 				"rotation": {
 					"x": 90,
