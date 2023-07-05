@@ -56,6 +56,11 @@
 			},
 			{
 				"assetBundle": "planets/trifid_quasarproject",
+				"path": "Assets/Quasar/tests/HamsterBall.prefab",
+				"keepLoaded": true
+			},
+			{
+				"assetBundle": "planets/trifid_quasarproject",
 				"path": "Assets/Quasar/tests/HamsterBallItem.prefab",
 				"keepLoaded": true,
 				"position": {
