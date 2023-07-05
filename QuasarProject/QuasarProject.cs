@@ -25,8 +25,13 @@ namespace QuasarProject
             // Example of accessing game code.
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
             {
-                if (loadScene != OWScene.SolarSystem) return;
-                ModHelper.Console.WriteLine("Loaded into solar system!", MessageType.Success);
+                if (newHorizons.GetCurrentStarSystem() != "Trifid.QuasarProject") return;
+                ModHelper.Console.WriteLine("Loaded into QP!", MessageType.Success);
+
+                ModHelper.Events.Unity.FireOnNextUpdate(() =>
+                {
+                    // TODO add hamster ball to player
+                });
             };
         }
     }
