@@ -16,14 +16,14 @@ namespace QuasarProject
 
         }
 
-        private void OnPickup(OWItem arg1)
+        private void OnPickup(OWItem instance)
         {
             DeathManager deathManager = FindObjectOfType<DeathManager>();
             deathManager.KillPlayer(DeathType.Default);
 
         }
 
-        //on pickup add a force to the player
+        
 
 
 
