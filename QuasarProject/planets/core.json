@@ -2,6 +2,9 @@
 	"$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
 	"name": "Core",
 	"starSystem": "Trifid.QuasarProject",
+	"removeChildren": [
+		"Sector/BlackHole/BlackHoleRenderer"
+	],
 	"Base": {
 		"surfaceGravity": 4750,
 		"soiOverride": 15000,
@@ -15,7 +18,7 @@
 	},
 	"Orbit": {
 		"isStatic": true,
-		"siderealPeriod": -2
+		"siderealPeriod": -4
 	},
 	"Star": {
 		"size": 1,
@@ -25,12 +28,12 @@
 			"b": 0,
 			"a": 255
 		},
-		"solarLuminosity": 1.5,
+		"solarLuminosity": 1,
 		"lightRadius": 100000,
 		"lightTint": {
 			"r": 238,
-			"g": 162,
-			"b": 58,
+			"g": 197,
+			"b": 143,
 			"a": 255
 		},
 		"stellarDeathType": "none",
@@ -40,16 +43,16 @@
 		"singularities": [
 			{
 				"type": "blackHole",
-				"horizonRadius": 2000,
-				"distortRadius": 4000,
+				"horizonRadius": 1000,
+				"distortRadius": 5000,
 				"renderQueueOverride": 3500
 			}
 		],
 		"details": [
 			{
 				"assetBundle": "planets/trifid_quasarproject",
-				"path": "Assets/Quasar/tests/accretiondisktest.prefab",
-				"scale": 50000,
+				"path": "Assets/Quasar/Quasar.prefab",
+				"scale": 1,
 				"rotation": {
 					"x": 45,
 					"y": 0,

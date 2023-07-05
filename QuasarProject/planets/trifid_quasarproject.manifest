@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2560335103
+CRC: 3374337213
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b12d7d08ea4f6e4d615d23ba76a2c524
+    Hash: aed237daeaf78faf8e433e79b5e44f5c
   TypeTreeHash:
     serializedVersion: 2
     Hash: 19443859815da987e5e8c21f754ca04d
@@ -47,4 +47,5 @@ Assets:
 - Assets/Quasar/tests/ringtest1.prefab
 - Assets/Quasar/tests/HamsterBall.prefab
 - Assets/Quasar/Ring_v1.prefab
+- Assets/Quasar/Quasar.prefab
 Dependencies: []
