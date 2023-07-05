@@ -5,6 +5,6 @@
   "name": "The Quasar Project",
   "uniqueName": "Trifid.QuasarProject",
   "version": "0.1.0",
-  "owmlVersion": "2.9.0",
+  "owmlVersion": "2.9.3",
   "dependencies": ["xen.NewHorizons"]
 }
