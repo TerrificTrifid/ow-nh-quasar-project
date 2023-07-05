@@ -58,12 +58,10 @@
 				"assetBundle": "planets/trifid_quasarproject",
 				"path": "Assets/Quasar/tests/HamsterBallItem.prefab",
 				"keepLoaded": true,
-				
-
 				"position": {
 					"x": 60.93604,
 					"y": -9.557279,
-					"z": -20340.01
+					"z": -20349.38
 				}
 			}
 		]
