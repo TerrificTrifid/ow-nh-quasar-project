@@ -11,12 +11,18 @@ namespace QuasarProject
     {
         public static HamsterBallController Instance { get; private set; }
 
+        public OWRigidbody Rigidbody;
+        public PlayerAttachPoint AttachPoint;
+
+        private bool _active;
+
         private void Awake()
         {
             Instance = this;
+            Rigidbody.Suspend();
+            gameObject.SetActive(false);
         }
 
-        private bool _active;
         public bool IsActive() => _active;
 
         public void SetActive(bool active)
@@ -27,15 +33,29 @@ namespace QuasarProject
             if (active)
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
-                // test
-                Locator.GetPlayerBody().AddForce(Locator.GetPlayerBody().GetVelocity() * 1000f);
+
+                gameObject.SetActive(true);
+                Rigidbody.Unsuspend();
+                AttachPoint.AttachPlayer();
             }
             else
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
-                // test
-                Locator.GetPlayerBody().AddForce(Locator.GetPlayerBody().GetVelocity() * -1000f);
+
+                AttachPoint.DetachPlayer();
+                Rigidbody.Suspend();
+                gameObject.SetActive(false);
             }
+        }
+
+        private void FixedUpdate()
+        {
+            // align attach point
+            var currentDirection = -AttachPoint.transform.up;
+            var targetDirection = Locator.GetPlayerForceDetector().GetAlignmentAcceleration();
+
+            var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
+            AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
         }
     }
 }
