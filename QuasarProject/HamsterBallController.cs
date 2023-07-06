@@ -15,6 +15,7 @@ namespace QuasarProject
         public static HamsterBallController Instance { get; private set; }
 
         public OWRigidbody Rigidbody;
+        public AlignmentForceDetector ForceDetector;
         public PlayerAttachPoint AttachPoint;
         
         private GameObject _checkpoint;
@@ -76,22 +77,11 @@ namespace QuasarProject
                 return;
             }
 
-            
-
-            if (_active)
-            {
-                Rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(Rigidbody.transform.forward, _checkpointNormal));
-                Rigidbody.SetVelocity(Vector3.zero);
-                Rigidbody.SetAngularVelocity(Vector3.zero);
-            } else
-            {
-                OWRigidbody rigidbody = Locator.GetPlayerBody();
-                rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
-                rigidbody.SetVelocity(Vector3.zero);
-                rigidbody.SetAngularVelocity(Vector3.zero);
-            }
-
-
+            OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
+            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
+           
+            rigidbody.SetVelocity(Vector3.zero);
+            rigidbody.SetAngularVelocity(Vector3.zero);
         }
 
 
@@ -104,16 +94,18 @@ namespace QuasarProject
 
             if (active)
             {
+                // var velocity = Locator.GetPlayerBody().GetVelocity();
+
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
-                Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
-                Rigidbody.SetAngularVelocity(Vector3.zero);
                 
                 Delay.FireInNUpdates(() =>
                 {
                     Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
+                    
                     Rigidbody.SetVelocity(Vector3.zero);
+                    // Rigidbody.SetVelocity(velocity);
                     Rigidbody.SetAngularVelocity(Vector3.zero);
 
                     AttachPoint.AttachPlayer();
@@ -134,13 +126,10 @@ namespace QuasarProject
         {
             // align attach point
             var currentDirection = -AttachPoint.transform.up;
-            // should be same as ball's own detector alignment direction
-            var targetDirection = Locator.GetPlayerForceDetector().GetAlignmentAcceleration();
+            var targetDirection = ForceDetector.GetAlignmentAcceleration();
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
             AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
-            Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
-
         }
     }
 }
