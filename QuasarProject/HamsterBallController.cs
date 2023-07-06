@@ -30,16 +30,12 @@ namespace QuasarProject
             {
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
-<<<<<<< Updated upstream
-=======
+
                 
                 Rigidbody.SetVelocity(Vector3.zero);
                 Rigidbody.SetAngularVelocity(Vector3.zero);
                 Rigidbody._rigidbody.mass = 0.1f;
                 
-
-                
->>>>>>> Stashed changes
             }, 2);
         }
 
