@@ -30,12 +30,9 @@ namespace QuasarProject
             {
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
-
                 
                 Rigidbody.SetVelocity(Vector3.zero);
                 Rigidbody.SetAngularVelocity(Vector3.zero);
-                Rigidbody._rigidbody.mass = 0.001f;
-                
             }, 2);
         }
 
@@ -76,22 +73,10 @@ namespace QuasarProject
                 return;
             }
 
-            
-
-            if (_active)
-            {
-                Rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(Rigidbody.transform.forward, _checkpointNormal));
-                Rigidbody.SetVelocity(Vector3.zero);
-                Rigidbody.SetAngularVelocity(Vector3.zero);
-            } else
-            {
-                OWRigidbody rigidbody = Locator.GetPlayerBody();
-                rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
-                rigidbody.SetVelocity(Vector3.zero);
-                rigidbody.SetAngularVelocity(Vector3.zero);
-            }
-
-
+            OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
+            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
+            rigidbody.SetVelocity(Vector3.zero);
+            rigidbody.SetAngularVelocity(Vector3.zero);
         }
 
 
@@ -105,16 +90,16 @@ namespace QuasarProject
             if (active)
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+                
+                var velocity = Locator.GetPlayerBody().GetVelocity();
+                
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
-                // apparently this preserves velocity idk
-                Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
-                Rigidbody.SetAngularVelocity(Vector3.zero);
                 
                 Delay.FireInNUpdates(() =>
                 {
-                    Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
-                    Rigidbody.SetVelocity(Vector3.zero);
+                    Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
+                    Rigidbody.SetVelocity(velocity);
                     Rigidbody.SetAngularVelocity(Vector3.zero);
 
                     AttachPoint.AttachPlayer();
