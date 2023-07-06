@@ -34,7 +34,7 @@ namespace QuasarProject
                 
                 Rigidbody.SetVelocity(Vector3.zero);
                 Rigidbody.SetAngularVelocity(Vector3.zero);
-                Rigidbody._rigidbody.mass = 0.1f;
+                Rigidbody._rigidbody.mass = 0.001f;
                 
             }, 2);
         }
@@ -76,16 +76,19 @@ namespace QuasarProject
                 return;
             }
 
-            OWRigidbody rigidbody = Locator.GetPlayerBody();
-            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
-            rigidbody.SetVelocity(Vector3.zero);
-            rigidbody.SetAngularVelocity(Vector3.zero);
+            
 
             if (_active)
             {
                 Rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(Rigidbody.transform.forward, _checkpointNormal));
                 Rigidbody.SetVelocity(Vector3.zero);
                 Rigidbody.SetAngularVelocity(Vector3.zero);
+            } else
+            {
+                OWRigidbody rigidbody = Locator.GetPlayerBody();
+                rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
+                rigidbody.SetVelocity(Vector3.zero);
+                rigidbody.SetAngularVelocity(Vector3.zero);
             }
 
 
@@ -136,6 +139,8 @@ namespace QuasarProject
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
             AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
+            Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
+
         }
     }
 }
