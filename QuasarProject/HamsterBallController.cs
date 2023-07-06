@@ -21,8 +21,8 @@ namespace QuasarProject
             Instance = this;
             Rigidbody.Suspend();
             gameObject.SetActive(false);
-            AttachPoint.SetAttachOffset(Vector3.zero);
-            this.transform.position = Locator.GetPlayerTransform().position;
+            // AttachPoint.SetAttachOffset(Vector3.zero);
+            // this.transform.position = Locator.GetPlayerTransform().position;
         }
 
         public bool IsActive() => _active;
@@ -35,21 +35,20 @@ namespace QuasarProject
             if (active)
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
-                this.transform.position = Locator.GetPlayerTransform().position;
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
-                AttachPoint.AttachPlayer();
-                AttachPoint.SetAttachOffset(Vector3.zero);
-                
+                // AttachPoint.AttachPlayer();
+                // this.transform.position = Locator.GetPlayerTransform().position;
+                // AttachPoint.SetAttachOffset(Vector3.zero);
             }
             else
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
 
-                AttachPoint.DetachPlayer();
+                // AttachPoint.DetachPlayer();
+                // AttachPoint.SetAttachOffset(Vector3.zero);
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
-                AttachPoint.SetAttachOffset(Vector3.zero);
             }
         }
 
@@ -61,9 +60,7 @@ namespace QuasarProject
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
             AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
-            AttachPoint.SetAttachOffset(Vector3.zero);
-
-            
+            // AttachPoint.SetAttachOffset(Vector3.zero);
         }
     }
 }
