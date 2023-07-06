@@ -1,6 +1,9 @@
 ﻿using NewHorizons;
+using NewHorizons.Utility;
 using OWML.Common;
 using OWML.ModHelper;
+using System.IO;
+using UnityEngine;
 
 namespace QuasarProject
 {
@@ -12,7 +15,7 @@ namespace QuasarProject
             // So you probably don't want to do anything here.
             // Use Start() instead.
         }
-
+        public AssetBundle assetBundle;
         private void Start()
         {
             // Starting here, you'll have access to OWML's mod helper.
@@ -21,12 +24,16 @@ namespace QuasarProject
             // Get the New Horizons API and load configs
             var newHorizons = ModHelper.Interaction.TryGetModApi<INewHorizons>("xen.NewHorizons");
             newHorizons.LoadConfigs(this);
-
+            
+            
             // Example of accessing game code.
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
             {
                 if (newHorizons.GetCurrentStarSystem() != "Trifid.QuasarProject") return;
                 ModHelper.Console.WriteLine("Loaded into QP!", MessageType.Success);
+                
+                
+
             };
         }
     }
