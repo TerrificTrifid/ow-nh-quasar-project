@@ -30,6 +30,16 @@ namespace QuasarProject
             {
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
+<<<<<<< Updated upstream
+=======
+                
+                Rigidbody.SetVelocity(Vector3.zero);
+                Rigidbody.SetAngularVelocity(Vector3.zero);
+                Rigidbody._rigidbody.mass = 0.1f;
+                
+
+                
+>>>>>>> Stashed changes
             }, 2);
         }
 
@@ -70,11 +80,19 @@ namespace QuasarProject
                 return;
             }
 
-            OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
+            OWRigidbody rigidbody = Locator.GetPlayerBody();
             rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
-           
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
+
+            if (_active)
+            {
+                Rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(Rigidbody.transform.forward, _checkpointNormal));
+                Rigidbody.SetVelocity(Vector3.zero);
+                Rigidbody.SetAngularVelocity(Vector3.zero);
+            }
+
+
         }
 
 
@@ -90,6 +108,8 @@ namespace QuasarProject
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
+                Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
+                Rigidbody.SetAngularVelocity(Vector3.zero);
                 
                 Delay.FireInNUpdates(() =>
                 {
