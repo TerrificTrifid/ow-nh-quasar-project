@@ -44,9 +44,9 @@ namespace QuasarProject
                     checkpoint = new GameObject("HamsterBallCheckpoint");
                 }
                 
-                checkpoint.transform.position = raycastHit.point;
-                checkpoint.transform.parent = raycastHit.rigidbody.transform;
                 checkpointNormal = raycastHit.normal;
+                checkpoint.transform.position = raycastHit.point + checkpointNormal * 1.5f/*ball radius*/;
+                checkpoint.transform.parent = raycastHit.rigidbody.transform;
             } 
             else
             {
@@ -63,7 +63,7 @@ namespace QuasarProject
             }
 
             OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
-            rigidbody.WarpToPositionRotation(checkpoint.transform.position, Quaternion.LookRotation(checkpointNormal));
+            rigidbody.WarpToPositionRotation(checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, checkpointNormal));
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
