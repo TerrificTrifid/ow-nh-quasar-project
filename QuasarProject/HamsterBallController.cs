@@ -16,8 +16,8 @@ namespace QuasarProject
         public OWRigidbody Rigidbody;
         public PlayerAttachPoint AttachPoint;
         
-        public GameObject checkpoint;
-        public Vector3 checkpointNormal;
+        private GameObject _checkpoint;
+        private Vector3 _checkpointNormal;
 
         private bool _active;
 
@@ -34,7 +34,7 @@ namespace QuasarProject
 
         private void OnDestroy()
         {
-            Destroy(checkpoint);
+            Destroy(_checkpoint);
         }
 
         public void SetCheckpoint()
@@ -44,14 +44,14 @@ namespace QuasarProject
             Vector3 forward = Locator.GetActiveCamera().transform.forward;
             RaycastHit raycastHit;
             if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) {
-                if (checkpoint == null)
+                if (_checkpoint == null)
                 {
-                    checkpoint = new GameObject("HamsterBallCheckpoint");
+                    _checkpoint = new GameObject("HamsterBallCheckpoint");
                 }
                 
-                checkpointNormal = raycastHit.normal;
-                checkpoint.transform.position = raycastHit.point + checkpointNormal * 1.5f/*ball radius*/;
-                checkpoint.transform.parent = raycastHit.rigidbody.transform;
+                _checkpointNormal = raycastHit.normal;
+                _checkpoint.transform.position = raycastHit.point + _checkpointNormal * 1.5f/*ball radius*/;
+                _checkpoint.transform.parent = raycastHit.rigidbody.transform;
             } 
             else
             {
@@ -61,14 +61,14 @@ namespace QuasarProject
 
         public void GoToCheckpoint()
         {
-            if (checkpoint == null)
+            if (_checkpoint == null)
             {
                 Locator.GetPlayerAudioController().PlayNegativeUISound();
                 return;
             }
 
             OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
-            rigidbody.WarpToPositionRotation(checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, checkpointNormal));
+            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
