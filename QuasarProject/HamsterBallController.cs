@@ -50,8 +50,7 @@ namespace QuasarProject
             } 
             else
             {
-                // should probably change this to an error noise
-                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+                Locator.GetPlayerAudioController().PlayNegativeUISound();
             }
         }
 
@@ -59,8 +58,7 @@ namespace QuasarProject
         {
             if (checkpoint == null)
             {
-                // should probably change this to an error noise
-                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+                Locator.GetPlayerAudioController().PlayNegativeUISound();
                 return;
             }
 
@@ -88,13 +86,13 @@ namespace QuasarProject
                 Rigidbody.SetAngularVelocity(Vector3.zero);
                 
                 Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
-                // AttachPoint.AttachPlayer();
+                AttachPoint.AttachPlayer();
             }
             else
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
 
-                // AttachPoint.DetachPlayer();
+                AttachPoint.DetachPlayer();
                 
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
