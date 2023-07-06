@@ -127,6 +127,14 @@ namespace QuasarProject
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
             AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
+            
+            
+            
+            // movement wah
+            var wasd = OWInput.GetAxisValue(InputLibrary.moveXZ, InputMode.Character);
+            var localMovement = new Vector3(wasd.x, 0, wasd.y);
+            var movement = Locator.GetPlayerTransform().TransformDirection(localMovement);
+            Rigidbody.AddVelocityChange(movement);
         }
     }
 }
