@@ -91,6 +91,8 @@ namespace QuasarProject
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
                 
+                var position = Locator.GetPlayerBody().GetPosition();
+                var rotation = Locator.GetPlayerBody().GetRotation();
                 var velocity = Locator.GetPlayerBody().GetVelocity();
                 
                 gameObject.SetActive(true);
@@ -98,7 +100,7 @@ namespace QuasarProject
                 
                 Delay.FireInNUpdates(() =>
                 {
-                    Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
+                    Rigidbody.WarpToPositionRotation(position, rotation);
                     Rigidbody.SetVelocity(velocity);
                     Rigidbody.SetAngularVelocity(Vector3.zero);
 
