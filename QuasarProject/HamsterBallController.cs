@@ -5,6 +5,8 @@ namespace QuasarProject
 {
     /// <summary>
     /// attached to the player. handles the actual ball
+    ///
+    /// BUG: detector will fuck up with entry way trigger. might not need to do anything about this 
     /// </summary>
     [UsedInUnityProject]
     public class HamsterBallController : MonoBehaviour
@@ -22,7 +24,10 @@ namespace QuasarProject
         private void Awake()
         {
             Instance = this;
-            
+        }
+
+        private void Start()
+        {
             Rigidbody.Suspend();
             gameObject.SetActive(false);
         }
@@ -103,6 +108,7 @@ namespace QuasarProject
         {
             // align attach point
             var currentDirection = -AttachPoint.transform.up;
+            // should be same as ball's own detector alignment direction
             var targetDirection = Locator.GetPlayerForceDetector().GetAlignmentAcceleration();
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
