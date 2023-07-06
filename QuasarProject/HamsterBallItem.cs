@@ -17,7 +17,7 @@ namespace QuasarProject
     {
         public override string GetDisplayName()
         {
-            return TranslationHandler.GetTranslation("Hamster Ball Remote", TranslationHandler.TextType.UI);
+            return TranslationHandler.GetTranslation("Prototype", TranslationHandler.TextType.UI);
         }
 
         public override void Awake()
