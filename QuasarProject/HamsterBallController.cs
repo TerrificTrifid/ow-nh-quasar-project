@@ -1,8 +1,4 @@
 ﻿using NewHorizons;
-using NewHorizons.Utility;
-using OWML.Common;
-using OWML.ModHelper;
-using System;
 using UnityEngine;
 
 namespace QuasarProject
@@ -17,6 +13,7 @@ namespace QuasarProject
 
         public OWRigidbody Rigidbody;
         public PlayerAttachPoint AttachPoint;
+        
         public GameObject checkpoint;
         public Vector3 checkpointNormal;
 
@@ -24,14 +21,15 @@ namespace QuasarProject
 
         private void Awake()
         {
-            
             Instance = this;
-            checkpoint = new GameObject("HamsterBallCheckpoint");
-            checkpoint.transform.parent = this.transform;
+            
             Rigidbody.Suspend();
             gameObject.SetActive(false);
-            // AttachPoint.SetAttachOffset(Vector3.zero);
-            // this.transform.position = Locator.GetPlayerTransform().position;
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(checkpoint);
         }
 
         public void SetCheckpoint()
@@ -40,24 +38,34 @@ namespace QuasarProject
             Vector3 position = Locator.GetActiveCamera().transform.position;
             Vector3 forward = Locator.GetActiveCamera().transform.forward;
             RaycastHit raycastHit;
-            if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) { 
+            if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) {
+                if (checkpoint == null)
+                {
+                    checkpoint = new GameObject("HamsterBallCheckpoint");
+                }
+                
                 checkpoint.transform.position = raycastHit.point;
-                checkpoint.transform.parent = raycastHit.rigidbody.gameObject.transform;
+                checkpoint.transform.parent = raycastHit.rigidbody.transform;
                 checkpointNormal = raycastHit.normal;
-            } else
+            } 
+            else
             {
+                // should probably change this to an error noise
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
             }
-
-
         }
 
         public void GoToCheckpoint()
         {
-            if (checkpoint == null) return;
-            OWRigidbody rigidbody = Locator.GetPlayerBody();
-            rigidbody.transform.localPosition = checkpoint.transform.position;
-            rigidbody.transform.localRotation = Quaternion.LookRotation(checkpointNormal);
+            if (checkpoint == null)
+            {
+                // should probably change this to an error noise
+                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+                return;
+            }
+
+            OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
+            rigidbody.WarpToPositionRotation(checkpoint.transform.position, Quaternion.LookRotation(checkpointNormal));
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
@@ -75,16 +83,19 @@ namespace QuasarProject
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
+                
+                Rigidbody.SetVelocity(Vector3.zero);
+                Rigidbody.SetAngularVelocity(Vector3.zero);
+                
+                Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
                 // AttachPoint.AttachPlayer();
-                // this.transform.position = Locator.GetPlayerTransform().position;
-                // AttachPoint.SetAttachOffset(Vector3.zero);
             }
             else
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
 
                 // AttachPoint.DetachPlayer();
-                // AttachPoint.SetAttachOffset(Vector3.zero);
+                
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
             }
@@ -98,7 +109,6 @@ namespace QuasarProject
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
             AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
-            // AttachPoint.SetAttachOffset(Vector3.zero);
         }
     }
 }
