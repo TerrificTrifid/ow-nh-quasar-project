@@ -103,6 +103,8 @@ namespace QuasarProject
                     Rigidbody.SetAngularVelocity(Vector3.zero);
 
                     AttachPoint.AttachPlayer();
+                    // it goes wacko rotation without this
+                    Locator.GetPlayerTransform().localRotation = Quaternion.identity;
                 }, 2);
             }
             else
