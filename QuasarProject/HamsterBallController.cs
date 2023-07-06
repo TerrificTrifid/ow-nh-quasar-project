@@ -26,14 +26,10 @@ namespace QuasarProject
         {
             Instance = this;
             
-            // wait for stuff to init LOLLL
             Delay.FireInNUpdates(() =>
             {
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
-                
-                Rigidbody.SetVelocity(Vector3.zero);
-                Rigidbody.SetAngularVelocity(Vector3.zero);
             }, 2);
         }
 
@@ -95,21 +91,24 @@ namespace QuasarProject
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
                 
-                AttachPoint.AttachPlayer();
+                Delay.FireInNUpdates(() =>
+                {
+                    Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
+                    Rigidbody.SetVelocity(Vector3.zero);
+                    Rigidbody.SetAngularVelocity(Vector3.zero);
+
+                    AttachPoint.AttachPlayer();
+                }, 2);
             }
             else
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
 
                 AttachPoint.DetachPlayer();
-                
+
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
             }
-            
-            Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
-            Rigidbody.SetVelocity(Vector3.zero);
-            Rigidbody.SetAngularVelocity(Vector3.zero);
         }
 
         private void FixedUpdate()
