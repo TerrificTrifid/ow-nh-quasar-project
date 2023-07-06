@@ -48,6 +48,8 @@ namespace QuasarProject
             Vector3 position = Locator.GetActiveCamera().transform.position;
             Vector3 forward = Locator.GetActiveCamera().transform.forward;
             RaycastHit raycastHit;
+
+            
             if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) {
                 if (_checkpoint == null)
                 {
