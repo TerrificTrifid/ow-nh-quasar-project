@@ -19,6 +19,7 @@ namespace QuasarProject
         public PlayerAttachPoint AttachPoint;
         public GameObject checkpoint;
         public Vector3 checkpointNormal;
+        public bool checkpointSet = false;
 
         private bool _active;
 
@@ -40,10 +41,16 @@ namespace QuasarProject
             Vector3 position = Locator.GetActiveCamera().transform.position;
             Vector3 forward = Locator.GetActiveCamera().transform.forward;
             RaycastHit raycastHit;
-            if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) { 
+
+            
+            if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) {
+                Quaternion q = Quaternion.LookRotation(Vector3.ProjectOnPlane((position - raycastHit.point).normalized, raycastHit.normal), raycastHit.normal);
+
                 checkpoint.transform.position = raycastHit.point;
+                checkpoint.transform.rotation = raycastHit.rigidbody.transform.InverseTransformRotation(q);
                 checkpoint.transform.parent = raycastHit.rigidbody.gameObject.transform;
                 checkpointNormal = raycastHit.normal;
+                checkpointSet = true;
             } else
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
@@ -56,8 +63,15 @@ namespace QuasarProject
         {
             if (checkpoint == null) return;
             OWRigidbody rigidbody = Locator.GetPlayerBody();
-            rigidbody.transform.localPosition = checkpoint.transform.position;
-            rigidbody.transform.localRotation = Quaternion.LookRotation(checkpointNormal);
+            rigidbody.transform.localPosition = checkpoint.transform.position + checkpointNormal*1;
+            rigidbody.transform.localRotation = checkpoint.transform.rotation;
+            // rotate 180 deg around the normal
+            rigidbody.transform.RotateAround(rigidbody.transform.position, checkpointNormal, 180);
+            
+            
+            
+
+
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
