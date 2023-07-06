@@ -1,8 +1,4 @@
 ﻿using NewHorizons;
-using NewHorizons.Utility;
-using OWML.Common;
-using OWML.ModHelper;
-using System;
 using UnityEngine;
 
 namespace QuasarProject
@@ -17,6 +13,7 @@ namespace QuasarProject
 
         public OWRigidbody Rigidbody;
         public PlayerAttachPoint AttachPoint;
+        
         public GameObject checkpoint;
         public Vector3 checkpointNormal;
         public bool checkpointSet = false;
@@ -25,14 +22,15 @@ namespace QuasarProject
 
         private void Awake()
         {
-            
             Instance = this;
-            checkpoint = new GameObject("HamsterBallCheckpoint");
-            checkpoint.transform.parent = this.transform;
+            
             Rigidbody.Suspend();
             gameObject.SetActive(false);
-            // AttachPoint.SetAttachOffset(Vector3.zero);
-            // this.transform.position = Locator.GetPlayerTransform().position;
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(checkpoint);
         }
 
         public void SetCheckpoint()
@@ -53,25 +51,20 @@ namespace QuasarProject
                 checkpointSet = true;
             } else
             {
-                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+                Locator.GetPlayerAudioController().PlayNegativeUISound();
             }
-
-
         }
 
         public void GoToCheckpoint()
         {
-            if (checkpoint == null) return;
-            OWRigidbody rigidbody = Locator.GetPlayerBody();
-            rigidbody.transform.localPosition = checkpoint.transform.position + checkpointNormal*1;
-            rigidbody.transform.localRotation = checkpoint.transform.rotation;
-            // rotate 180 deg around the normal
-            rigidbody.transform.RotateAround(rigidbody.transform.position, checkpointNormal, 180);
-            
-            
-            
+            if (checkpoint == null)
+            {
+                Locator.GetPlayerAudioController().PlayNegativeUISound();
+                return;
+            }
 
-
+            OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
+            rigidbody.WarpToPositionRotation(checkpoint.transform.position, Quaternion.LookRotation(checkpointNormal));
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
@@ -89,16 +82,19 @@ namespace QuasarProject
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
-                // AttachPoint.AttachPlayer();
-                // this.transform.position = Locator.GetPlayerTransform().position;
-                // AttachPoint.SetAttachOffset(Vector3.zero);
+                
+                Rigidbody.SetVelocity(Vector3.zero);
+                Rigidbody.SetAngularVelocity(Vector3.zero);
+                
+                Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
+                AttachPoint.AttachPlayer();
             }
             else
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
 
-                // AttachPoint.DetachPlayer();
-                // AttachPoint.SetAttachOffset(Vector3.zero);
+                AttachPoint.DetachPlayer();
+                
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
             }
@@ -112,7 +108,6 @@ namespace QuasarProject
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
             AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
-            // AttachPoint.SetAttachOffset(Vector3.zero);
         }
     }
 }
