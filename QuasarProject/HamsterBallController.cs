@@ -1,4 +1,5 @@
 ﻿using NewHorizons;
+using NewHorizons.Utility.OWML;
 using UnityEngine;
 
 namespace QuasarProject
@@ -24,12 +25,16 @@ namespace QuasarProject
         private void Awake()
         {
             Instance = this;
-        }
-
-        private void Start()
-        {
-            Rigidbody.Suspend();
-            gameObject.SetActive(false);
+            
+            // wait for stuff to init LOLLL
+            Delay.FireInNUpdates(() =>
+            {
+                Rigidbody.Suspend();
+                gameObject.SetActive(false);
+                
+                Rigidbody.SetVelocity(Vector3.zero);
+                Rigidbody.SetAngularVelocity(Vector3.zero);
+            }, 2);
         }
 
         private void OnDestroy()
@@ -69,6 +74,7 @@ namespace QuasarProject
 
             OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
             rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
+           
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
@@ -87,10 +93,6 @@ namespace QuasarProject
                 gameObject.SetActive(true);
                 Rigidbody.Unsuspend();
                 
-                Rigidbody.SetVelocity(Vector3.zero);
-                Rigidbody.SetAngularVelocity(Vector3.zero);
-                
-                Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
                 AttachPoint.AttachPlayer();
             }
             else
@@ -102,6 +104,10 @@ namespace QuasarProject
                 Rigidbody.Suspend();
                 gameObject.SetActive(false);
             }
+            
+            Rigidbody.SetPosition(Locator.GetPlayerBody().GetPosition());
+            Rigidbody.SetVelocity(Vector3.zero);
+            Rigidbody.SetAngularVelocity(Vector3.zero);
         }
 
         private void FixedUpdate()
