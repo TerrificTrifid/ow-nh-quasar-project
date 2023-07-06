@@ -5,6 +5,8 @@ namespace QuasarProject
 {
     /// <summary>
     /// attached to the player. handles the actual ball
+    ///
+    /// BUG: detector will fuck up with entry way trigger. might not need to do anything about this 
     /// </summary>
     [UsedInUnityProject]
     public class HamsterBallController : MonoBehaviour
@@ -14,23 +16,25 @@ namespace QuasarProject
         public OWRigidbody Rigidbody;
         public PlayerAttachPoint AttachPoint;
         
-        public GameObject checkpoint;
-        public Vector3 checkpointNormal;
-        public bool checkpointSet = false;
+        private GameObject _checkpoint;
+        private Vector3 _checkpointNormal;
 
         private bool _active;
 
         private void Awake()
         {
             Instance = this;
-            
+        }
+
+        private void Start()
+        {
             Rigidbody.Suspend();
             gameObject.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            Destroy(checkpoint);
+            Destroy(_checkpoint);
         }
 
         public void SetCheckpoint()
@@ -42,14 +46,16 @@ namespace QuasarProject
 
             
             if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) {
-                Quaternion q = Quaternion.LookRotation(Vector3.ProjectOnPlane((position - raycastHit.point).normalized, raycastHit.normal), raycastHit.normal);
-
-                checkpoint.transform.position = raycastHit.point;
-                checkpoint.transform.rotation = raycastHit.rigidbody.transform.InverseTransformRotation(q);
-                checkpoint.transform.parent = raycastHit.rigidbody.gameObject.transform;
-                checkpointNormal = raycastHit.normal;
-                checkpointSet = true;
-            } else
+                if (_checkpoint == null)
+                {
+                    _checkpoint = new GameObject("HamsterBallCheckpoint");
+                }
+                
+                _checkpointNormal = raycastHit.normal;
+                _checkpoint.transform.position = raycastHit.point + _checkpointNormal * 1.5f/*ball radius*/;
+                _checkpoint.transform.parent = raycastHit.rigidbody.transform;
+            } 
+            else
             {
                 Locator.GetPlayerAudioController().PlayNegativeUISound();
             }
@@ -57,14 +63,14 @@ namespace QuasarProject
 
         public void GoToCheckpoint()
         {
-            if (checkpoint == null)
+            if (_checkpoint == null)
             {
                 Locator.GetPlayerAudioController().PlayNegativeUISound();
                 return;
             }
 
             OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
-            rigidbody.WarpToPositionRotation(checkpoint.transform.position, Quaternion.LookRotation(checkpointNormal));
+            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
@@ -104,6 +110,7 @@ namespace QuasarProject
         {
             // align attach point
             var currentDirection = -AttachPoint.transform.up;
+            // should be same as ball's own detector alignment direction
             var targetDirection = Locator.GetPlayerForceDetector().GetAlignmentAcceleration();
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);

@@ -1,6 +1,8 @@
-﻿using NewHorizons;
+﻿using HarmonyLib;
+using NewHorizons;
 using OWML.Common;
 using OWML.ModHelper;
+using System.Reflection;
 
 namespace QuasarProject
 {
@@ -11,6 +13,7 @@ namespace QuasarProject
             // You won't be able to access OWML's mod helper in Awake.
             // So you probably don't want to do anything here.
             // Use Start() instead.
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
         }
 
         private void Start()
