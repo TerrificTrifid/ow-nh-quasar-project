@@ -1,6 +1,10 @@
 ﻿using NewHorizons;
+using NewHorizons.Builder.Props;
+using NewHorizons.Utility;
+using NewHorizons.Utility.Files;
 using OWML.Common;
 using OWML.ModHelper;
+using UnityEngine;
 
 namespace QuasarProject
 {
@@ -27,15 +31,6 @@ namespace QuasarProject
             {
                 if (newHorizons.GetCurrentStarSystem() != "Trifid.QuasarProject") return;
                 ModHelper.Console.WriteLine("Loaded into QP!", MessageType.Success);
-
-                ModHelper.Events.Unity.FireOnNextUpdate(() =>
-                {
-                    // goofy
-                    var hamsterBall = FindObjectOfType<HamsterBallController>();
-                    hamsterBall.SetActive(false);
-                    hamsterBall.transform.parent = Locator.GetPlayerBody().transform;
-                    ModHelper.Console.WriteLine($"hampter ball is {hamsterBall}");
-                });
             };
         }
     }

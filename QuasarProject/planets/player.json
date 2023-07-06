@@ -1,0 +1,14 @@
+{
+	"$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
+	"name": "Player",
+	"starSystem": "Trifid.QuasarProject",
+	"Props": {
+		"details": [
+			{
+				"assetBundle": "planets/trifid_quasarproject",
+				"path": "Assets/Quasar/tests/HamsterBall.prefab",
+				"keepLoaded": true
+			}
+		]
+	}
+}
