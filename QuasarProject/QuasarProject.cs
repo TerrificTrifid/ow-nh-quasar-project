@@ -1,10 +1,6 @@
 ﻿using NewHorizons;
-using NewHorizons.Builder.Props;
-using NewHorizons.Utility;
-using NewHorizons.Utility.Files;
 using OWML.Common;
 using OWML.ModHelper;
-using UnityEngine;
 
 namespace QuasarProject
 {
