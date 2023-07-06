@@ -2,6 +2,7 @@ using NewHorizons;
 using NewHorizons.Handlers;
 using UnityEngine;
 
+
 namespace QuasarProject
 {
     /// <summary>
@@ -61,6 +62,14 @@ namespace QuasarProject
             if (OWInput.IsNewlyPressed(InputLibrary.toolActionPrimary, InputMode.Character))
             {
                 HamsterBallController.Instance.SetActive(!HamsterBallController.Instance.IsActive());
+            }
+            if (OWInput.IsNewlyPressed(InputLibrary.toolOptionUp, InputMode.Character))
+            {
+                HamsterBallController.Instance.SetCheckpoint();
+            }
+            if (OWInput.IsNewlyPressed(InputLibrary.toolOptionDown, InputMode.Character))
+            {
+                HamsterBallController.Instance.GoToCheckpoint();
             }
         }
     }

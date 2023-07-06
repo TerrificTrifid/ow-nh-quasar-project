@@ -1,4 +1,8 @@
 ﻿using NewHorizons;
+using NewHorizons.Utility;
+using OWML.Common;
+using OWML.ModHelper;
+using System;
 using UnityEngine;
 
 namespace QuasarProject
@@ -13,17 +17,51 @@ namespace QuasarProject
 
         public OWRigidbody Rigidbody;
         public PlayerAttachPoint AttachPoint;
+        public GameObject checkpoint;
+        public Vector3 checkpointNormal;
 
         private bool _active;
 
         private void Awake()
         {
+            
             Instance = this;
+            checkpoint = new GameObject("HamsterBallCheckpoint");
+            checkpoint.transform.parent = this.transform;
             Rigidbody.Suspend();
             gameObject.SetActive(false);
             // AttachPoint.SetAttachOffset(Vector3.zero);
             // this.transform.position = Locator.GetPlayerTransform().position;
         }
+
+        public void SetCheckpoint()
+        {
+            int layerMask = OWLayerMask.physicalMask;
+            Vector3 position = Locator.GetActiveCamera().transform.position;
+            Vector3 forward = Locator.GetActiveCamera().transform.forward;
+            RaycastHit raycastHit;
+            if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) { 
+                checkpoint.transform.position = raycastHit.point;
+                checkpoint.transform.parent = raycastHit.rigidbody.gameObject.transform;
+                checkpointNormal = raycastHit.normal;
+            } else
+            {
+                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+            }
+
+
+        }
+
+        public void GoToCheckpoint()
+        {
+            if (checkpoint == null) return;
+            OWRigidbody rigidbody = Locator.GetPlayerBody();
+            rigidbody.transform.localPosition = checkpoint.transform.position;
+            rigidbody.transform.localRotation = Quaternion.LookRotation(checkpointNormal);
+            rigidbody.SetVelocity(Vector3.zero);
+            rigidbody.SetAngularVelocity(Vector3.zero);
+        }
+
 
         public bool IsActive() => _active;
 
