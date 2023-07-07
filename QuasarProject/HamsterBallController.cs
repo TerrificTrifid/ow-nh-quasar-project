@@ -25,15 +25,15 @@ namespace QuasarProject
         private void Awake()
         {
             Instance = this;
-            
-            Delay.FireInNUpdates(() =>
+        }
+
+        private void Start()
+        {
+            // let other scripts Start run
+            Delay.FireOnNextUpdate(() =>
             {
-                Rigidbody.Suspend();
                 gameObject.SetActive(false);
-                
-                Rigidbody.SetVelocity(Vector3.zero);
-                Rigidbody.SetAngularVelocity(Vector3.zero);
-            }, 2);
+            });
         }
 
         private void OnDestroy()
@@ -90,24 +90,19 @@ namespace QuasarProject
             if (active)
             {
                 Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
-                
-                var position = Locator.GetPlayerBody().GetPosition();
-                var rotation = Locator.GetPlayerBody().GetRotation();
-                var velocity = Locator.GetPlayerBody().GetVelocity();
-                
-                gameObject.SetActive(true);
-                Rigidbody.Unsuspend();
-                
-                Delay.FireInNUpdates(() =>
-                {
-                    Rigidbody.WarpToPositionRotation(position, rotation);
-                    Rigidbody.SetVelocity(velocity);
-                    Rigidbody.SetAngularVelocity(Vector3.zero);
 
-                    AttachPoint.AttachPlayer();
-                    // it goes wacko rotation without this
-                    Locator.GetPlayerTransform().localRotation = Quaternion.identity;
-                }, 2);
+                Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
+                Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
+                Rigidbody.SetAngularVelocity(Vector3.zero);
+                // makes it not flip
+                AttachPoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
+
+                gameObject.SetActive(true);
+
+                AttachPoint.AttachPlayer();
+                // snap to center
+                Locator.GetPlayerTransform().localPosition = Vector3.zero;
+                Locator.GetPlayerTransform().localRotation = Quaternion.identity;
             }
             else
             {
@@ -115,7 +110,6 @@ namespace QuasarProject
 
                 AttachPoint.DetachPlayer();
 
-                Rigidbody.Suspend();
                 gameObject.SetActive(false);
             }
         }
