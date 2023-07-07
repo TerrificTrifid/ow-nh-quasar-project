@@ -8,6 +8,11 @@
 				"assetBundle": "planets/trifid_quasarproject",
 				"path": "Assets/Quasar/tests/HamsterBall.prefab",
 				"keepLoaded": true
+			},
+			{
+				"path": "Sun_Body/Sector_SUN/Geometry_SUN/Surface",
+				"keepLoaded": true,
+				"scale": 1.5
 			}
 		]
 	}

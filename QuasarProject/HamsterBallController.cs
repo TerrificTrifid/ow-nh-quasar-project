@@ -1,4 +1,5 @@
 ﻿using NewHorizons;
+using NewHorizons.Utility.Files;
 using NewHorizons.Utility.OWML;
 using UnityEngine;
 
@@ -32,6 +33,22 @@ namespace QuasarProject
             // let other scripts Start run
             Delay.FireOnNextUpdate(() =>
             {
+                // add visual
+                var surface = Locator.GetPlayerTransform().Find("Surface");
+                if (surface != null)
+                {
+                    surface.SetParent(transform);
+                    surface.localPosition = Vector3.zero;
+                    surface.localScale = new Vector3(1.4f, 1.4f, 1.4f);
+
+                    var material = Locator.GetSunController()._supernova._supernovaMaterial;
+                    material.SetColor("_Color", new Color(0.25f, 0.25f, 0.25f));
+                    material.SetTexture("_ColorRamp", ImageUtilities.GetTexture(Main.Instance, "planets/BallRamp.png"));
+                    material.SetVector("_WaveScaleMain", new Vector4(0.4f, 0.05f, 2f, 2f));
+                    material.SetVector("_WaveScaleMacro", new Vector4(2f, 0.2f, 2f, 1f));
+                    surface.GetComponent<TessellatedSphereRenderer>()._materials = new Material[] { material };
+                }
+
                 gameObject.SetActive(false);
             });
         }
