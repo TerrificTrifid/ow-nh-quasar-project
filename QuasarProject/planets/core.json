@@ -6,7 +6,7 @@
 		"Sector/BlackHole/BlackHoleRenderer"
 	],
 	"Base": {
-		"surfaceGravity": 4750,
+		"surfaceGravity": 0,
 		"soiOverride": 15000,
 		"surfaceSize": 2000,
 		"hasMapMarker": false,

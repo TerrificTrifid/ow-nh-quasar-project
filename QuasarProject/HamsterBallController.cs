@@ -130,7 +130,7 @@ namespace QuasarProject
             var wasd = OWInput.GetAxisValue(InputLibrary.moveXZ, InputMode.Character);
             var localMovement = new Vector3(wasd.x, 0, wasd.y);
             var movement = Locator.GetPlayerTransform().TransformDirection(localMovement);
-            Rigidbody.AddVelocityChange(movement);
+            Rigidbody.AddVelocityChange(movement * .3f);
         }
     }
 }
