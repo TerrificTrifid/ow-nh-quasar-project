@@ -19,8 +19,9 @@ namespace QuasarProject
         public PlayerAttachPoint AttachPoint;
 
         [Space]
-        public OWAudioSource AudioSource;
-        public AudioClip Activate, Deactivate;
+        public AudioClip Loop;
+        public AudioClip Activate;
+        public AudioClip Deactivate;
 
         [Space]
         public GameObject CheckpointPrefab;
@@ -107,8 +108,8 @@ namespace QuasarProject
 
             if (active)
             {
-                AudioSource.PlayOneShot(Activate);
-                AudioSource.FadeIn(1);
+                Locator.GetPlayerAudioController()._oneShotSource.PlayOneShot(Activate);
+                // TODO gah looping source
 
                 Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
                 Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
@@ -125,8 +126,8 @@ namespace QuasarProject
             }
             else
             {
-                AudioSource.PlayOneShot(Deactivate);
-                AudioSource.FadeIn(0);
+                Locator.GetPlayerAudioController()._oneShotSource.PlayOneShot(Deactivate);
+                // TODO gah looping source
 
                 AttachPoint.DetachPlayer();
 
