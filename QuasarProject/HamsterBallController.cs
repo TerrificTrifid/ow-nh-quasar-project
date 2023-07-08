@@ -20,12 +20,13 @@ namespace QuasarProject
 
         [Space]
         public AudioClip Loop;
+        private OWAudioSource _loopAudioSource;
         public AudioClip Activate;
         public AudioClip Deactivate;
+        private OWAudioSource _oneShotAudioSource;
 
         [Space]
         public GameObject CheckpointPrefab;
-
         private GameObject _checkpoint;
 
         private bool _active;
@@ -37,25 +38,37 @@ namespace QuasarProject
 
         private void Start()
         {
+            _loopAudioSource = Instantiate(
+                Locator.GetPlayerAudioController()._oneShotSource.gameObject,
+                Locator.GetPlayerAudioController()._oneShotSource.transform.parent
+            ).GetComponent<OWAudioSource>();
+            _loopAudioSource.clip = Loop;
+            _loopAudioSource.loop = true;
+            _loopAudioSource.SetMaxVolume(1 / 5f);
+            _oneShotAudioSource = Instantiate(
+                Locator.GetPlayerAudioController()._oneShotSource.gameObject,
+                Locator.GetPlayerAudioController()._oneShotSource.transform.parent
+            ).GetComponent<OWAudioSource>();
+
+            // add visual
+            var surface = Locator.GetPlayerTransform().Find("Surface");
+            if (surface != null)
+            {
+                surface.SetParent(transform);
+                surface.localPosition = Vector3.zero;
+                surface.localScale = new Vector3(1.4f, 1.4f, 1.4f);
+
+                var material = Locator.GetSunController()._supernova._supernovaMaterial;
+                material.SetColor("_Color", new Color(0.25f, 0.25f, 0.25f));
+                material.SetTexture("_ColorRamp", ImageUtilities.GetTexture(QuasarProject.Instance, "planets/BallRamp.png"));
+                material.SetVector("_WaveScaleMain", new Vector4(0.4f, 0.05f, 2f, 2f));
+                material.SetVector("_WaveScaleMacro", new Vector4(2f, 0.2f, 2f, 1f));
+                surface.GetComponent<TessellatedSphereRenderer>()._materials = new[] { material };
+            }
+
             // let other scripts Start run
             Delay.FireOnNextUpdate(() =>
             {
-                // add visual
-                var surface = Locator.GetPlayerTransform().Find("Surface");
-                if (surface != null)
-                {
-                    surface.SetParent(transform);
-                    surface.localPosition = Vector3.zero;
-                    surface.localScale = new Vector3(1.4f, 1.4f, 1.4f);
-
-                    var material = Locator.GetSunController()._supernova._supernovaMaterial;
-                    material.SetColor("_Color", new Color(0.25f, 0.25f, 0.25f));
-                    material.SetTexture("_ColorRamp", ImageUtilities.GetTexture(QuasarProject.Instance, "planets/BallRamp.png"));
-                    material.SetVector("_WaveScaleMain", new Vector4(0.4f, 0.05f, 2f, 2f));
-                    material.SetVector("_WaveScaleMacro", new Vector4(2f, 0.2f, 2f, 1f));
-                    surface.GetComponent<TessellatedSphereRenderer>()._materials = new[] { material };
-                }
-
                 gameObject.SetActive(false);
             });
         }
@@ -63,6 +76,9 @@ namespace QuasarProject
         private void OnDestroy()
         {
             Destroy(_checkpoint);
+
+            Destroy(_loopAudioSource.gameObject);
+            Destroy(_oneShotAudioSource.gameObject);
         }
 
         public void SetCheckpoint()
@@ -108,8 +124,8 @@ namespace QuasarProject
 
             if (active)
             {
-                Locator.GetPlayerAudioController()._oneShotSource.PlayOneShot(Activate);
-                // TODO gah looping source
+                _loopAudioSource.Play();
+                _oneShotAudioSource.PlayOneShot(Activate);
 
                 Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
                 Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
@@ -126,8 +142,8 @@ namespace QuasarProject
             }
             else
             {
-                Locator.GetPlayerAudioController()._oneShotSource.PlayOneShot(Deactivate);
-                // TODO gah looping source
+                _loopAudioSource.Stop();
+                _oneShotAudioSource.PlayOneShot(Deactivate);
 
                 AttachPoint.DetachPlayer();
 
@@ -151,6 +167,9 @@ namespace QuasarProject
             var localMovement = new Vector3(wasd.x, 0, wasd.y);
             var movement = Locator.GetPlayerTransform().TransformDirection(localMovement);
             Rigidbody.AddVelocityChange(movement * .3f);
+
+
+            _loopAudioSource.SetLocalVolume(Mathf.Clamp01(Rigidbody.GetVelocity().magnitude / 20f));
         }
     }
 }
