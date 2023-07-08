@@ -26,7 +26,6 @@ namespace QuasarProject
         public GameObject CheckpointPrefab;
 
         private GameObject _checkpoint;
-        private Vector3 _checkpointNormal;
 
         private bool _active;
 
@@ -74,7 +73,6 @@ namespace QuasarProject
                     _checkpoint = Instantiate(CheckpointPrefab);
                 }
 
-                _checkpointNormal = raycastHit.normal;
                 _checkpoint.transform.position = Locator.GetPlayerBody().GetPosition();
                 _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
                 _checkpoint.transform.parent = raycastHit.rigidbody.transform;
