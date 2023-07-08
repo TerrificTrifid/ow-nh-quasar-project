@@ -17,7 +17,9 @@ namespace QuasarProject
 
         public OWRigidbody Rigidbody;
         public PlayerAttachPoint AttachPoint;
-        
+
+        public GameObject CheckpointPrefab;
+
         private GameObject _checkpoint;
         private Vector3 _checkpointNormal;
 
@@ -46,7 +48,7 @@ namespace QuasarProject
                     material.SetTexture("_ColorRamp", ImageUtilities.GetTexture(QuasarProject.Instance, "planets/BallRamp.png"));
                     material.SetVector("_WaveScaleMain", new Vector4(0.4f, 0.05f, 2f, 2f));
                     material.SetVector("_WaveScaleMacro", new Vector4(2f, 0.2f, 2f, 1f));
-                    surface.GetComponent<TessellatedSphereRenderer>()._materials = new Material[] { material };
+                    surface.GetComponent<TessellatedSphereRenderer>()._materials = new[] { material };
                 }
 
                 gameObject.SetActive(false);
@@ -60,22 +62,18 @@ namespace QuasarProject
 
         public void SetCheckpoint()
         {
-            int layerMask = OWLayerMask.physicalMask;
-            Vector3 position = Locator.GetActiveCamera().transform.position;
-            Vector3 forward = Locator.GetActiveCamera().transform.forward;
-            RaycastHit raycastHit;
-
-            
-            if (Physics.Raycast(position, forward, out raycastHit, 100f, layerMask)) {
+            if (Physics.Raycast(Locator.GetPlayerBody().GetPosition(), -Locator.GetPlayerBody().GetLocalUpDirection(), out var raycastHit, 2f, OWLayerMask.groundMask))
+            {
                 if (_checkpoint == null)
                 {
-                    _checkpoint = new GameObject("HamsterBallCheckpoint");
+                    _checkpoint = Instantiate(CheckpointPrefab);
                 }
-                
+
                 _checkpointNormal = raycastHit.normal;
-                _checkpoint.transform.position = raycastHit.point + _checkpointNormal * 1.5f/*ball radius*/;
+                _checkpoint.transform.position = Locator.GetPlayerBody().GetPosition();
+                _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
                 _checkpoint.transform.parent = raycastHit.rigidbody.transform;
-            } 
+            }
             else
             {
                 Locator.GetPlayerAudioController().PlayNegativeUISound();
@@ -90,8 +88,8 @@ namespace QuasarProject
                 return;
             }
 
-            OWRigidbody rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
-            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, Quaternion.LookRotation(rigidbody.transform.forward, _checkpointNormal));
+            var rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
+            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, _checkpoint.transform.rotation);
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
@@ -140,9 +138,8 @@ namespace QuasarProject
 
             var rotation = Quaternion.FromToRotation(currentDirection, targetDirection);
             AttachPoint.transform.rotation = rotation * AttachPoint.transform.rotation;
-            
-            
-            
+
+
             // movement wah
             var wasd = OWInput.GetAxisValue(InputLibrary.moveXZ, InputMode.Character);
             var localMovement = new Vector3(wasd.x, 0, wasd.y);

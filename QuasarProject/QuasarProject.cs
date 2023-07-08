@@ -9,11 +9,11 @@ namespace QuasarProject
     public class QuasarProject : ModBehaviour
     {
         public static QuasarProject Instance;
-        
+
         private void Awake()
         {
             Instance = this;
-            
+
             // You won't be able to access OWML's mod helper in Awake.
             // So you probably don't want to do anything here.
             // Use Start() instead.
@@ -23,7 +23,7 @@ namespace QuasarProject
         private void Start()
         {
             // Starting here, you'll have access to OWML's mod helper.
-           // ModHelper.Console.WriteLine($"My mod {nameof(QuasarProject)} is loaded!", MessageType.Success);
+            ModHelper.Console.WriteLine($"My mod {nameof(QuasarProject)} is loaded!", MessageType.Success);
 
             // Get the New Horizons API and load configs
             var newHorizons = ModHelper.Interaction.TryGetModApi<INewHorizons>("xen.NewHorizons");
@@ -36,6 +36,12 @@ namespace QuasarProject
                 if (newHorizons.GetCurrentStarSystem() != "Trifid.QuasarProject") return;
                 ModHelper.Console.WriteLine("Loaded into QP!", MessageType.Success);
             };
+        }
+
+        private void Update()
+        {
+            ModHelper.Console.WriteLine("help");
+            ModHelper.Console.WriteLine("");
         }
     }
 }
