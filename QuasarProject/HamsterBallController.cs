@@ -44,7 +44,7 @@ namespace QuasarProject
             ).GetComponent<OWAudioSource>();
             _loopAudioSource.clip = Loop;
             _loopAudioSource.loop = true;
-            _loopAudioSource.SetMaxVolume(1 / 5f);
+            _loopAudioSource.SetMaxVolume(1 / 3f);
             _oneShotAudioSource = Instantiate(
                 Locator.GetPlayerAudioController()._oneShotSource.gameObject,
                 Locator.GetPlayerAudioController()._oneShotSource.transform.parent
@@ -169,7 +169,7 @@ namespace QuasarProject
             Rigidbody.AddVelocityChange(movement * .3f);
 
 
-            _loopAudioSource.SetLocalVolume(Mathf.Clamp01(Rigidbody.GetVelocity().magnitude / 20f));
+            _loopAudioSource.SetLocalVolume(Mathf.Clamp01(Rigidbody.GetAngularVelocity().magnitude / 10f));
         }
     }
 }
