@@ -37,11 +37,5 @@ namespace QuasarProject
                 ModHelper.Console.WriteLine("Loaded into QP!", MessageType.Success);
             };
         }
-
-        private void Update()
-        {
-            ModHelper.Console.WriteLine("help");
-            ModHelper.Console.WriteLine("");
-        }
     }
 }

@@ -107,7 +107,8 @@ namespace QuasarProject
 
             if (active)
             {
-                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+                AudioSource.PlayOneShot(Activate);
+                AudioSource.FadeIn(1);
 
                 Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
                 Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
@@ -121,22 +122,15 @@ namespace QuasarProject
                 // snap to center
                 Locator.GetPlayerTransform().localPosition = Vector3.zero;
                 Locator.GetPlayerTransform().localRotation = Quaternion.identity;
-
-
-                AudioSource.PlayOneShot(Activate);
-                AudioSource.FadeIn(1);
             }
             else
             {
-                Locator.GetPlayerAudioController().OnExitDreamWorld(AudioType.Artifact_Extinguish);
+                AudioSource.PlayOneShot(Deactivate);
+                AudioSource.FadeIn(0);
 
                 AttachPoint.DetachPlayer();
 
                 gameObject.SetActive(false);
-
-
-                AudioSource.PlayOneShot(Deactivate);
-                AudioSource.FadeIn(0);
             }
         }
 
