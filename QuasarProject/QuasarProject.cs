@@ -8,8 +8,12 @@ namespace QuasarProject
 {
     public class QuasarProject : ModBehaviour
     {
+        public static QuasarProject Instance;
+        
         private void Awake()
         {
+            Instance = this;
+            
             // You won't be able to access OWML's mod helper in Awake.
             // So you probably don't want to do anything here.
             // Use Start() instead.

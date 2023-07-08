@@ -43,7 +43,7 @@ namespace QuasarProject
 
                     var material = Locator.GetSunController()._supernova._supernovaMaterial;
                     material.SetColor("_Color", new Color(0.25f, 0.25f, 0.25f));
-                    material.SetTexture("_ColorRamp", ImageUtilities.GetTexture(Main.Instance, "planets/BallRamp.png"));
+                    material.SetTexture("_ColorRamp", ImageUtilities.GetTexture(QuasarProject.Instance, "planets/BallRamp.png"));
                     material.SetVector("_WaveScaleMain", new Vector4(0.4f, 0.05f, 2f, 2f));
                     material.SetVector("_WaveScaleMacro", new Vector4(2f, 0.2f, 2f, 1f));
                     surface.GetComponent<TessellatedSphereRenderer>()._materials = new Material[] { material };
