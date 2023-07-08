@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2035716225
+CRC: 4188917843
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 26274e9881f2dbd36a44e80d4d43edfe
+    Hash: a1e058d24d4b199e4beac2360df18a9d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f8dad40ab53c0dec2aa437c807b2015a
+    Hash: 45506f1b595ffa2c320e5f31648711ae
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -33,6 +33,10 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
 - Class: 89
   Script: {instanceID: 0}
 - Class: 91
@@ -41,6 +45,10 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 108
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71054d60e5bf7e72491643bf7986c025, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 64039fd011e32da2cb514e5e004fb9d0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fbb2498122f7e23a2e87544333cb528f, type: 3}
 - Class: 114
@@ -60,13 +68,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 25b7e56961bf1df33ed31b8c786ab1c3, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 0cfd736a3952486c93e9a5d8f58c79c3, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 3cb5a34c0b2b4edb1b44fafe70d79e7b, type: 3}
+  Script: {fileID: 280204251, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
 - Class: 114
   Script: {fileID: -1553317914, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
 - Class: 114
-  Script: {fileID: 280204251, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+  Script: {fileID: 11500000, guid: 2145ed3a866d4bd5a94d98ee05d0fa4f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cfd736a3952486c93e9a5d8f58c79c3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3cb5a34c0b2b4edb1b44fafe70d79e7b, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -76,5 +86,6 @@ Assets:
 - Assets/Quasar/tests/HamsterBallItem.prefab
 - Assets/Quasar/Ring_v1.prefab
 - Assets/Quasar/tests/HamsterBall.prefab
+- Assets/Quasar/tests/HamsterBallCheckpoint.prefab
 - Assets/Quasar/Quasar.prefab
 Dependencies: []

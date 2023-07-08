@@ -121,6 +121,10 @@ namespace QuasarProject
                 // snap to center
                 Locator.GetPlayerTransform().localPosition = Vector3.zero;
                 Locator.GetPlayerTransform().localRotation = Quaternion.identity;
+
+
+                AudioSource.PlayOneShot(Activate);
+                AudioSource.FadeIn(1);
             }
             else
             {
@@ -129,6 +133,10 @@ namespace QuasarProject
                 AttachPoint.DetachPlayer();
 
                 gameObject.SetActive(false);
+
+
+                AudioSource.PlayOneShot(Deactivate);
+                AudioSource.FadeIn(0);
             }
         }
 
