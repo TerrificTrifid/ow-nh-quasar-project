@@ -18,6 +18,11 @@ namespace QuasarProject
         public OWRigidbody Rigidbody;
         public PlayerAttachPoint AttachPoint;
 
+        [Space]
+        public OWAudioSource AudioSource;
+        public AudioClip Activate, Deactivate;
+
+        [Space]
         public GameObject CheckpointPrefab;
 
         private GameObject _checkpoint;

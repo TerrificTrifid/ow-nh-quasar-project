@@ -2,6 +2,6 @@
   <PropertyGroup>
     <OutputPath>$(AppData)\OuterWildsModManager\OWML\Mods\Trifid.QuasarProject</OutputPath>
     <OuterWildsModsDirectory>$(AppData)\OuterWildsModManager\OWML\Mods</OuterWildsModsDirectory>
-    <!--<UnityDllsDir>D:\Code Stuff\REMOTE\ow-nh-qp-unity-assets\Assets\Dlls</UnityDllsDir>-->
+    <UnityDllsDir>D:\Code Stuff\REMOTE\ow-nh-qp-unity-assets\Assets\Dlls</UnityDllsDir>
   </PropertyGroup>
 </Project>
