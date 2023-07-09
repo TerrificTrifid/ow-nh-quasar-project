@@ -124,7 +124,7 @@ namespace QuasarProject
 
             if (active)
             {
-                _loopAudioSource.Play();
+                _loopAudioSource.FadeIn(.5f);
                 _oneShotAudioSource.PlayOneShot(Activate);
 
                 Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
@@ -142,7 +142,7 @@ namespace QuasarProject
             }
             else
             {
-                _loopAudioSource.Stop();
+                _loopAudioSource.FadeOut(.5f);
                 _oneShotAudioSource.PlayOneShot(Deactivate);
 
                 AttachPoint.DetachPlayer();
@@ -169,7 +169,10 @@ namespace QuasarProject
             Rigidbody.AddVelocityChange(movement * .3f);
 
 
-            _loopAudioSource.SetLocalVolume(Mathf.Clamp01(Rigidbody.GetAngularVelocity().magnitude / 10f));
+            var speed = Rigidbody.GetAngularVelocity().magnitude;
+            speed = Mathf.InverseLerp(0, 10, speed);
+            speed = Mathf.Lerp(1, 1.5f, speed);
+            _loopAudioSource.pitch = speed;
         }
     }
 }
