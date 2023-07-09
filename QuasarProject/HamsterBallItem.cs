@@ -33,9 +33,9 @@ namespace QuasarProject
         {
             enabled = false;
 
-            _activatePrompt = new ScreenPrompt(InputLibrary.toolActionPrimary, TranslationHandler.GetTranslation("Use", TranslationHandler.TextType.UI) + "   <CMD>");
-            _setCheckpointPrompt = new ScreenPrompt(InputLibrary.toolOptionUp, TranslationHandler.GetTranslation("Set Checkpoint", TranslationHandler.TextType.UI) + "   <CMD>");
-            _gotoCheckpointPrompt = new ScreenPrompt(InputLibrary.toolOptionDown, TranslationHandler.GetTranslation("Go To Checkpoint", TranslationHandler.TextType.UI) + "   <CMD>");
+            _activatePrompt = new ScreenPrompt(InputLibrary.toolActionPrimary, TranslationHandler.GetTranslation("Activate", TranslationHandler.TextType.UI) + "   <CMD>");
+            _setCheckpointPrompt = new ScreenPrompt(InputLibrary.toolOptionUp, TranslationHandler.GetTranslation("Designate", TranslationHandler.TextType.UI) + "   <CMD>");
+            _gotoCheckpointPrompt = new ScreenPrompt(InputLibrary.toolOptionDown, TranslationHandler.GetTranslation("Recall", TranslationHandler.TextType.UI) + "   <CMD>");
         }
 
         public override void PickUpItem(Transform holdTranform)
