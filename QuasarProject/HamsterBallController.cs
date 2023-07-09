@@ -46,7 +46,7 @@ namespace QuasarProject
             );
             _loopAudioSource.clip = Loop;
             _loopAudioSource.loop = true;
-            _loopAudioSource.SetMaxVolume(1 / 5f);
+            _loopAudioSource.SetMaxVolume(0.1f);
             _oneShotAudioSource = Instantiate(
                 Locator.GetPlayerAudioController()._oneShotSource,
                 Locator.GetPlayerAudioController()._oneShotSource.transform.parent
