@@ -34,6 +34,8 @@ namespace QuasarProject
         private void Awake()
         {
             Instance = this;
+
+            Rigidbody.SetMaxAngularVelocity(100);
         }
 
         private void Start()
@@ -83,37 +85,42 @@ namespace QuasarProject
 
         public void SetCheckpoint()
         {
-            if (Physics.Raycast(Locator.GetPlayerBody().GetPosition(), Locator.GetActiveCamera().transform.forward,
-                    out var raycastHit, 4f, OWLayerMask.groundMask))
+            // check for wall in front first
+            if (Physics.Raycast(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerTransform().forward,
+                out var raycastHit, 2, OWLayerMask.groundMask))
             {
+                // then go down at the wall
                 if (Physics.Raycast(raycastHit.point, -Locator.GetPlayerBody().GetLocalUpDirection(),
-                        out var raycast2Hit, 2f, OWLayerMask.groundMask)) { 
+                    out raycastHit, 2, OWLayerMask.groundMask))
+                {
                     if (_checkpoint == null)
                     {
                         _checkpoint = Instantiate(CheckpointPrefab);
                     }
 
-                    _checkpoint.transform.position = raycast2Hit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2;
+                    _checkpoint.transform.position = raycastHit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2; // does this still clip into the wall a bit?
                     _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
-                    _checkpoint.transform.parent = raycast2Hit.rigidbody.transform;
-                } else
+                    _checkpoint.transform.parent = raycastHit.rigidbody.transform;
+                }
+                else
                 {
                     Locator.GetPlayerAudioController().PlayNegativeUISound();
                 }
             }
-            else 
+            else
             {
-                if (Physics.Raycast(Locator.GetPlayerBody().GetPosition()+ (Locator.GetActiveCamera().transform.forward.normalized)*2,
-                        -Locator.GetPlayerBody().GetLocalUpDirection(), out var raycast2Hit, 4f, OWLayerMask.groundMask))
+                // otherwise just go straight forward and down
+                if (Physics.Raycast(Locator.GetPlayerBody().GetPosition() + Locator.GetPlayerTransform().forward * 2,
+                    -Locator.GetPlayerBody().GetLocalUpDirection(), out raycastHit, 2, OWLayerMask.groundMask))
                 {
                     if (_checkpoint == null)
                     {
                         _checkpoint = Instantiate(CheckpointPrefab);
                     }
 
-                    _checkpoint.transform.position = raycast2Hit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2;
+                    _checkpoint.transform.position = raycastHit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2;
                     _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
-                    _checkpoint.transform.parent = raycast2Hit.rigidbody.transform;
+                    _checkpoint.transform.parent = raycastHit.rigidbody.transform;
                 }
                 else
                 {
@@ -176,6 +183,7 @@ namespace QuasarProject
         private void FixedUpdate()
         {
             // align attach point
+            // TODO move this to update and then do tilt manually
             var currentDirection = -AttachPoint.transform.up;
             // should be same as ball's own detector alignment direction
             var targetDirection = Locator.GetPlayerForceDetector().GetAlignmentAcceleration();
@@ -191,9 +199,9 @@ namespace QuasarProject
             Rigidbody.AddVelocityChange(movement * .3f);
 
 
-            var speed = Rigidbody.GetVelocity().magnitude;
-            speed = Mathf.InverseLerp(0, 10, speed);
-            speed = Mathf.Lerp(1, 1.5f, speed);
+            var speed = Rigidbody.GetAngularVelocity().magnitude;
+            speed = Mathf.InverseLerp(0, 100, speed);
+            speed = Mathf.Lerp(1, 2, speed);
             _loopAudioSource.pitch = speed;
         }
     }
