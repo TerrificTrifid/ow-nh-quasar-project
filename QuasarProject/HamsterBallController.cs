@@ -83,20 +83,42 @@ namespace QuasarProject
 
         public void SetCheckpoint()
         {
-            if (Physics.Raycast(Locator.GetPlayerBody().GetPosition(), -Locator.GetPlayerBody().GetLocalUpDirection(), out var raycastHit, 2f, OWLayerMask.groundMask))
+            if (Physics.Raycast(Locator.GetPlayerBody().GetPosition(), Locator.GetActiveCamera().transform.forward,
+                    out var raycastHit, 4f, OWLayerMask.groundMask))
             {
-                if (_checkpoint == null)
-                {
-                    _checkpoint = Instantiate(CheckpointPrefab);
-                }
+                if (Physics.Raycast(raycastHit.point, -Locator.GetPlayerBody().GetLocalUpDirection(),
+                        out var raycast2Hit, 2f, OWLayerMask.groundMask)) { 
+                    if (_checkpoint == null)
+                    {
+                        _checkpoint = Instantiate(CheckpointPrefab);
+                    }
 
-                _checkpoint.transform.position = Locator.GetPlayerBody().GetPosition();
-                _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
-                _checkpoint.transform.parent = raycastHit.rigidbody.transform;
+                    _checkpoint.transform.position = raycast2Hit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2;
+                    _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
+                    _checkpoint.transform.parent = raycast2Hit.rigidbody.transform;
+                } else
+                {
+                    Locator.GetPlayerAudioController().PlayNegativeUISound();
+                }
             }
-            else
+            else 
             {
-                Locator.GetPlayerAudioController().PlayNegativeUISound();
+                if (Physics.Raycast(Locator.GetPlayerBody().GetPosition()+ (Locator.GetActiveCamera().transform.forward.normalized)*2,
+                        -Locator.GetPlayerBody().GetLocalUpDirection(), out var raycast2Hit, 4f, OWLayerMask.groundMask))
+                {
+                    if (_checkpoint == null)
+                    {
+                        _checkpoint = Instantiate(CheckpointPrefab);
+                    }
+
+                    _checkpoint.transform.position = raycast2Hit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2;
+                    _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
+                    _checkpoint.transform.parent = raycast2Hit.rigidbody.transform;
+                }
+                else
+                {
+                    Locator.GetPlayerAudioController().PlayNegativeUISound();
+                }
             }
         }
 
@@ -169,7 +191,7 @@ namespace QuasarProject
             Rigidbody.AddVelocityChange(movement * .3f);
 
 
-            var speed = Rigidbody.GetAngularVelocity().magnitude;
+            var speed = Rigidbody.GetVelocity().magnitude;
             speed = Mathf.InverseLerp(0, 10, speed);
             speed = Mathf.Lerp(1, 1.5f, speed);
             _loopAudioSource.pitch = speed;

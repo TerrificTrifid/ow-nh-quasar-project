@@ -1,0 +1,18 @@
+{
+  "name": "TIMBER_HEARTH",
+  "Props": {
+    "singularities": [
+      {
+        "targetStarSystem": "Trifid.QuasarProject",
+        "horizonRadius": 20,
+        "hasWarpEffects": false,
+        "type": "blackHole",
+        "position": {
+          "x": 155.2729,
+          "y": -14.96952,
+          "z": 194.843
+        }
+      }
+    ]
+  }
+}
