@@ -39,16 +39,16 @@ namespace QuasarProject
         private void Start()
         {
             _loopAudioSource = Instantiate(
-                Locator.GetPlayerAudioController()._oneShotSource.gameObject,
+                Locator.GetPlayerAudioController()._oneShotSource,
                 Locator.GetPlayerAudioController()._oneShotSource.transform.parent
-            ).GetComponent<OWAudioSource>();
+            );
             _loopAudioSource.clip = Loop;
             _loopAudioSource.loop = true;
             _loopAudioSource.SetMaxVolume(1 / 5f);
             _oneShotAudioSource = Instantiate(
-                Locator.GetPlayerAudioController()._oneShotSource.gameObject,
+                Locator.GetPlayerAudioController()._oneShotSource,
                 Locator.GetPlayerAudioController()._oneShotSource.transform.parent
-            ).GetComponent<OWAudioSource>();
+            );
 
             // add visual
             var surface = Locator.GetPlayerTransform().Find("Surface");
