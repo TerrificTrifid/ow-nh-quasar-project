@@ -1,3 +1,4 @@
+using HarmonyLib;
 using NewHorizons;
 using NewHorizons.Handlers;
 using UnityEngine;
@@ -7,14 +8,15 @@ namespace QuasarProject
 {
     /// <summary>
     /// controls the hamster ball
-    /// 
-    /// using vision torch item for reference
-    ///
-    /// TODO: button prompts. where is this done in base game? its not on the item.
     /// </summary>
     [UsedInUnityProject]
+    [HarmonyPatch]
     public class HamsterBallItem : OWItem
     {
+        private ScreenPrompt _activatePrompt;
+        private ScreenPrompt _setCheckpointPrompt;
+        private ScreenPrompt _gotoCheckpointPrompt;
+
         public override string GetDisplayName()
         {
             return TranslationHandler.GetTranslation("Prototype", TranslationHandler.TextType.UI);
@@ -30,12 +32,20 @@ namespace QuasarProject
         private void Start()
         {
             enabled = false;
+
+            _activatePrompt = new ScreenPrompt(InputLibrary.toolActionPrimary, TranslationHandler.GetTranslation("Use", TranslationHandler.TextType.UI) + "   <CMD>");
+            _setCheckpointPrompt = new ScreenPrompt(InputLibrary.toolOptionUp, TranslationHandler.GetTranslation("Set Checkpoint", TranslationHandler.TextType.UI) + "   <CMD>");
+            _gotoCheckpointPrompt = new ScreenPrompt(InputLibrary.toolOptionDown, TranslationHandler.GetTranslation("Go To Checkpoint", TranslationHandler.TextType.UI) + "   <CMD>");
         }
 
         public override void PickUpItem(Transform holdTranform)
         {
             base.PickUpItem(holdTranform);
             enabled = true;
+
+            Locator.GetPromptManager().AddScreenPrompt(_activatePrompt, PromptPosition.UpperRight, true);
+            Locator.GetPromptManager().AddScreenPrompt(_setCheckpointPrompt, PromptPosition.UpperRight, true);
+            Locator.GetPromptManager().AddScreenPrompt(_gotoCheckpointPrompt, PromptPosition.UpperRight, true);
         }
 
         public override void DropItem(Vector3 position, Vector3 normal, Transform parent, Sector sector, IItemDropTarget customDropTarget)
@@ -43,6 +53,10 @@ namespace QuasarProject
             base.DropItem(position, normal, parent, sector, customDropTarget);
             enabled = false;
             HamsterBallController.Instance.SetActive(false);
+
+            Locator.GetPromptManager().RemoveScreenPrompt(_activatePrompt, PromptPosition.UpperRight);
+            Locator.GetPromptManager().RemoveScreenPrompt(_setCheckpointPrompt, PromptPosition.UpperRight);
+            Locator.GetPromptManager().RemoveScreenPrompt(_gotoCheckpointPrompt, PromptPosition.UpperRight);
         }
 
         public override void SocketItem(Transform socketTransform, Sector sector)
@@ -50,6 +64,10 @@ namespace QuasarProject
             base.SocketItem(socketTransform, sector);
             enabled = false;
             HamsterBallController.Instance.SetActive(false);
+
+            Locator.GetPromptManager().RemoveScreenPrompt(_activatePrompt, PromptPosition.UpperRight);
+            Locator.GetPromptManager().RemoveScreenPrompt(_setCheckpointPrompt, PromptPosition.UpperRight);
+            Locator.GetPromptManager().RemoveScreenPrompt(_gotoCheckpointPrompt, PromptPosition.UpperRight);
         }
 
         public override bool CheckIsDroppable()
@@ -70,6 +88,19 @@ namespace QuasarProject
             if (OWInput.IsNewlyPressed(InputLibrary.toolOptionDown, InputMode.Character))
             {
                 HamsterBallController.Instance.GoToCheckpoint();
+            }
+        }
+
+
+        [HarmonyPostfix, HarmonyPatch(typeof(ToolModeUI), nameof(ToolModeUI.Update))]
+        private static void ToolModeUI_Update(ToolModeUI __instance)
+        {
+            if (OWInput.IsInputMode(InputMode.Character) && __instance._toolSwapper.GetToolMode() == ToolMode.Item)
+            {
+                if (__instance._toolSwapper.GetItemCarryTool().GetHeldItem() is HamsterBallItem)
+                {
+                    __instance._projectPrompt.SetVisibility(false);
+                }
             }
         }
     }
