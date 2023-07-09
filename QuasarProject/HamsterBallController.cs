@@ -44,7 +44,7 @@ namespace QuasarProject
             ).GetComponent<OWAudioSource>();
             _loopAudioSource.clip = Loop;
             _loopAudioSource.loop = true;
-            _loopAudioSource.SetMaxVolume(1 / 3f);
+            _loopAudioSource.SetMaxVolume(1 / 5f);
             _oneShotAudioSource = Instantiate(
                 Locator.GetPlayerAudioController()._oneShotSource.gameObject,
                 Locator.GetPlayerAudioController()._oneShotSource.transform.parent
