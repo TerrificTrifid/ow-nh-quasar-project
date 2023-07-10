@@ -52,5 +52,4 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="Exists('$(UnityDllsDir)')">
     <Exec Command="xcopy /y &quot;$(TargetPath)&quot; &quot;$(UnityDllsDir)&quot;" />
   </Target>
-  <ProjectExtensions><VisualStudio><UserProperties planets_4timber_3hearth_1json__JsonSchema="https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json" /></VisualStudio></ProjectExtensions>
 </Project>

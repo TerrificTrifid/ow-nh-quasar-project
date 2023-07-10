@@ -183,7 +183,6 @@ namespace QuasarProject
         private void FixedUpdate()
         {
             // align attach point
-            // TODO move this to update and then do tilt manually
             var currentDirection = -AttachPoint.transform.up;
             // should be same as ball's own detector alignment direction
             var targetDirection = Locator.GetPlayerForceDetector().GetAlignmentAcceleration();
