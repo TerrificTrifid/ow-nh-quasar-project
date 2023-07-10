@@ -100,7 +100,8 @@ namespace QuasarProject
                         _checkpoint = Instantiate(CheckpointPrefab);
                     }
 
-                    _checkpoint.transform.position = raycastHit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2; // does this still clip into the wall a bit?
+                    // does this still clip into the wall a bit?
+                    _checkpoint.transform.position = raycastHit.point;
                     _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
                     _checkpoint.transform.parent = raycastHit.rigidbody.transform;
                 }
@@ -120,7 +121,7 @@ namespace QuasarProject
                         _checkpoint = Instantiate(CheckpointPrefab);
                     }
 
-                    _checkpoint.transform.position = raycastHit.point + Locator.GetPlayerBody().GetLocalUpDirection() * 2;
+                    _checkpoint.transform.position = raycastHit.point;
                     _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
                     _checkpoint.transform.parent = raycastHit.rigidbody.transform;
                 }
@@ -140,7 +141,7 @@ namespace QuasarProject
             }
 
             var rigidbody = _active ? Rigidbody : Locator.GetPlayerBody();
-            rigidbody.WarpToPositionRotation(_checkpoint.transform.position, _checkpoint.transform.rotation);
+            rigidbody.WarpToPositionRotation(_checkpoint.transform.position + Locator.GetPlayerBody().GetLocalUpDirection() * 2, _checkpoint.transform.rotation);
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
         }
