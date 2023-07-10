@@ -36,6 +36,8 @@ namespace QuasarProject
             Instance = this;
 
             Rigidbody.SetMaxAngularVelocity(10);
+
+            AssetBundleUtilities.ReplaceShaders(CheckpointPrefab);
         }
 
         private void Start()
