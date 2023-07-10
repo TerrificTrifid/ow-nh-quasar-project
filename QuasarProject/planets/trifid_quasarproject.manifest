@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4165152163
+CRC: 2971605923
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 09451b685d3314d0d53185978d8baf51
+    Hash: a781cb5bf209e84fa7a5723b66b7e92e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b2d3b81d2b48385701aa343400cc3820
+    Hash: 19915c0ca9712ba720e48022806591bc
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -89,6 +89,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 3cb5a34c0b2b4edb1b44fafe70d79e7b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7f2e3f7cc6baeb3499f9963353d7b458, type: 3}
+- Class: 114
+  Script: {fileID: 805120175, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -99,6 +101,7 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Quasar/tests/HamsterBallItem.prefab
 - Assets/Quasar/Ring_v1.prefab
+- Assets/Quasar/Skybox.prefab
 - Assets/Quasar/tests/HamsterBall.prefab
 - Assets/Quasar/tests/HamsterBallCheckpoint.prefab
 - Assets/Quasar/Quasar.prefab

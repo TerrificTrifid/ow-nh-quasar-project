@@ -63,6 +63,11 @@
 					"y": -9.557279,
 					"z": -20349.38
 				}
+			},
+			{
+				"assetBundle": "planets/trifid_quasarproject",
+				"path": "Assets/Quasar/Skybox.prefab",
+				"keepLoaded": true
 			}
 		]
 	}
