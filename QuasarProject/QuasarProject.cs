@@ -10,6 +10,8 @@ namespace QuasarProject
     {
         public static QuasarProject Instance;
 
+        public INewHorizons NewHorizons;
+
         private void Awake()
         {
             Instance = this;
@@ -26,14 +28,14 @@ namespace QuasarProject
             ModHelper.Console.WriteLine($"My mod {nameof(QuasarProject)} is loaded!", MessageType.Success);
 
             // Get the New Horizons API and load configs
-            var newHorizons = ModHelper.Interaction.TryGetModApi<INewHorizons>("xen.NewHorizons");
-            newHorizons.LoadConfigs(this);
+            NewHorizons = ModHelper.Interaction.TryGetModApi<INewHorizons>("xen.NewHorizons");
+            NewHorizons.LoadConfigs(this);
 
 
             // Example of accessing game code.
             LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
             {
-                if (newHorizons.GetCurrentStarSystem() != "Trifid.QuasarProject") return;
+                if (NewHorizons.GetCurrentStarSystem() != "Trifid.QuasarProject") return;
                 ModHelper.Console.WriteLine("Loaded into QP!", MessageType.Success);
             };
         }
