@@ -35,7 +35,7 @@ namespace QuasarProject
         {
             Instance = this;
 
-            Rigidbody.SetMaxAngularVelocity(100);
+            Rigidbody.SetMaxAngularVelocity(10);
         }
 
         private void Start()
@@ -199,10 +199,7 @@ namespace QuasarProject
             Rigidbody.AddVelocityChange(movement * .3f);
 
 
-            var speed = Rigidbody.GetAngularVelocity().magnitude;
-            speed = Mathf.InverseLerp(0, 100, speed);
-            speed = Mathf.Lerp(1, 2, speed);
-            _loopAudioSource.pitch = speed;
+            _loopAudioSource.pitch = 1 + Rigidbody.GetVelocity().magnitude / 100;
         }
     }
 }
