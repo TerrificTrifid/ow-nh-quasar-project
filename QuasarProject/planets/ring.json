@@ -67,7 +67,8 @@
 			{
 				"assetBundle": "planets/trifid_quasarproject",
 				"path": "Assets/Quasar/Skybox.prefab",
-				"keepLoaded": true
+				"keepLoaded": true,
+				"scale": 0.1
 			}
 		]
 	}
