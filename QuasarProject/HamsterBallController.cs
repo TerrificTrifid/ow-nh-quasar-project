@@ -19,15 +19,18 @@ namespace QuasarProject
         public PlayerAttachPoint AttachPoint;
 
         [Space]
-        public AudioClip Loop;
-        private OWAudioSource _loopAudioSource;
-        public AudioClip Activate;
-        public AudioClip Deactivate;
-        private OWAudioSource _oneShotAudioSource;
-
-        [Space]
         public GameObject CheckpointPrefab;
         private GameObject _checkpoint;
+
+        [Header("Sound")]
+        public AudioClip Ball_Loop;
+        private OWAudioSource _loopAudioSource;
+        public AudioClip Ball_Activate;
+        public AudioClip Ball_Deactivate;
+        public AudioClip Checkpoint_Place;
+        public AudioClip Checkpoint_Warp;
+        public AudioClip Checkpoint_Invalid;
+        private OWAudioSource _oneShotAudioSource;
 
         private bool _active;
 
@@ -46,7 +49,7 @@ namespace QuasarProject
                 Locator.GetPlayerAudioController()._oneShotSource,
                 Locator.GetPlayerAudioController()._oneShotSource.transform.parent
             );
-            _loopAudioSource.clip = Loop;
+            _loopAudioSource.clip = Ball_Loop;
             _loopAudioSource.loop = true;
             _loopAudioSource.SetMaxVolume(0.1f);
             _oneShotAudioSource = Instantiate(
@@ -104,10 +107,12 @@ namespace QuasarProject
                     _checkpoint.transform.position = raycastHit.point;
                     _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
                     _checkpoint.transform.parent = raycastHit.rigidbody.transform;
+
+                    _oneShotAudioSource.PlayOneShot(Checkpoint_Place);
                 }
                 else
                 {
-                    Locator.GetPlayerAudioController().PlayNegativeUISound();
+                    _oneShotAudioSource.PlayOneShot(Checkpoint_Invalid);
                 }
             }
             else
@@ -124,10 +129,12 @@ namespace QuasarProject
                     _checkpoint.transform.position = raycastHit.point;
                     _checkpoint.transform.rotation = Locator.GetPlayerBody().GetRotation();
                     _checkpoint.transform.parent = raycastHit.rigidbody.transform;
+
+                    _oneShotAudioSource.PlayOneShot(Checkpoint_Place);
                 }
                 else
                 {
-                    Locator.GetPlayerAudioController().PlayNegativeUISound();
+                    _oneShotAudioSource.PlayOneShot(Checkpoint_Invalid);
                 }
             }
         }
@@ -136,7 +143,7 @@ namespace QuasarProject
         {
             if (_checkpoint == null)
             {
-                Locator.GetPlayerAudioController().PlayNegativeUISound();
+                _oneShotAudioSource.PlayOneShot(Checkpoint_Invalid);
                 return;
             }
 
@@ -144,6 +151,8 @@ namespace QuasarProject
             rigidbody.WarpToPositionRotation(_checkpoint.transform.position + Locator.GetPlayerBody().GetLocalUpDirection() * 2, _checkpoint.transform.rotation);
             rigidbody.SetVelocity(Vector3.zero);
             rigidbody.SetAngularVelocity(Vector3.zero);
+
+            _oneShotAudioSource.PlayOneShot(Checkpoint_Warp);
         }
 
 
@@ -157,7 +166,7 @@ namespace QuasarProject
             if (active)
             {
                 _loopAudioSource.FadeIn(.5f);
-                _oneShotAudioSource.PlayOneShot(Activate);
+                _oneShotAudioSource.PlayOneShot(Ball_Activate);
 
                 Rigidbody.WarpToPositionRotation(Locator.GetPlayerBody().GetPosition(), Locator.GetPlayerBody().GetRotation());
                 Rigidbody.SetVelocity(Locator.GetPlayerBody().GetVelocity());
@@ -175,7 +184,7 @@ namespace QuasarProject
             else
             {
                 _loopAudioSource.FadeOut(.5f);
-                _oneShotAudioSource.PlayOneShot(Deactivate);
+                _oneShotAudioSource.PlayOneShot(Ball_Deactivate);
 
                 AttachPoint.DetachPlayer();
 
