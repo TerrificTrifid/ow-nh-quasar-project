@@ -3,6 +3,7 @@ using NewHorizons;
 using OWML.Common;
 using OWML.ModHelper;
 using System.Reflection;
+using UnityEngine;
 
 namespace QuasarProject
 {
@@ -32,12 +33,16 @@ namespace QuasarProject
             NewHorizons.LoadConfigs(this);
 
 
-            // Example of accessing game code.
-            LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
+            NewHorizons.GetStarSystemLoadedEvent().AddListener(system =>
             {
-                if (NewHorizons.GetCurrentStarSystem() != "Trifid.QuasarProject") return;
+                if (system != "Trifid.QuasarProject") return;
                 ModHelper.Console.WriteLine("Loaded into QP!", MessageType.Success);
-            };
+
+                // copied from ring/moving skybox
+                var rotateTransform = GameObject.Find("/Skybox").AddComponent<RotateTransform>();
+                rotateTransform._localAxis = Vector3.up;
+                rotateTransform._degreesPerSecond = -1.5f;
+            });
         }
     }
 }
