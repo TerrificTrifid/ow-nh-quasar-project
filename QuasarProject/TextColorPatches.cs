@@ -6,6 +6,13 @@ namespace QuasarProject;
 [HarmonyPatch]
 public static class TextColorPatches
 {
+	private static readonly Color _baseEmissionColor = new(0.5294f, 0.5763f, 1.5f, 1f);
+
+	private static readonly Color _baseProjectorColor = new(1.4118f, 1.5367f, 4f, 1f);
+	private static readonly Color _baseTextColor = new(0.8824f, 0.9604f, 2.5f, 1f);
+	private static readonly Color _baseTextShadowColor = new(0.3529f, 0.3843f, 1f, 0.25f);
+
+
 	[HarmonyPrefix, HarmonyPatch(typeof(NomaiTextLine), nameof(NomaiTextLine.DetermineTextLineColor))]
 	private static bool NomaiTextLine_DetermineTextLineColor(NomaiTextLine __instance, NomaiTextLine.VisualState state, out Color __result)
 	{
