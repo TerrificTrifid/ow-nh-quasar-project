@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 685788216
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 469308cc832a4c9d1b52a09b6e9ca574
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 15e110e576a96ebd016226d6c9dcc2f4
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -2121363334, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Quasar/tests/portals/Test Portals.prefab
+- Assets/Quasar/tests/portals/Portal.prefab
+Dependencies: []

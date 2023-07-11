@@ -14,6 +14,15 @@
           "z": 194.843
         }
       }
+    ],
+    "details": [
+      {
+        "position": {"x": 16.89875, "y": -45.92596, "z": 184.4908},
+        "rotation": {"x": 4.75635, "y": 96.68484, "z": 104.0165},
+
+        "assetBundle": "planets/portals",
+        "path": "Test Portals"
+      }
     ]
   }
 }
