@@ -1,17 +1,19 @@
 ﻿using NewHorizons;
+using NewHorizons.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace QuasarProject
 {
+    // referencing https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Core/Portal.cs
     [UsedInUnityProject]
     public class PortalController : MonoBehaviour
     {
-        private List<GameObject> enteringGOs = new List<GameObject>();
+        private readonly List<OWRigidbody> enteringBodies = new();
 
         public PortalController pairedPortal;
         private Camera cam;
-        protected RenderTexture rt;
+        private RenderTexture rt;
         private MeshRenderer portalRenderer;
 
         private Transform playerTransform;
@@ -20,7 +22,7 @@ namespace QuasarProject
 
         public void Awake()
         {
-            rt = new RenderTexture(256, 256, 16, RenderTextureFormat.ARGB32);
+            rt = new RenderTexture(256, 256, 0);
             rt.Create();
 
             portalRenderer = GetComponentInChildren<MeshRenderer>();
@@ -43,68 +45,58 @@ namespace QuasarProject
 
         public void OnTriggerEnter(Collider other)
         {
-            enteringGOs.Add(other.gameObject);
+            enteringBodies.SafeAdd(other.GetAttachedOWRigidbody());
         }
 
         public void OnTriggerExit(Collider other)
         {
-            enteringGOs.Remove(other.gameObject);
-        }
-
-        private static Quaternion QuaternionFromEuler(Vector3 euler)
-        {
-            return Quaternion.Euler(euler.x, euler.y, euler.z);
+            enteringBodies.QuickRemove(other.GetAttachedOWRigidbody());
         }
 
         public void Update()
         {
-            var relativePos = pairedPortal.transform.InverseTransformPoint(playerTransform.position);
-            var relativeRot = pairedPortal.transform.InverseTransformRotation(playerTransform.rotation);
-            cam.transform.localPosition = -relativePos;
-            cam.transform.localRotation = this.transform.InverseTransformRotation(pairedPortal.transform.rotation) * relativeRot; //QuaternionFromEuler(relativeRot.eulerAngles + new Vector3(0, 180, 0));
+            var relativePos = transform.InverseTransformPoint(playerTransform.position);
+            var relativeRot = transform.InverseTransformRotation(playerTransform.rotation);
+            pairedPortal.cam.transform.localPosition = -relativePos;
+            pairedPortal.cam.transform.localRotation = relativeRot * Quaternion.Euler(0, 180, 0);
 
             // if any enteringGOs are on the opposite side, teleport them to pairedPortal, and add them to pairedPortal.enteredGOs
             // if any enteredGOs are on the opposite side, teleport them to pairedPortal, and add them to pairedPortal.enteringGOs
 
-            if (enteringGOs.Count <= 0) return;
+            if (enteringBodies.Count <= 0) return;
 
-            var testList = enteringGOs.ToArray();
-            foreach (var go in testList)
+            for (var i = enteringBodies.Count - 1; i >= 0; i--)
             {
-                if (!IsPassedThrough(go.transform)) continue;
-                pairedPortal.TeleportToMeFromPairedPortal(go.transform);
-                pairedPortal.enteringGOs.Add(go);
-                this.enteringGOs.Remove(go);
+                var body = enteringBodies[i];
+                if (!IsPassedThrough(body)) continue;
+                pairedPortal.ReceiveWarpedBody(body);
+
+                pairedPortal.enteringBodies.SafeAdd(body);
+                enteringBodies.QuickRemove(body);
             }
         }
 
         // returns true if the center of inQuestion is behind the portal
         // I think this is the correct implementation, we'll find out
-        private bool IsPassedThrough(Transform inQuestion)
+        private bool IsPassedThrough(OWRigidbody body)
         {
-            var relativeLocation = this.transform.InverseTransformPoint(inQuestion.position);
+            var relativePos = transform.InverseTransformPoint(body.GetPosition());
 
-            return Vector3.Dot(relativeLocation, new Vector3(1, 0, 0)) < 0;
+            return Vector3.Dot(relativePos, new Vector3(1, 0, 0)) < 0;
         }
 
-        private void TeleportToMeFromPairedPortal(Transform t)
+        private void ReceiveWarpedBody(OWRigidbody body)
         {
-            var relativePos = pairedPortal.transform.InverseTransformPoint(t.position);
-            var relativeRot = pairedPortal.transform.InverseTransformRotation(t.rotation);
+            var relativePos = pairedPortal.transform.InverseTransformPoint(body.GetPosition());
+            var relativeRot = pairedPortal.transform.InverseTransformRotation(body.GetRotation());
 
-            //t.transform.rotation = this.transform.rotation * relativeRot;
-            //t.transform.position = this.transform.position + relativePos;
+            var relativeVel = pairedPortal.transform.InverseTransformVector(body.GetVelocity());
+            var relativeAngularVel = pairedPortal.transform.InverseTransformVector(body.GetAngularVelocity());
 
-            // account for owrigidbody speed & angular momentum
-            var rb = t.GetComponentInChildren<OWRigidbody>();
-            var angVel = rb.GetAngularVelocity();
-            var relativeVel = pairedPortal.transform.InverseTransformVector(rb.GetVelocity());
-            var relativeAngularVel = pairedPortal.transform.InverseTransformRotation(Quaternion.Euler(angVel.x, angVel.y, angVel.z));
+            body.WarpToPositionRotation(transform.TransformPoint(relativePos), transform.TransformRotation(relativeRot));
 
-            rb.WarpToPositionRotation(this.transform.position + relativePos, this.transform.rotation * relativeRot);
-
-            rb.SetVelocity(this.transform.TransformVector(relativeVel));
-            rb.SetAngularVelocity((this.transform.rotation * relativeAngularVel).eulerAngles);
+            body.SetVelocity(transform.TransformVector(relativeVel));
+            body.SetAngularVelocity(transform.TransformVector(relativeAngularVel));
         }
     }
 }
