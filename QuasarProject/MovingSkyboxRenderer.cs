@@ -11,8 +11,8 @@ public class MovingSkyboxRenderer : MonoBehaviour
         var scaled = transform.parent;
         var origin = scaled.parent;
         
-        var playerPos = origin.InverseTransformPoint(Locator.GetPlayerTransform().position);
-        scaled.localPosition = playerPos;
-        transform.localPosition = -playerPos;
+        var cameraPos = origin.InverseTransformPoint(Locator.GetActiveCamera().transform.position);
+        scaled.localPosition = cameraPos;
+        transform.localPosition = -cameraPos;
     }
 }
