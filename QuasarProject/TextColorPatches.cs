@@ -6,100 +6,96 @@ namespace QuasarProject;
 [HarmonyPatch]
 public static class TextColorPatches
 {
-	private static readonly Color _baseEmissionColor = new(0.5294f, 0.5763f, 1.5f, 1f);
-
-	private static readonly Color _baseProjectorColor = new(1.4118f, 1.5367f, 4f, 1f);
-	private static readonly Color _baseTextColor = new(0.8824f, 0.9604f, 2.5f, 1f);
-	private static readonly Color _baseTextShadowColor = new(0.3529f, 0.3843f, 1f, 0.25f);
-
-
-	[HarmonyPrefix, HarmonyPatch(typeof(NomaiTextLine), nameof(NomaiTextLine.DetermineTextLineColor))]
-	private static bool NomaiTextLine_DetermineTextLineColor(NomaiTextLine __instance, NomaiTextLine.VisualState state, out Color __result)
+	private static class OriginalColors
 	{
-		Color color = Color.white;
-		bool flag = false;
-		if (__instance._active)
+		public static readonly Color s_originSpeakerColorUnread = new(0.5294114f, 0.5762672f, 1.5f, 1f);
+		public static readonly Color s_originSpeakerColorTranslated = new(0.6f, 0.6f, 0.6f, 1f);
+		public static readonly Color s_externalSpeakerColorUnread = new(1.5f, 0.9606341f, 0.5735294f, 1f);
+		public static readonly Color s_externalSpeakerColorTranslated = new(0.6f, 0.4f, 0.22f, 1f);
+
+		public static readonly Color _baseEmissionColor = new(0.5294f, 0.5763f, 1.5f, 1f);
+		public static readonly Color s_colorTranslated = new(0.6f, 0.6f, 0.6f, 1f);
+
+		public static readonly Color _baseTextColor = new(0.8824f, 0.9604f, 2.5f, 1f);
+		public static readonly Color s_textColorTranslated = new(1.5f, 1.5f, 1.5f, 1f);
+		public static readonly Color _baseTextShadowColor = new(0.3529f, 0.3843f, 1f, 0.25f);
+		public static readonly Color s_textShadowColorTranslated = new(1f, 1f, 1f, 0.3f);
+		public static readonly Color _baseProjectorColor = new(1.4118f, 1.5367f, 4f, 1f);
+		public static readonly Color s_projectorColorTranslated = new(3f, 3f, 3f, 1f);
+	}
+
+	private static class EditedColors
+	{
+		public static readonly Color s_originSpeakerColorUnread = new(0.5294114f, 0.5762672f, 1.5f, 1f);
+		public static readonly Color s_originSpeakerColorTranslated = new(0.6f, 0.6f, 0.6f, 1f);
+		public static readonly Color s_externalSpeakerColorUnread = new(1.5f, 0.9606341f, 0.5735294f, 1f);
+		public static readonly Color s_externalSpeakerColorTranslated = new(0.6f, 0.4f, 0.22f, 1f);
+
+		public static readonly Color _baseEmissionColor = new(0.5294f, 0.5763f, 1.5f, 1f);
+		public static readonly Color s_colorTranslated = new(0.6f, 0.6f, 0.6f, 1f);
+
+		public static readonly Color _baseTextColor = new(0.8824f, 0.9604f, 2.5f, 1f);
+		public static readonly Color s_textColorTranslated = new(1.5f, 1.5f, 1.5f, 1f);
+		public static readonly Color _baseTextShadowColor = new(0.3529f, 0.3843f, 1f, 0.25f);
+		public static readonly Color s_textShadowColorTranslated = new(1f, 1f, 1f, 0.3f);
+		public static readonly Color _baseProjectorColor = new(1.4118f, 1.5367f, 4f, 1f);
+		public static readonly Color s_projectorColorTranslated = new(3f, 3f, 3f, 1f);
+	}
+
+	[HarmonyPrefix, HarmonyPatch(typeof(NomaiTextLine), nameof(NomaiTextLine.Awake))]
+	private static void NomaiTextLine_Awake(NomaiTextLine __instance)
+	{
+		if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
 		{
-			switch (state)
-			{
-				case NomaiTextLine.VisualState.HIDDEN:
-					color = Color.white;
-					flag = false;
-					break;
-				case NomaiTextLine.VisualState.UNREAD:
-					flag = true;
-					if (__instance._speakerLocation == NomaiText.Location.UNSPECIFIED || __instance._textLineLocation == NomaiText.Location.UNSPECIFIED)
-					{
-						color = NomaiTextLine.s_originSpeakerColorUnread;
-					}
-					else if (__instance._speakerLocation == __instance._textLineLocation)
-					{
-						color = NomaiTextLine.s_originSpeakerColorUnread;
-					}
-					else
-					{
-						color = NomaiTextLine.s_externalSpeakerColorUnread;
-					}
-					break;
-				case NomaiTextLine.VisualState.TRANSLATED:
-					if (__instance._speakerLocation == NomaiText.Location.UNSPECIFIED || __instance._textLineLocation == NomaiText.Location.UNSPECIFIED)
-					{
-						color = NomaiTextLine.s_originSpeakerColorTranslated;
-					}
-					else if (__instance._speakerLocation == __instance._textLineLocation)
-					{
-						color = NomaiTextLine.s_originSpeakerColorTranslated;
-					}
-					else
-					{
-						color = NomaiTextLine.s_externalSpeakerColorTranslated;
-					}
-					flag = true;
-					break;
-			}
-		}
-		if (flag)
-		{
-			color.a = 1f;
+			NomaiTextLine.s_originSpeakerColorUnread = EditedColors.s_originSpeakerColorUnread;
+			NomaiTextLine.s_originSpeakerColorTranslated = EditedColors.s_originSpeakerColorTranslated;
+			NomaiTextLine.s_externalSpeakerColorUnread = EditedColors.s_externalSpeakerColorUnread;
+			NomaiTextLine.s_externalSpeakerColorTranslated = EditedColors.s_externalSpeakerColorTranslated;
 		}
 		else
 		{
-			color.a = 0f;
+			NomaiTextLine.s_originSpeakerColorUnread = OriginalColors.s_originSpeakerColorUnread;
+			NomaiTextLine.s_originSpeakerColorTranslated = OriginalColors.s_originSpeakerColorTranslated;
+			NomaiTextLine.s_externalSpeakerColorUnread = OriginalColors.s_externalSpeakerColorUnread;
+			NomaiTextLine.s_externalSpeakerColorTranslated = OriginalColors.s_externalSpeakerColorTranslated;
 		}
-		__result = color;
-
-		return false;
 	}
 
-
-	[HarmonyPrefix, HarmonyPatch(typeof(NomaiComputerRing), nameof(NomaiComputerRing.Update))]
-	private static bool NomaiComputerRing_Update(NomaiComputerRing __instance)
+	[HarmonyPrefix, HarmonyPatch(typeof(NomaiComputerRing), nameof(NomaiComputerRing.Initialize))]
+	private static void NomaiComputerRing_Initialize(NomaiComputerRing __instance)
 	{
-		if ((!__instance._activated || !__instance._translated) && __instance._emissionColorT < 1f)
+		if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
 		{
-			__instance._emissionColorT = Mathf.MoveTowards(__instance._emissionColorT, 1f, Time.unscaledDeltaTime / __instance._colorFadeTime);
-			NomaiComputerRing.s_matPropBlock.SetColor(NomaiComputerRing.s_propID_Detail1EmissionColor, Color.Lerp(NomaiComputerRing.s_colorTranslated, __instance._baseEmissionColor, __instance._emissionColorT));
-			__instance._renderer.SetPropertyBlock(NomaiComputerRing.s_matPropBlock);
-			return false;
+			__instance._baseEmissionColor = EditedColors._baseEmissionColor;
+			NomaiComputerRing.s_colorTranslated = EditedColors.s_colorTranslated;
 		}
-		if (__instance._activated && __instance._translated && __instance._emissionColorT > 0f)
+		else
 		{
-			__instance._emissionColorT = Mathf.MoveTowards(__instance._emissionColorT, 0f, Time.unscaledDeltaTime / __instance._colorFadeTime);
-			NomaiComputerRing.s_matPropBlock.SetColor(NomaiComputerRing.s_propID_Detail1EmissionColor, Color.Lerp(NomaiComputerRing.s_colorTranslated, __instance._baseEmissionColor, __instance._emissionColorT));
-			__instance._renderer.SetPropertyBlock(NomaiComputerRing.s_matPropBlock);
+			__instance._baseEmissionColor = OriginalColors._baseEmissionColor;
+			NomaiComputerRing.s_colorTranslated = OriginalColors.s_colorTranslated;
 		}
-
-		return false;
 	}
 
-
-	[HarmonyPrefix, HarmonyPatch(typeof(NomaiVesselComputerRing), nameof(NomaiVesselComputerRing.UpdateColor))]
-	private static bool NomaiVesselComputerRing_UpdateColor(NomaiVesselComputerRing __instance)
+	[HarmonyPrefix, HarmonyPatch(typeof(NomaiVesselComputerRing), nameof(NomaiVesselComputerRing.Awake))]
+	private static void NomaiVesselComputerRing_Awake(NomaiVesselComputerRing __instance)
 	{
-		__instance._ringRenderer.SetColor(Color.Lerp(NomaiVesselComputerRing.s_textColorTranslated, __instance._baseTextColor, __instance._colorT));
-		__instance._ringRenderer.SetMaterialProperty(__instance._propID_ShadowColor, Color.Lerp(NomaiVesselComputerRing.s_textShadowColorTranslated, __instance._baseTextShadowColor, __instance._colorT));
-		__instance._projectorRenderer.SetColor(Color.Lerp(NomaiVesselComputerRing.s_projectorColorTranslated, __instance._baseProjectorColor, __instance._colorT));
-
-		return false;
+		if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
+		{
+			__instance._baseTextColor = EditedColors._baseTextColor;
+			NomaiVesselComputerRing.s_textColorTranslated = EditedColors.s_textColorTranslated;
+			__instance._baseTextShadowColor = EditedColors._baseTextShadowColor;
+			NomaiVesselComputerRing.s_textShadowColorTranslated = EditedColors.s_textShadowColorTranslated;
+			__instance._baseProjectorColor = EditedColors._baseProjectorColor;
+			NomaiVesselComputerRing.s_projectorColorTranslated = EditedColors.s_projectorColorTranslated;
+		}
+		else
+		{
+			__instance._baseTextColor = OriginalColors._baseTextColor;
+			NomaiVesselComputerRing.s_textColorTranslated = OriginalColors.s_textColorTranslated;
+			__instance._baseTextShadowColor = OriginalColors._baseTextShadowColor;
+			NomaiVesselComputerRing.s_textShadowColorTranslated = OriginalColors.s_textShadowColorTranslated;
+			__instance._baseProjectorColor = OriginalColors._baseProjectorColor;
+			NomaiVesselComputerRing.s_projectorColorTranslated = OriginalColors.s_projectorColorTranslated;
+		}
 	}
 }
