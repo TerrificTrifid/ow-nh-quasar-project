@@ -61,6 +61,7 @@ public static class TextColorPatches
 		}
 	}
 
+	// TODO this doesnt work for some reason. idk why
 	[HarmonyPostfix, HarmonyPatch(typeof(NomaiComputerRing), nameof(NomaiComputerRing.Initialize))]
 	private static void NomaiComputerRing_Initialize(NomaiComputerRing __instance)
 	{
