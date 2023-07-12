@@ -31,9 +31,9 @@
 		"solarLuminosity": 1,
 		"lightRadius": 100000,
 		"lightTint": {
-			"r": 238,
-			"g": 197,
-			"b": 143,
+			"r": 245,
+			"g": 236,
+			"b": 223,
 			"a": 255
 		},
 		"stellarDeathType": "none",
