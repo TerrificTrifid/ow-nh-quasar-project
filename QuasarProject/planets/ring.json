@@ -65,6 +65,16 @@
 				}
 			},
 			{
+				"assetBundle": "planets/portals",
+				"path": "Test Portals",
+				"keepLoaded": true,
+				"position": {
+					"x": 60.93604,
+					"y": -9.557279,
+					"z": -20349.38
+				}
+			},
+			{
 				"assetBundle": "planets/trifid_quasarproject",
 				"path": "Assets/Quasar/Skybox.prefab",
 				"keepLoaded": true,

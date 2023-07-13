@@ -16,7 +16,7 @@ namespace QuasarProject
         private RenderTexture rt;
         private MeshRenderer portalRenderer;
 
-        private Transform playerTransform;
+        private Transform playerCamTransform;
 
         public Transform debugPlayerReplacement;
 
@@ -25,7 +25,7 @@ namespace QuasarProject
             rt = new RenderTexture(256, 256, 0);
             rt.Create();
 
-            portalRenderer = GetComponentInChildren<MeshRenderer>();
+            portalRenderer = GetComponentsInChildren<MeshRenderer>()[1]; // change back after removing cubes
             cam = GetComponentInChildren<Camera>();
 
             cam.targetTexture = rt;
@@ -34,7 +34,7 @@ namespace QuasarProject
         public void Start()
         {
             portalRenderer.material.SetTexture("_MainTex", pairedPortal.rt);
-            playerTransform = debugPlayerReplacement ?? Locator.GetPlayerTransform();
+            playerCamTransform = debugPlayerReplacement ?? Locator.GetPlayerCamera().transform;
         }
 
         public void OnDestroy()
@@ -46,17 +46,19 @@ namespace QuasarProject
         public void OnTriggerEnter(Collider other)
         {
             enteringBodies.SafeAdd(other.GetAttachedOWRigidbody());
+            QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} enter {this}");
         }
 
         public void OnTriggerExit(Collider other)
         {
             enteringBodies.QuickRemove(other.GetAttachedOWRigidbody());
+            QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} exit {this}");
         }
 
         public void Update()
         {
-            var relativePos = transform.InverseTransformPoint(playerTransform.position);
-            var relativeRot = transform.InverseTransformRotation(playerTransform.rotation);
+            var relativePos = transform.InverseTransformPoint(playerCamTransform.position);
+            var relativeRot = transform.InverseTransformRotation(playerCamTransform.rotation);
             pairedPortal.cam.transform.localPosition = -relativePos;
             pairedPortal.cam.transform.localRotation = Quaternion.Euler(0, 180, 0) * relativeRot;
 
@@ -69,6 +71,7 @@ namespace QuasarProject
             {
                 var body = enteringBodies[i];
                 if (!IsPassedThrough(body)) continue;
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
                 pairedPortal.ReceiveWarpedBody(body);
 
                 pairedPortal.enteringBodies.SafeAdd(body);
@@ -82,6 +85,7 @@ namespace QuasarProject
         {
             var relativePos = transform.InverseTransformPoint(body.GetPosition());
 
+            QuasarProject.Instance.ModHelper.Console.WriteLine($"funny dot for {this} and {body} = {Vector3.Dot(relativePos, Vector3.forward)}");
             return Vector3.Dot(relativePos, Vector3.forward) < 0;
         }
 
