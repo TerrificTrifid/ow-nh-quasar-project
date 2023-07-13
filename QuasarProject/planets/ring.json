@@ -70,9 +70,16 @@
 				"keepLoaded": true,
 				"position": {
 					"x": 60.93604,
-					"y": -9.557279,
-					"z": -20349.38
-				}
+					"y": -20349.4,
+					"z": 9.5586
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"parentPath": "Sector/Ring_v1",
+				"isRelativeToParent": true
 			},
 			{
 				"assetBundle": "planets/trifid_quasarproject",
