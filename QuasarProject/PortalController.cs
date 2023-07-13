@@ -9,7 +9,7 @@ namespace QuasarProject
     [UsedInUnityProject]
     public class PortalController : MonoBehaviour
     {
-        private readonly List<OWRigidbody> enteringBodies = new();
+        private readonly List<OWRigidbody> trackedBodies = new();
 
         public PortalController pairedPortal;
         private Camera cam;
@@ -45,13 +45,13 @@ namespace QuasarProject
 
         public void OnTriggerEnter(Collider other)
         {
-            enteringBodies.SafeAdd(other.GetAttachedOWRigidbody());
+            trackedBodies.SafeAdd(other.GetAttachedOWRigidbody());
             QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} enter {this}");
         }
 
         public void OnTriggerExit(Collider other)
         {
-            enteringBodies.QuickRemove(other.GetAttachedOWRigidbody());
+            trackedBodies.QuickRemove(other.GetAttachedOWRigidbody());
             QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} exit {this}");
         }
 
@@ -59,39 +59,34 @@ namespace QuasarProject
         {
             var relativePos = transform.InverseTransformPoint(playerCamTransform.position);
             var relativeRot = transform.InverseTransformRotation(playerCamTransform.rotation);
-            pairedPortal.cam.transform.localPosition = -relativePos;
-            pairedPortal.cam.transform.localRotation = Quaternion.Euler(0, 180, 0) * relativeRot;
+            pairedPortal.cam.transform.localPosition = relativePos;
+            pairedPortal.cam.transform.localRotation = relativeRot;
 
-            // if any enteringGOs are on the opposite side, teleport them to pairedPortal, and add them to pairedPortal.enteredGOs
-            // if any enteredGOs are on the opposite side, teleport them to pairedPortal, and add them to pairedPortal.enteringGOs
+            if (trackedBodies.Count <= 0) return;
 
-            if (enteringBodies.Count <= 0) return;
-
-            for (var i = enteringBodies.Count - 1; i >= 0; i--)
+            for (var i = trackedBodies.Count - 1; i >= 0; i--)
             {
-                var body = enteringBodies[i];
+                var body = trackedBodies[i];
                 if (!IsPassedThrough(body)) continue;
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
                 pairedPortal.ReceiveWarpedBody(body);
 
-                pairedPortal.enteringBodies.SafeAdd(body);
-                enteringBodies.QuickRemoveAt(i);
+                // pairedPortal.trackedBodies.SafeAdd(body);
+                // trackedBodies.QuickRemoveAt(i);
             }
         }
 
-        // returns true if the center of inQuestion is behind the portal
-        // I think this is the correct implementation, we'll find out
         private bool IsPassedThrough(OWRigidbody body)
         {
             var relativePos = transform.InverseTransformPoint(body.GetPosition());
 
-            QuasarProject.Instance.ModHelper.Console.WriteLine($"funny dot for {this} and {body} = {Vector3.Dot(relativePos, Vector3.forward)}");
             return Vector3.Dot(relativePos, Vector3.forward) < 0;
         }
 
         private void ReceiveWarpedBody(OWRigidbody body)
         {
             var relativePos = pairedPortal.transform.InverseTransformPoint(body.GetPosition());
+            relativePos -= Vector3.forward * 10f; // push you thru the portal a bit more
             var relativeRot = pairedPortal.transform.InverseTransformRotation(body.GetRotation());
 
             var relativeVel = pairedPortal.transform.InverseTransformVector(body.GetVelocity());
