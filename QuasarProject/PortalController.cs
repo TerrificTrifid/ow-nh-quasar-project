@@ -86,7 +86,7 @@ namespace QuasarProject
         private void ReceiveWarpedBody(OWRigidbody body)
         {
             var relativePos = pairedPortal.transform.InverseTransformPoint(body.GetPosition());
-            relativePos -= Vector3.forward * 10f; // push you thru the portal a bit more
+            relativePos += Vector3.forward * .1f; // push you thru the portal a bit more
             var relativeRot = pairedPortal.transform.InverseTransformRotation(body.GetRotation());
 
             var relativeVel = pairedPortal.transform.InverseTransformVector(body.GetVelocity());
