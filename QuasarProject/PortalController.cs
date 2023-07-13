@@ -58,7 +58,7 @@ namespace QuasarProject
             var relativePos = transform.InverseTransformPoint(playerTransform.position);
             var relativeRot = transform.InverseTransformRotation(playerTransform.rotation);
             pairedPortal.cam.transform.localPosition = -relativePos;
-            pairedPortal.cam.transform.localRotation = relativeRot * Quaternion.Euler(0, 180, 0);
+            pairedPortal.cam.transform.localRotation = Quaternion.Euler(0, 180, 0) * relativeRot;
 
             // if any enteringGOs are on the opposite side, teleport them to pairedPortal, and add them to pairedPortal.enteredGOs
             // if any enteredGOs are on the opposite side, teleport them to pairedPortal, and add them to pairedPortal.enteringGOs
@@ -72,7 +72,7 @@ namespace QuasarProject
                 pairedPortal.ReceiveWarpedBody(body);
 
                 pairedPortal.enteringBodies.SafeAdd(body);
-                enteringBodies.QuickRemove(body);
+                enteringBodies.QuickRemoveAt(i);
             }
         }
 
@@ -82,7 +82,7 @@ namespace QuasarProject
         {
             var relativePos = transform.InverseTransformPoint(body.GetPosition());
 
-            return Vector3.Dot(relativePos, new Vector3(1, 0, 0)) < 0;
+            return Vector3.Dot(relativePos, Vector3.forward) < 0;
         }
 
         private void ReceiveWarpedBody(OWRigidbody body)
