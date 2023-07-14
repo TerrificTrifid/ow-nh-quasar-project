@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 210586182
+CRC: 2193925437
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: df1cb478878c2de4ab460feea1983030
+    Hash: 6edef1e46cb54bea8d093c1d5cc0514a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9a87559716497e4bcb151bd26bdd180e
+    Hash: 15e110e576a96ebd016226d6c9dcc2f4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,8 +18,6 @@ ClassTypes:
 - Class: 21
   Script: {instanceID: 0}
 - Class: 23
-  Script: {instanceID: 0}
-- Class: 28
   Script: {instanceID: 0}
 - Class: 33
   Script: {instanceID: 0}
@@ -35,6 +33,7 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/Quasar/tests/portals/PortalB.prefab
 - Assets/Quasar/tests/portals/Test Portals.prefab
-- Assets/Quasar/tests/portals/Portal.prefab
+- Assets/Quasar/tests/portals/PortalA.prefab
 Dependencies: []

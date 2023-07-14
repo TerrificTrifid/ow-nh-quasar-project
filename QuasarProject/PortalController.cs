@@ -16,16 +16,18 @@ namespace QuasarProject
         private RenderTexture rt;
         private MeshRenderer portalRenderer;
 
-        private Transform playerCamTransform;
+        private Camera playerCam;
 
-        public Transform debugPlayerReplacement;
+
+        private float nearClipOffset = 0.05f;
+        private float nearClipLimit = 0.2f;
 
         public void Awake()
         {
             rt = new RenderTexture(256, 256, 0);
             rt.Create();
 
-            portalRenderer = GetComponentsInChildren<MeshRenderer>()[1]; // change back after removing cubes
+            portalRenderer = GetComponentInChildren<MeshRenderer>();
             cam = GetComponentInChildren<Camera>();
 
             cam.targetTexture = rt;
@@ -34,7 +36,8 @@ namespace QuasarProject
         public void Start()
         {
             portalRenderer.material.SetTexture("_MainTex", pairedPortal.rt);
-            playerCamTransform = debugPlayerReplacement ?? Locator.GetPlayerCamera().transform;
+            portalRenderer.material.SetInt("displayMask", 1);
+            playerCam = Locator.GetPlayerCamera().mainCamera;
         }
 
         public void OnDestroy()
@@ -57,22 +60,20 @@ namespace QuasarProject
 
         public void Update()
         {
-            var relativePos = transform.InverseTransformPoint(playerCamTransform.position);
-            var relativeRot = transform.InverseTransformRotation(playerCamTransform.rotation);
-            pairedPortal.cam.transform.localPosition = relativePos;
-            pairedPortal.cam.transform.localRotation = relativeRot;
+            var relativePos = transform.InverseTransformPoint(playerCam.transform.position);
+            var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
+            cam.transform.localPosition = relativePos;
+            cam.transform.localRotation = relativeRot;
+            cam.fieldOfView = playerCam.fieldOfView;
 
             if (trackedBodies.Count <= 0) return;
 
-            for (var i = trackedBodies.Count - 1; i >= 0; i--)
+            foreach (var body in trackedBodies)
             {
-                var body = trackedBodies[i];
                 if (!IsPassedThrough(body)) continue;
+
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
                 pairedPortal.ReceiveWarpedBody(body);
-
-                // pairedPortal.trackedBodies.SafeAdd(body);
-                // trackedBodies.QuickRemoveAt(i);
             }
         }
 
@@ -80,13 +81,14 @@ namespace QuasarProject
         {
             var relativePos = transform.InverseTransformPoint(body.GetPosition());
 
+            // bleh doesnt work FUCK
             return Vector3.Dot(relativePos, Vector3.forward) < 0;
         }
 
         private void ReceiveWarpedBody(OWRigidbody body)
         {
             var relativePos = pairedPortal.transform.InverseTransformPoint(body.GetPosition());
-            relativePos += Vector3.forward * .1f; // push you thru the portal a bit more
+            // relativePos += Vector3.forward * .1f; // push you thru the portal a bit more
             var relativeRot = pairedPortal.transform.InverseTransformRotation(body.GetRotation());
 
             var relativeVel = pairedPortal.transform.InverseTransformVector(body.GetVelocity());
@@ -96,6 +98,35 @@ namespace QuasarProject
 
             body.SetVelocity(transform.TransformVector(relativeVel));
             body.SetAngularVelocity(transform.TransformVector(relativeAngularVel));
+        }
+
+
+        // Use custom projection matrix to align portal camera's near clip plane with the surface of the portal
+        // Note that this affects precision of the depth buffer, which can cause issues with effects like screenspace AO
+        void SetNearClipPlane()
+        {
+            // Learning resource:
+            // http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
+            Transform clipPlane = transform;
+            int dot = System.Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - cam.transform.position));
+
+            Vector3 camSpacePos = cam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
+            Vector3 camSpaceNormal = cam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
+            float camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset;
+
+            // Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
+            if (Mathf.Abs(camSpaceDst) > nearClipLimit)
+            {
+                Vector4 clipPlaneCameraSpace = new Vector4(camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
+
+                // Update projection based on new clip plane
+                // Calculate matrix with player cam so that player camera settings (fov, etc) are used
+                cam.projectionMatrix = playerCam.CalculateObliqueMatrix(clipPlaneCameraSpace);
+            }
+            else
+            {
+                cam.projectionMatrix = playerCam.projectionMatrix;
+            }
         }
     }
 }
