@@ -65,6 +65,7 @@ namespace QuasarProject
             cam.transform.localPosition = relativePos;
             cam.transform.localRotation = relativeRot;
             cam.fieldOfView = playerCam.fieldOfView;
+            SetNearClipPlane();
 
             if (trackedBodies.Count <= 0) return;
 
