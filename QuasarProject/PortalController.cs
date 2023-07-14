@@ -24,6 +24,7 @@ namespace QuasarProject
 
         public void Awake()
         {
+            // low res to not kill ur game fuck u
             rt = new RenderTexture(256, 256, 0);
             rt.Create();
 
@@ -31,12 +32,12 @@ namespace QuasarProject
             cam = GetComponentInChildren<Camera>();
 
             cam.targetTexture = rt;
+            portalRenderer.material.SetTexture("_MainTex", rt);
+            portalRenderer.material.SetInt("displayMask", 1);
         }
 
         public void Start()
         {
-            portalRenderer.material.SetTexture("_MainTex", pairedPortal.rt);
-            portalRenderer.material.SetInt("displayMask", 1);
             playerCam = Locator.GetPlayerCamera().mainCamera;
         }
 
@@ -83,7 +84,8 @@ namespace QuasarProject
             // use portal renderer for proper direction
             var relativePos = portalRenderer.transform.InverseTransformPoint(body.GetPosition());
 
-            return Vector3.Dot(relativePos, Vector3.forward) > 0;
+            // why does this have to be flipped backwards idk
+            return Vector3.Dot(relativePos, Vector3.forward) < 0;
         }
 
         private void ReceiveWarpedBody(OWRigidbody body)
