@@ -80,10 +80,10 @@ namespace QuasarProject
 
         private bool IsPassedThrough(OWRigidbody body)
         {
-            var relativePos = transform.InverseTransformPoint(body.GetPosition());
+            // use portal renderer for proper direction
+            var relativePos = portalRenderer.transform.InverseTransformPoint(body.GetPosition());
 
-            // bleh doesnt work FUCK
-            return Vector3.Dot(relativePos, Vector3.forward) < 0;
+            return Vector3.Dot(relativePos, Vector3.forward) > 0;
         }
 
         private void ReceiveWarpedBody(OWRigidbody body)
