@@ -62,8 +62,7 @@ namespace QuasarProject
         {
             var relativePos = transform.InverseTransformPoint(playerCam.transform.position);
             var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
-            cam.transform.localPosition = relativePos;
-            cam.transform.localRotation = relativeRot;
+            cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
             cam.fieldOfView = playerCam.fieldOfView;
             ProtectScreenFromClipping(playerCam.transform.position);
             SetNearClipPlane();
