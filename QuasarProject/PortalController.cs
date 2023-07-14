@@ -65,6 +65,7 @@ namespace QuasarProject
             cam.transform.localPosition = relativePos;
             cam.transform.localRotation = relativeRot;
             cam.fieldOfView = playerCam.fieldOfView;
+            ProtectScreenFromClipping(playerCam.transform.position);
             SetNearClipPlane();
 
             if (trackedBodies.Count <= 0) return;
@@ -101,6 +102,21 @@ namespace QuasarProject
             body.SetAngularVelocity(transform.TransformVector(relativeAngularVel));
         }
 
+
+        // Sets the thickness of the portal screen so as not to clip with camera near plane when player goes through
+        float ProtectScreenFromClipping(Vector3 viewPoint)
+        {
+            float halfHeight = playerCam.nearClipPlane * Mathf.Tan(playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            float halfWidth = halfHeight * playerCam.aspect;
+            float dstToNearClipPlaneCorner = new Vector3(halfWidth, halfHeight, playerCam.nearClipPlane).magnitude;
+            float screenThickness = dstToNearClipPlaneCorner;
+
+            Transform screenT = portalRenderer.transform;
+            bool camFacingSameDirAsPortal = Vector3.Dot(transform.forward, transform.position - viewPoint) > 0;
+            screenT.localScale = new Vector3(screenT.localScale.x, screenT.localScale.y, screenThickness);
+            screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f);
+            return screenThickness;
+        }
 
         // Use custom projection matrix to align portal camera's near clip plane with the surface of the portal
         // Note that this affects precision of the depth buffer, which can cause issues with effects like screenspace AO
