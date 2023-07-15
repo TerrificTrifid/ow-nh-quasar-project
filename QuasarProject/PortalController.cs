@@ -1,5 +1,6 @@
 ﻿using NewHorizons;
 using NewHorizons.Utility;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ namespace QuasarProject
 
         private Camera playerCam;
 
+        public OWTriggerVolume VolumeWhereActive;
+
 
         private float nearClipOffset = 0.05f;
         private float nearClipLimit = 0.2f;
@@ -34,6 +37,10 @@ namespace QuasarProject
             cam.targetTexture = rt;
             portalRenderer.material.SetTexture("_MainTex", rt);
             portalRenderer.material.SetInt("displayMask", 1);
+
+            VolumeWhereActive.OnEntry += OnEntry;
+            VolumeWhereActive.OnExit += OnExit;
+            gameObject.SetActive(false);
         }
 
         public void Start()
@@ -45,6 +52,19 @@ namespace QuasarProject
         {
             // Release the hardware resources used by the render texture 
             rt.Release();
+
+            VolumeWhereActive.OnEntry -= OnEntry;
+            VolumeWhereActive.OnExit -= OnExit;
+        }
+
+        private void OnEntry(GameObject hitobj)
+        {
+            gameObject.SetActive(true);
+        }
+
+        private void OnExit(GameObject hitobj)
+        {
+            gameObject.SetActive(false);
         }
 
         public void OnTriggerEnter(Collider other)
@@ -126,7 +146,7 @@ namespace QuasarProject
             // Learning resource:
             // http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
             Transform clipPlane = transform;
-            int dot = System.Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - cam.transform.position));
+            int dot = Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - cam.transform.position));
 
             Vector3 camSpacePos = cam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
             Vector3 camSpaceNormal = cam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
