@@ -2,6 +2,14 @@
 	"$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
 	"name": "Ring",
 	"starSystem": "Trifid.QuasarProject",
+	"removeChildren": [
+		"Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 2/Pivot/ProbeBlackHole/SabalProbe/BlackHole/BlackHoleRenderer",
+		"Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (4)/WhiteHole/WhiteHoleRenderer",
+		"Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole/WhiteHole/WhiteHoleRenderer",
+		"Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (1)/WhiteHole/WhiteHoleRenderer",
+		"Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (2)/WhiteHole/WhiteHoleRenderer",
+		"Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (3)/WhiteHole/WhiteHoleRenderer"
+	],
 	"Base": {
 		"surfaceGravity": 0,
 		"soiOverride": 22000,
@@ -43,6 +51,116 @@
 		"isStatic": true
 	},
 	"Props": {
+		"singularities": [
+			{
+				"type": "blackHole",
+				"uniqueID": "QP_Probe5BH",
+				"pairedSingularity": "QP_Probe5WH",
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 2/Pivot/ProbeBlackHole/SabalProbe",
+				"isRelativeToParent": true,
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"horizonRadius": 6,
+				"distortRadius": 12,
+				"renderQueueOverride": 3400,
+				"hasWarpEffects": false
+			},
+			{
+				"type": "whiteHole",
+				"uniqueID": "QP_Probe5WH",
+				"pairedSingularity": "QP_Probe5BH",
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (4)",
+				"isRelativeToParent": true,
+				"position": {
+					"x": 0,
+					"y": 15,
+					"z": 0
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 90
+				},
+				"horizonRadius": 6,
+				"distortRadius": 12,
+				"renderQueueOverride": 3400
+			},
+			{
+				"type": "whiteHole",
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole",
+				"isRelativeToParent": true,
+				"position": {
+					"x": 0,
+					"y": 15,
+					"z": 0
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 90
+				},
+				"horizonRadius": 6,
+				"distortRadius": 12,
+				"renderQueueOverride": 3400
+			},
+			{
+				"type": "whiteHole",
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (1)",
+				"isRelativeToParent": true,
+				"position": {
+					"x": 0,
+					"y": 15,
+					"z": 0
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 90
+				},
+				"horizonRadius": 6,
+				"distortRadius": 12,
+				"renderQueueOverride": 3400
+			},
+			{
+				"type": "whiteHole",
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (2)",
+				"isRelativeToParent": true,
+				"position": {
+					"x": 0,
+					"y": 15,
+					"z": 0
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 90
+				},
+				"horizonRadius": 6,
+				"distortRadius": 12,
+				"renderQueueOverride": 3400
+			},
+			{
+				"type": "whiteHole",
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (3)",
+				"isRelativeToParent": true,
+				"position": {
+					"x": 0,
+					"y": 15,
+					"z": 0
+				},
+				"rotation": {
+					"x": 0,
+					"y": 0,
+					"z": 90
+				},
+				"horizonRadius": 6,
+				"distortRadius": 12,
+				"renderQueueOverride": 3400
+			}
+		],
 		"details": [
 			{
 				"assetBundle": "planets/trifid_quasarproject",
