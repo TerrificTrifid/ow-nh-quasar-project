@@ -45,7 +45,7 @@ public static class TextColorPatches
 	[HarmonyPostfix, HarmonyPatch(typeof(NomaiTextLine), nameof(NomaiTextLine.Awake))]
 	private static void NomaiTextLine_Awake(NomaiTextLine __instance)
 	{
-		if (true || QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
+		if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
 		{
 			NomaiTextLine.s_originSpeakerColorUnread = EditedColors.s_originSpeakerColorUnread;
 			NomaiTextLine.s_originSpeakerColorTranslated = EditedColors.s_originSpeakerColorTranslated;
@@ -65,7 +65,7 @@ public static class TextColorPatches
 	[HarmonyPostfix, HarmonyPatch(typeof(NomaiComputerRing), nameof(NomaiComputerRing.Initialize))]
 	private static void NomaiComputerRing_Initialize(NomaiComputerRing __instance)
 	{
-		if (true || QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
+		if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
 		{
 			__instance._baseEmissionColor = EditedColors._baseEmissionColor;
 			NomaiComputerRing.s_colorTranslated = EditedColors.s_colorTranslated;
@@ -80,7 +80,7 @@ public static class TextColorPatches
 	[HarmonyPostfix, HarmonyPatch(typeof(NomaiVesselComputerRing), nameof(NomaiVesselComputerRing.Awake))]
 	private static void NomaiVesselComputerRing_Awake(NomaiVesselComputerRing __instance)
 	{
-		if (true || QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
+		if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
 		{
 			__instance._baseTextColor = EditedColors._baseTextColor;
 			NomaiVesselComputerRing.s_textColorTranslated = EditedColors.s_textColorTranslated;
