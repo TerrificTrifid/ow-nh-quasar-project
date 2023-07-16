@@ -1,6 +1,9 @@
 {
   "$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
-  "name" : "Timber Hearth",
+    "name": "Timber Hearth",
+    "removeChildren": [
+        "Sector_TH/SabalProbe/BlackHole/BlackHoleRenderer"
+    ],
   "Props": {
     "singularities": [
       {
@@ -15,21 +18,21 @@
           "y": 0,
           "z": 0
         },
-        "parentPath": "Sector/SabalProbe",
+        "parentPath": "Sector_TH/SabalProbe",
         "isRelativeToParent": true
       }
     ],
     "details": [
         {
             "position": {
-                "x": 11.20752,
-                "y": 92.77989,
-                "z": 240.5836
+                "x": 14.0525,
+                "y": 101.5725,
+                "z": 242.8403
             },
             "rotation": {
-                "x": 35.03841,
-                "y": 284.8962,
-                "z": 294.1171
+                "x": 64.7572,
+                "y": 289.8336,
+                "z": 236.9852
             },
 
             "assetBundle": "planets/trifid_quasarproject",
