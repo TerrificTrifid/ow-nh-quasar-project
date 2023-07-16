@@ -59,12 +59,14 @@ namespace QuasarProject
 
         private void OnEntry(GameObject hitobj)
         {
-            gameObject.SetActive(true);
+            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+                gameObject.SetActive(true);
         }
 
         private void OnExit(GameObject hitobj)
         {
-            gameObject.SetActive(false);
+            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+                gameObject.SetActive(false);
         }
 
         public void OnTriggerEnter(Collider other)
