@@ -5,23 +5,31 @@
     "singularities": [
       {
         "targetStarSystem": "Trifid.QuasarProject",
-        "horizonRadius": 20,
+        "uniqueID": "QP_THProbe",
+        "horizonRadius": 6,
+        "distortRadius": 12,
         "hasWarpEffects": false,
         "type": "blackHole",
         "position": {
-          "x": 155.2729,
-          "y": -14.96952,
-          "z": 194.843
-        }
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "parentPath": "Sector/SabalProbe",
+        "isRelativeToParent": true
       }
     ],
     "details": [
       {
-        "position": {"x": 16.89875, "y": -45.92596, "z": 184.4908},
+        "position": {
+            "x": 155.2729,
+            "y": -14.96952,
+            "z": 194.843
+        },
         "rotation": {"x": 4.75635, "y": 96.68484, "z": 104.0165},
 
-        "assetBundle": "planets/portals",
-        "path": "Test Portals"
+        "assetBundle": "planets/trifid_quasarproject",
+        "path": "Assets/Quasar/Structures/SabalProbe.prefab"
       }
     ]
   }
