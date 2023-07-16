@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
-	"name": "the Blazier Galaxy",
+	"name": "the Brazier Galaxy",
 	"starSystem": "Trifid.QuasarProject",
 	"removeChildren": [
 		"Sector/BlackHole/BlackHoleRenderer"
