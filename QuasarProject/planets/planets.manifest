@@ -1,10 +1,11 @@
 ManifestFileVersion: 0
-CRC: 2984819658
+CRC: 3027117058
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: trifid_quasarproject
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: portals
     Info_1:
       Name: portals
       Dependencies: {}

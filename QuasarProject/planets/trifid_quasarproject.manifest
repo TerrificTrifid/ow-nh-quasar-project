@@ -1,17 +1,19 @@
 ManifestFileVersion: 0
-CRC: 2324111169
+CRC: 1785921036
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b597f568b9840ddee7f3a0e26f22d01a
+    Hash: e28fb2e60704f2f871ce738c4fb838bb
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9247731fb6471426fed372882c64963f
+    Hash: 092ea803f6694f5e2284396d73e77b37
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 4
+  Script: {instanceID: 0}
+- Class: 20
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
@@ -56,8 +58,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 0320f602fdf0781718928b27a2d7a7ca, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1163abd376bac17c52f957f63c4164c5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d3e77ae3309b6f323de07b456da83fb0, type: 3}
@@ -84,14 +84,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 25b7e56961bf1df33ed31b8c786ab1c3, type: 3}
 - Class: 114
-  Script: {fileID: 280204251, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
-- Class: 114
-  Script: {fileID: -1553317914, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
-- Class: 114
-  Script: {fileID: 805120175, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
-- Class: 114
-  Script: {fileID: -2052962736, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 2145ed3a866d4bd5a94d98ee05d0fa4f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cfd736a3952486c93e9a5d8f58c79c3, type: 3}
@@ -99,6 +91,18 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 3cb5a34c0b2b4edb1b44fafe70d79e7b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7f2e3f7cc6baeb3499f9963353d7b458, type: 3}
+- Class: 114
+  Script: {fileID: -1553317914, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+- Class: 114
+  Script: {fileID: 280204251, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+- Class: 114
+  Script: {fileID: -2052962736, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+- Class: 114
+  Script: {fileID: 805120175, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+- Class: 114
+  Script: {fileID: -2121363334, guid: 26ed2c3ac4b6fa346bbefef706fd84ea, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -113,4 +117,6 @@ Assets:
 - Assets/Quasar/tests/HamsterBall.prefab
 - Assets/Quasar/tests/HamsterBallCheckpoint.prefab
 - Assets/Quasar/Quasar.prefab
-Dependencies: []
+- Assets/Quasar/Structures/SabalProbe.prefab
+Dependencies:
+- C:/Users/orenb/Downloads/quasarproject/ow-nh-quasar-project/QuasarProject/planets/portals
