@@ -1,5 +1,5 @@
 ﻿using NewHorizons;
-using NewHorizons.Utility.OWML;
+using System.Collections;
 using UnityEngine;
 
 namespace QuasarProject;
@@ -25,6 +25,14 @@ public class ActivationDelay : MonoBehaviour
     private void OnEntry(GameObject hitobj)
     {
         if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
-            Delay.FireInNUpdates(() => Object.SetActive(true), Seconds * 60);
+            StartCoroutine(Go());
+    }
+
+    private IEnumerator Go()
+    {
+        // unscaled cuz music plays while paused
+        yield return new WaitForSecondsRealtime(Seconds);
+
+        Object.SetActive(true);
     }
 }
