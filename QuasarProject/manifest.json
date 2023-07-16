@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/manifest_schema.json",
   "filename": "QuasarProject.dll",
-  "author": "Trifid",
+  "author": "Trifid, JohnCorby, Turtle, Tetraminus",
   "name": "The Quasar Project",
   "uniqueName": "Trifid.QuasarProject",
   "version": "0.1.0",
