@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/xen-42/outer-wilds-new-horizons/main/NewHorizons/Schemas/body_schema.json",
-	"name": "Core",
+	"name": "the Blazier Galaxy",
 	"starSystem": "Trifid.QuasarProject",
 	"removeChildren": [
 		"Sector/BlackHole/BlackHoleRenderer"
@@ -45,7 +45,8 @@
 				"type": "blackHole",
 				"horizonRadius": 1000,
 				"distortRadius": 5000,
-				"renderQueueOverride": 3500
+				"renderQueueOverride": 3500,
+				"uniqueID": "quasar"
 			}
 		],
 		"details": [
