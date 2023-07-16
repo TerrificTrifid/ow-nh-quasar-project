@@ -189,5 +189,21 @@
 				"scale": 0.1
 			}
 		]
+	},
+	"Volumes": {
+		"creditsVolume": [
+			{
+				"gameOverText": "To be continued...",
+				"deathType": "timeLoop",
+				"radius": 100,
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/TemporaryExterior/CREDITS",
+				"isRelativeToParent": true
+			}
+		]
 	}
 }
