@@ -20,17 +20,21 @@
       }
     ],
     "details": [
-      {
-        "position": {
-            "x": 155.2729,
-            "y": -14.96952,
-            "z": 194.843
-        },
-        "rotation": {"x": 4.75635, "y": 96.68484, "z": 104.0165},
+        {
+            "position": {
+                "x": 11.20752,
+                "y": 92.77989,
+                "z": 240.5836
+            },
+            "rotation": {
+                "x": 35.03841,
+                "y": 284.8962,
+                "z": 294.1171
+            },
 
-        "assetBundle": "planets/trifid_quasarproject",
-        "path": "Assets/Quasar/Structures/SabalProbe.prefab"
-      }
+            "assetBundle": "planets/trifid_quasarproject",
+            "path": "Assets/Quasar/Structures/SabalProbe.prefab"
+        }
     ]
   }
 }
