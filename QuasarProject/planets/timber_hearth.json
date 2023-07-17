@@ -37,6 +37,15 @@
 
             "assetBundle": "planets/trifid_quasarproject",
             "path": "Assets/Quasar/Structures/SabalProbe.prefab"
+        },
+        {
+            "position": {
+                "x": 3.748679,
+                "y": 104.3664,
+                "z": 231.4027
+            },
+            "alignRadial": true,
+            "path": "TimberHearth_Body/Sector_TH/Sector_ImpactCrater/Interactables_ImpactCrater/BrambleSeed/Effects_HEA_SmokeColumn_Crash"
         }
     ]
   }
