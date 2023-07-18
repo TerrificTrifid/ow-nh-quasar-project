@@ -33,6 +33,7 @@ namespace QuasarProject
 
             portalRenderer = GetComponentInChildren<MeshRenderer>();
             cam = GetComponentInChildren<Camera>();
+            cam.enabled = false; // we render manually
 
             cam.targetTexture = rt;
             portalRenderer.material.SetTexture("_MainTex", rt);
@@ -60,13 +61,19 @@ namespace QuasarProject
         private void OnEntry(GameObject hitobj)
         {
             if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            {
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
                 gameObject.SetActive(true);
+            }
         }
 
         private void OnExit(GameObject hitobj)
         {
             if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            {
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
                 gameObject.SetActive(false);
+            }
         }
 
         public void OnTriggerEnter(Collider other)
@@ -87,8 +94,11 @@ namespace QuasarProject
             var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
             cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
             cam.fieldOfView = playerCam.fieldOfView;
-            ProtectScreenFromClipping(playerCam.transform.position);
             SetNearClipPlane();
+            ProtectScreenFromClipping(playerCam.transform.position);
+            pairedPortal.portalRenderer.enabled = false;
+            cam.Render();
+            pairedPortal.portalRenderer.enabled = true;
 
             if (trackedBodies.Count <= 0) return;
 
