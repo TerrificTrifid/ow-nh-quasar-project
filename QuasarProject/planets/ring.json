@@ -201,7 +201,7 @@
 					"y": 0,
 					"z": 0
 				},
-				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/TemporaryExterior/CREDITS",
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/LabExterior/TemporaryGeometry/CREDITS",
 				"isRelativeToParent": true
 			}
 		]
