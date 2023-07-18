@@ -15,11 +15,15 @@ namespace QuasarProject
         public PortalController pairedPortal;
         private Camera cam;
         private RenderTexture rt;
-        private MeshRenderer portalRenderer;
+        private Renderer portalRenderer;
 
         private Camera playerCam;
 
         public OWTriggerVolume VolumeWhereActive;
+
+        [Header("Hacks")]
+        public bool SetNearClipPlane;
+        public Renderer[] OtherRenderersToDisable;
 
 
         private float nearClipOffset = 0.05f;
@@ -28,7 +32,7 @@ namespace QuasarProject
         public void Awake()
         {
             // low res to not kill ur game fuck u
-            rt = new RenderTexture(256, 256, 0);
+            rt = new RenderTexture(Screen.width / 8, Screen.height / 8, 0);
             rt.Create();
 
             portalRenderer = GetComponentInChildren<MeshRenderer>();
@@ -94,11 +98,13 @@ namespace QuasarProject
             var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
             cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
             cam.fieldOfView = playerCam.fieldOfView;
-            SetNearClipPlane();
+            if (SetNearClipPlane) _SetNearClipPlane();
             ProtectScreenFromClipping(playerCam.transform.position);
-            pairedPortal.portalRenderer.enabled = false;
+            pairedPortal.portalRenderer.forceRenderingOff = true;
+            foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = true;
             cam.Render();
-            pairedPortal.portalRenderer.enabled = true;
+            pairedPortal.portalRenderer.forceRenderingOff = false;
+            foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = false;
 
             if (trackedBodies.Count <= 0) return;
 
@@ -153,7 +159,7 @@ namespace QuasarProject
 
         // Use custom projection matrix to align portal camera's near clip plane with the surface of the portal
         // Note that this affects precision of the depth buffer, which can cause issues with effects like screenspace AO
-        void SetNearClipPlane()
+        void _SetNearClipPlane()
         {
             // Learning resource:
             // http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
