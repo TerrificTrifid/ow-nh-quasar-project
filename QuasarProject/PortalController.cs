@@ -194,7 +194,7 @@ namespace QuasarProject
             Gizmos.color = Color.blue / modifier;
             if (!portalRenderer)
                 portalRenderer = GetComponentInChildren<Renderer>();
-            Gizmos.DrawLine(portalRenderer.transform.position, portalRenderer.transform.position + portalRenderer.transform.forward);
+            Gizmos.DrawLine(portalRenderer.transform.position, portalRenderer.transform.position + portalRenderer.transform.forward * 2);
             Gizmos.color = Color.grey / modifier;
             if (pairedPortal)
                 Gizmos.DrawLine(transform.position, pairedPortal.transform.position);
