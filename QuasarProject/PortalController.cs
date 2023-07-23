@@ -35,7 +35,7 @@ namespace QuasarProject
             rt = new RenderTexture(Screen.width / 8, Screen.height / 8, 0);
             rt.Create();
 
-            portalRenderer = GetComponentInChildren<MeshRenderer>();
+            portalRenderer = GetComponentInChildren<Renderer>();
             cam = GetComponentInChildren<Camera>();
             cam.enabled = false; // we render manually
 
@@ -68,6 +68,7 @@ namespace QuasarProject
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
                 gameObject.SetActive(true);
+                trackedBodies.Clear();
             }
         }
 
@@ -77,19 +78,20 @@ namespace QuasarProject
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
                 gameObject.SetActive(false);
+                trackedBodies.Clear();
             }
         }
 
         public void OnTriggerEnter(Collider other)
         {
-            trackedBodies.SafeAdd(other.GetAttachedOWRigidbody());
-            QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} enter {this}");
+            if (trackedBodies.SafeAdd(other.GetAttachedOWRigidbody()))
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} enter {this}");
         }
 
         public void OnTriggerExit(Collider other)
         {
-            trackedBodies.QuickRemove(other.GetAttachedOWRigidbody());
-            QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} exit {this}");
+            if (trackedBodies.QuickRemove(other.GetAttachedOWRigidbody()))
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} exit {this}");
         }
 
         public void Update()
@@ -183,6 +185,19 @@ namespace QuasarProject
             {
                 cam.projectionMatrix = playerCam.projectionMatrix;
             }
+        }
+
+
+        private void OnDrawGizmos()
+        {
+            var modifier = OWGizmos.IsDirectlySelected(gameObject) ? 1 : 3;
+            Gizmos.color = Color.blue / modifier;
+            if (!portalRenderer)
+                portalRenderer = GetComponentInChildren<Renderer>();
+            Gizmos.DrawLine(portalRenderer.transform.position, portalRenderer.transform.position + portalRenderer.transform.forward);
+            Gizmos.color = Color.grey / modifier;
+            if (pairedPortal)
+                Gizmos.DrawLine(transform.position, pairedPortal.transform.position);
         }
     }
 }
