@@ -198,12 +198,25 @@ namespace QuasarProject
             Gizmos.DrawLine(position, position + portalRenderer.transform.forward * 4);
             Gizmos.color = Color.grey;
             Gizmos.DrawCube(position + portalRenderer.transform.forward * -0.025f, new Vector3(4f, 4f, 0.051f));
+            Gizmos.color = Color.grey / modifier;
             Gizmos.DrawWireCube(position + portalRenderer.transform.forward * -0.25f, new Vector3(4f, 4f, 0.5f));
             if (pairedPortal)
             {
                 Gizmos.color = Color.yellow / modifier;
                 Gizmos.DrawLine(transform.position, pairedPortal.transform.position);
             }
+            if (VisibleThroughPortal)
+            {
+                Gizmos.color = Color.cyan / modifier;
+                Gizmos.DrawLine(transform.position, VisibleThroughPortal.transform.position);
+            }
+            var box = VolumeWhereActive?.GetComponent<BoxCollider>();
+            if (box && OWGizmos.IsDirectlySelected(gameObject))
+            {
+                Gizmos.color = new Color(0.5f, 1f, 0.5f);
+                Gizmos.DrawWireCube(VolumeWhereActive.transform.position + Vector3.Scale(VolumeWhereActive.transform.localScale, box.center), Vector3.Scale(VolumeWhereActive.transform.localScale, box.size));
+            }
+
             if (!VolumeWhereActive || !pairedPortal)
             {
                 Gizmos.color = Color.red;
