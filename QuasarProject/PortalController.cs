@@ -25,6 +25,8 @@ namespace QuasarProject
         public bool SetNearClipPlane;
         public Renderer[] OtherRenderersToDisable;
 
+        public PortalController VisibleThroughPortal;
+
 
         private float nearClipOffset = 0.05f;
         private float nearClipLimit = 0.2f;
