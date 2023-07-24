@@ -192,37 +192,41 @@ namespace QuasarProject
 
         private void OnDrawGizmos()
         {
+            // required things error checking
+            Gizmos.matrix = transform.localToWorldMatrix;
+            if (!VolumeWhereActive || !pairedPortal)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawCube(Vector3.zero, new Vector3(4f, 4f, 0.101f));
+                return;
+            }
+
             var modifier = OWGizmos.IsDirectlySelected(gameObject) ? 1 : 2;
             if (!portalRenderer)
                 portalRenderer = GetComponentInChildren<Renderer>();
-            var position = portalRenderer.transform.position;
+
             Gizmos.color = new Color(1f, 0.5f, 0f);
-            Gizmos.DrawLine(position, position + portalRenderer.transform.forward * 4);
+            Gizmos.DrawLine(Vector3.zero, Vector3.forward * 4);
             Gizmos.color = Color.grey;
-            Gizmos.DrawCube(position + portalRenderer.transform.forward * -0.025f, new Vector3(4f, 4f, 0.051f));
+            Gizmos.DrawCube(Vector3.forward * -0.025f, new Vector3(4f, 4f, 0.051f));
             Gizmos.color = Color.grey / modifier;
-            Gizmos.DrawWireCube(position + portalRenderer.transform.forward * -0.25f, new Vector3(4f, 4f, 0.5f));
-            if (pairedPortal)
-            {
-                Gizmos.color = Color.yellow / modifier;
-                Gizmos.DrawLine(transform.position, pairedPortal.transform.position);
-            }
+            Gizmos.DrawWireCube(Vector3.forward * -0.25f, new Vector3(4f, 4f, 0.5f));
+
+            Gizmos.matrix = Matrix4x4.identity;
+            Gizmos.color = Color.yellow / modifier;
+            Gizmos.DrawLine(transform.position, pairedPortal.transform.position);
             if (VisibleThroughPortal)
             {
                 Gizmos.color = Color.cyan / modifier;
                 Gizmos.DrawLine(transform.position, VisibleThroughPortal.transform.position);
             }
-            var box = VolumeWhereActive?.GetComponent<BoxCollider>();
+
+            Gizmos.matrix = VolumeWhereActive.transform.localToWorldMatrix;
+            var box = VolumeWhereActive.GetComponent<BoxCollider>();
             if (box && OWGizmos.IsDirectlySelected(gameObject))
             {
                 Gizmos.color = new Color(0.5f, 1f, 0.5f);
-                Gizmos.DrawWireCube(VolumeWhereActive.transform.position + Vector3.Scale(VolumeWhereActive.transform.localScale, box.center), Vector3.Scale(VolumeWhereActive.transform.localScale, box.size));
-            }
-
-            if (!VolumeWhereActive || !pairedPortal)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawCube(position, new Vector3(4f, 4f, 0.101f));
+                Gizmos.DrawWireCube(box.center, box.size);
             }
         }
     }
