@@ -198,7 +198,7 @@ namespace QuasarProject
 
             // required things error checking
             Gizmos.matrix = Matrix4x4.TRS(portalRenderer.transform.position, portalRenderer.transform.rotation, transform.lossyScale);
-            if (!VolumeWhereActive || !pairedPortal)
+            if (!VolumeWhereActive || !pairedPortal || OtherRenderersToDisable.Length == 0)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawCube(Vector3.zero, new Vector3(4f, 4f, 0.101f));
