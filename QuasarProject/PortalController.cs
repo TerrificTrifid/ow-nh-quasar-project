@@ -192,18 +192,18 @@ namespace QuasarProject
 
         private void OnDrawGizmos()
         {
+            if (!portalRenderer)
+                portalRenderer = GetComponentInChildren<Renderer>();
+            var modifier = OWGizmos.IsDirectlySelected(gameObject) ? 1 : 2;
+
             // required things error checking
-            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.matrix = Matrix4x4.TRS(portalRenderer.transform.position, portalRenderer.transform.rotation, transform.lossyScale);
             if (!VolumeWhereActive || !pairedPortal)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawCube(Vector3.zero, new Vector3(4f, 4f, 0.101f));
                 return;
             }
-
-            var modifier = OWGizmos.IsDirectlySelected(gameObject) ? 1 : 2;
-            if (!portalRenderer)
-                portalRenderer = GetComponentInChildren<Renderer>();
 
             Gizmos.color = new Color(1f, 0.5f, 0f);
             Gizmos.DrawLine(Vector3.zero, Vector3.forward * 4);
