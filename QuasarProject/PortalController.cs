@@ -34,7 +34,7 @@ namespace QuasarProject
         public void Awake()
         {
             // low res to not kill ur game fuck u
-            rt = new RenderTexture(Screen.width / 8, Screen.height / 8, 0);
+            rt = new RenderTexture(Screen.width / 4, Screen.height / 4, 0);
             rt.Create();
 
             portalRenderer = GetComponentInChildren<Renderer>();
