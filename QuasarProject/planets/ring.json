@@ -195,7 +195,7 @@
 			{
 				"gameOverText": "To be continued...",
 				"deathType": "timeLoop",
-				"radius": 100,
+				"radius": 200,
 				"position": {
 					"x": 0,
 					"y": 0,
