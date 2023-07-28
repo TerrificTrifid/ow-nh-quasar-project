@@ -28,14 +28,15 @@
 #define UNITY_5_4_OR_NEWER
 #define UNITY_5_5_OR_NEWER
 
-using UnityEngine;
-using System.Collections;
-using UnityEngine.Rendering;
+using NewHorizons;
 using System;
+using UnityEngine;
+using UnityEngine.Rendering;
 
-namespace VolumetricLights;
+namespace QuasarProject;
 
 [RequireComponent(typeof(Light))]
+[UsedInUnityProject]
 public class VolumetricLight : MonoBehaviour 
 {
     public event Action<VolumetricLightRenderer, VolumetricLight, CommandBuffer, Matrix4x4> CustomRenderEvent;
@@ -108,7 +109,7 @@ public class VolumetricLight : MonoBehaviour
             _light.AddCommandBuffer(LightEvent.AfterShadowMap, _commandBuffer);
 
         Shader shader = Shader.Find("Sandbox/VolumetricLight");
-        if (!shader) shader = Mod.ResourceBundle.LoadAsset<Shader>("Assets/Shaders/VolumetricLight.shader");
+        if (!shader) shader = QuasarProject.ResourceBundle.LoadAsset<Shader>("Assets/Shaders/VolumetricLight.shader");
         if (shader == null)
             throw new Exception("Critical Error: \"Sandbox/VolumetricLight\" shader is missing. Make sure it is included in \"Always Included Shaders\" in ProjectSettings/Graphics.");
         _material = new Material(shader); // new Material(VolumetricLightRenderer.GetLightMaterial());

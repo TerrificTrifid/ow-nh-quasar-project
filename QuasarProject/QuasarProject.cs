@@ -2,6 +2,7 @@
 using NewHorizons;
 using OWML.Common;
 using OWML.ModHelper;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ namespace QuasarProject
         public static QuasarProject Instance;
 
         public INewHorizons NewHorizons;
+
+        public static AssetBundle ResourceBundle;
 
         private void Awake()
         {
@@ -25,6 +28,8 @@ namespace QuasarProject
 
         private void Start()
         {
+            ResourceBundle = ModHelper.Assets.LoadBundle(Path.Combine("planets", "volumetriclights"));
+
             // Starting here, you'll have access to OWML's mod helper.
             //ModHelper.Console.WriteLine($"My mod {nameof(QuasarProject)} is loaded!", MessageType.Success);
 
