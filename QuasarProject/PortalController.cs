@@ -159,13 +159,13 @@ namespace QuasarProject
         public void OnTriggerEnter(Collider other)
         {
             if (trackedBodies.SafeAdd(other.GetAttachedOWRigidbody()))
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} enter {this}");
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other.GetAttachedOWRigidbody()} enter {this}");
         }
 
         public void OnTriggerExit(Collider other)
         {
             if (trackedBodies.QuickRemove(other.GetAttachedOWRigidbody()))
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other} exit {this}");
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other.GetAttachedOWRigidbody()} exit {this}");
         }
 
         public void Update()
