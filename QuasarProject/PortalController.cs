@@ -208,7 +208,8 @@ namespace QuasarProject
         private bool IsPassedThrough(OWRigidbody body)
         {
             // use portal renderer for proper direction
-            var relativePos = portalRenderer.transform.InverseTransformPoint(body.GetPosition());
+            var pos = body.CompareTag("Player") ? playerCam.transform.position : body.GetPosition();
+            var relativePos = portalRenderer.transform.InverseTransformPoint(pos);
 
             // why does this have to be flipped backwards idk
             return Vector3.Dot(relativePos, Vector3.forward) < 0;
