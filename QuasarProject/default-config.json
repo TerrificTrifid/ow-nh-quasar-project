@@ -2,11 +2,11 @@
   "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/config_schema.json",
   "enabled": true,
   "settings": {
-    "Portal Resolution": {
+    "Renderer Resolution": {
       "type": "selector",
-      "value": "Quarter",
+      "value": "Half",
       "options": ["Full", "Half", "Quarter", "Eighth"],
-      "tooltip": "Resolution of the portal renderers."
+      "tooltip": "The fraction of your screen resolution used for certain renderers. High GPU impact."
     }
   }
 }

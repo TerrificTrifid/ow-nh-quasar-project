@@ -52,7 +52,7 @@ namespace QuasarProject
 
         public override void Configure(IModConfig config)
         {
-            var resolutionSetting = ModHelper.Config.GetSettingsValue<string>("Portal Resolution");
+            var resolutionSetting = ModHelper.Config.GetSettingsValue<string>("Renderer Resolution");
             var resolution = resolutionSetting switch
             {
                 "Full" => 1,
