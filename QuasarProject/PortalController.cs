@@ -124,6 +124,7 @@ namespace QuasarProject
         public static void SetResolution(int resolution)
         {
             _resolution = resolution;
+            // inactive ones will set resolution on enable so its okay
             foreach (var portalController in FindObjectsOfType<PortalController>())
             {
                 portalController.ReleaseRt();
