@@ -17,7 +17,8 @@ namespace QuasarProject
         private RenderTexture rt;
         private Renderer portalRenderer;
 
-        private Camera playerCam;
+        private static Camera playerCam;
+        private static Renderer[] playerRenderers; // to turn off while rendering portals :P
 
         public OWTriggerVolume VolumeWhereActive; //required
         public Collider[] IgnoreCollisionWith;
@@ -29,8 +30,8 @@ namespace QuasarProject
         public PortalController VisibleThroughPortal;
         private bool isVisibleThroughPortal;
 
-        private float nearClipOffset = 0.05f;
-        private float nearClipLimit = 0.2f;
+        private const float nearClipOffset = 0.05f;
+        private const float nearClipLimit = 0.2f;
 
         public void Awake()
         {
@@ -55,7 +56,11 @@ namespace QuasarProject
 
         public void Start()
         {
-            playerCam = Locator.GetPlayerCamera().mainCamera;
+            if (!playerCam)
+            {
+                playerCam = Locator.GetPlayerCamera().mainCamera;
+                playerRenderers = Locator.GetPlayerTransform().GetComponentsInChildren<Renderer>(true);
+            }
         }
 
         public void OnDestroy()
@@ -167,7 +172,7 @@ namespace QuasarProject
             if (trackedBodies.SafeAdd(body))
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
-                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true)) // BUG: might include probe for player?
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, true);
             }
@@ -179,7 +184,7 @@ namespace QuasarProject
             if (trackedBodies.QuickRemove(body))
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
-                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true)) // BUG: might include probe for player?
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, false);
             }
@@ -189,6 +194,7 @@ namespace QuasarProject
         {
             if (isVisibleThroughPortal)
             {
+                // BUG: might not work if vtp stuff is rotated differently? test at some point
                 var relativePos1 = transform.InverseTransformPoint(playerCam.transform.position);
                 var relativePos2 = VisibleThroughPortal.transform.InverseTransformPoint(VisibleThroughPortal.pairedPortal.transform.position);
                 var relativeRot1 = transform.InverseTransformRotation(playerCam.transform.rotation);
@@ -208,10 +214,12 @@ namespace QuasarProject
             pairedPortal.portalRenderer.forceRenderingOff = true;
             if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
             foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = true;
+            foreach (var renderer in playerRenderers) renderer.forceRenderingOff = true;
             cam.Render();
             pairedPortal.portalRenderer.forceRenderingOff = false;
             if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = false;
             foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = false;
+            foreach (var renderer in playerRenderers) renderer.forceRenderingOff = false;
 
             if (trackedBodies.Count <= 0) return;
 
