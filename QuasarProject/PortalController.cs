@@ -189,9 +189,11 @@ namespace QuasarProject
             if (SetNearClipPlane) _SetNearClipPlane();
             ProtectScreenFromClipping(playerCam.transform.position);
             pairedPortal.portalRenderer.forceRenderingOff = true;
+            if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
             foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = true;
             cam.Render();
             pairedPortal.portalRenderer.forceRenderingOff = false;
+            if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = false;
             foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = false;
 
             if (trackedBodies.Count <= 0) return;
