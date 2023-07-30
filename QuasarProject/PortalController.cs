@@ -12,14 +12,14 @@ namespace QuasarProject
     {
         private readonly List<OWRigidbody> trackedBodies = new();
 
-        public PortalController pairedPortal;
+        public PortalController pairedPortal;//required
         private Camera cam;
         private RenderTexture rt;
         private Renderer portalRenderer;
 
         private Camera playerCam;
 
-        public OWTriggerVolume VolumeWhereActive;
+        public OWTriggerVolume VolumeWhereActive;//required
 
         [Header("Hacks")]
         public bool SetNearClipPlane;
@@ -42,7 +42,7 @@ namespace QuasarProject
             VolumeWhereActive.OnEntry += OnEntry;
             VolumeWhereActive.OnExit += OnExit;
 
-            if (VisibleThroughPortal && VisibleThroughPortal.VolumeWhereActive)
+            if (VisibleThroughPortal)
             {
                 isVisibleThroughPortal = true; // let the main trigger control this by disabling, so it takes priority over vtp trigger
                 VisibleThroughPortal.VolumeWhereActive.OnEntry += OnOtherEntry;
@@ -64,7 +64,7 @@ namespace QuasarProject
             VolumeWhereActive.OnEntry -= OnEntry;
             VolumeWhereActive.OnExit -= OnExit;
 
-            if (VisibleThroughPortal && VisibleThroughPortal.VolumeWhereActive)
+            if (VisibleThroughPortal)
             {
                 VisibleThroughPortal.VolumeWhereActive.OnEntry -= OnOtherEntry;
                 VisibleThroughPortal.VolumeWhereActive.OnExit -= OnOtherExit;
