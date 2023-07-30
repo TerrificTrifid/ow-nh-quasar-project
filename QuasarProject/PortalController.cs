@@ -20,11 +20,11 @@ namespace QuasarProject
         private Camera playerCam;
 
         public OWTriggerVolume VolumeWhereActive; //required
+        public Collider[] IgnoreCollisionWith;
 
         [Header("Hacks")]
         public bool SetNearClipPlane;
         public Renderer[] OtherRenderersToDisable;
-        public Collider IgnoreCollisionWith;
 
         public PortalController VisibleThroughPortal;
         private bool isVisibleThroughPortal;
@@ -167,13 +167,9 @@ namespace QuasarProject
             if (trackedBodies.SafeAdd(body))
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
-                if (IgnoreCollisionWith)
-                {
-                    foreach (var collider in body.GetComponentsInChildren<Collider>(true))
-                    {
-                        Physics.IgnoreCollision(collider, IgnoreCollisionWith, true);
-                    }
-                }
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+                    foreach (var collider2 in IgnoreCollisionWith)
+                        Physics.IgnoreCollision(collider1, collider2, true);
             }
         }
 
@@ -183,13 +179,9 @@ namespace QuasarProject
             if (trackedBodies.QuickRemove(body))
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
-                if (IgnoreCollisionWith)
-                {
-                    foreach (var collider in body.GetComponentsInChildren<Collider>(true))
-                    {
-                        Physics.IgnoreCollision(collider, IgnoreCollisionWith, false);
-                    }
-                }
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+                    foreach (var collider2 in IgnoreCollisionWith)
+                        Physics.IgnoreCollision(collider1, collider2, false);
             }
         }
 
