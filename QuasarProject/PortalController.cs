@@ -79,7 +79,7 @@ namespace QuasarProject
                 gameObject.SetActive(true);
                 CreateRt();
                 trackedBodies.Clear();
-                isVisibleThroughPortal = false;
+                if (VisibleThroughPortal) isVisibleThroughPortal = false;
             }
         }
 
@@ -91,7 +91,7 @@ namespace QuasarProject
                 gameObject.SetActive(false);
                 ReleaseRt();
                 trackedBodies.Clear();
-                isVisibleThroughPortal = true;
+                if (VisibleThroughPortal) isVisibleThroughPortal = true;
             }
         }
 
