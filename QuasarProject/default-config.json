@@ -1,4 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/config_schema.json",
-  "enabled": true
+  "enabled": true,
+  "settings": {
+    "Portal Resolution": {
+      "type": "selector",
+      "value": "Quarter",
+      "options": ["Full", "Half", "Quarter", "Eighth"],
+      "tooltip": "Resolution of the portal renderers."
+    }
+  }
 }

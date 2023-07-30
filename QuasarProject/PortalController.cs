@@ -27,22 +27,16 @@ namespace QuasarProject
 
         public PortalController VisibleThroughPortal;
         private bool isVisibleThroughPortal;
-        
+
         private float nearClipOffset = 0.05f;
         private float nearClipLimit = 0.2f;
 
         public void Awake()
         {
-            // low res to not kill ur game fuck u
-            rt = new RenderTexture(Screen.width / 2, Screen.height / 2, 0);
-            rt.Create();
-
             portalRenderer = GetComponentInChildren<Renderer>();
             cam = GetComponentInChildren<Camera>();
             cam.enabled = false; // we render manually
 
-            cam.targetTexture = rt;
-            portalRenderer.material.SetTexture("_MainTex", rt);
             portalRenderer.material.SetInt("displayMask", 1);
 
             VolumeWhereActive.OnEntry += OnEntry;
@@ -65,11 +59,16 @@ namespace QuasarProject
 
         public void OnDestroy()
         {
-            // Release the hardware resources used by the render texture 
-            rt.Release();
+            ReleaseRt();
 
             VolumeWhereActive.OnEntry -= OnEntry;
             VolumeWhereActive.OnExit -= OnExit;
+
+            if (VisibleThroughPortal && VisibleThroughPortal.VolumeWhereActive)
+            {
+                VisibleThroughPortal.VolumeWhereActive.OnEntry -= OnOtherEntry;
+                VisibleThroughPortal.VolumeWhereActive.OnExit -= OnOtherExit;
+            }
         }
 
         private void OnEntry(GameObject hitobj)
@@ -78,6 +77,7 @@ namespace QuasarProject
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
                 gameObject.SetActive(true);
+                CreateRt();
                 trackedBodies.Clear();
                 isVisibleThroughPortal = false;
             }
@@ -89,6 +89,7 @@ namespace QuasarProject
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
                 gameObject.SetActive(false);
+                ReleaseRt();
                 trackedBodies.Clear();
                 isVisibleThroughPortal = true;
             }
@@ -98,8 +99,9 @@ namespace QuasarProject
         {
             if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
             {
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"player other activate {this}");
                 gameObject.SetActive(true);
+                CreateRt();
                 trackedBodies.Clear();
             }
         }
@@ -108,11 +110,47 @@ namespace QuasarProject
         {
             if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
             {
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"player other deactivate {this}");
                 gameObject.SetActive(false);
+                ReleaseRt();
                 trackedBodies.Clear();
             }
         }
+
+        #region resolution stuff
+
+        private static int _resolution = 1;
+
+        public static void SetResolution(int resolution)
+        {
+            _resolution = resolution;
+            foreach (var portalController in FindObjectsOfType<PortalController>())
+            {
+                portalController.ReleaseRt();
+                portalController.CreateRt();
+            }
+        }
+
+        private void CreateRt()
+        {
+            if (rt != null) return;
+
+            rt = new RenderTexture(Screen.width / _resolution, Screen.height / _resolution, 0);
+            rt.Create();
+
+            cam.targetTexture = rt;
+            portalRenderer.material.SetTexture("_MainTex", rt);
+        }
+
+        private void ReleaseRt()
+        {
+            if (rt == null) return;
+
+            rt.Release();
+            rt = null;
+        }
+
+        #endregion
 
         public void OnTriggerEnter(Collider other)
         {

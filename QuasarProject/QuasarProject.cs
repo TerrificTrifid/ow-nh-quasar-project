@@ -49,5 +49,19 @@ namespace QuasarProject
                 rotateTransform._degreesPerSecond = -1.5f;
             });
         }
+
+        public override void Configure(IModConfig config)
+        {
+            var resolutionSetting = ModHelper.Config.GetSettingsValue<string>("Portal Resolution");
+            var resolution = resolutionSetting switch
+            {
+                "Full" => 1,
+                "Half" => 2,
+                "Quarter" => 4,
+                "Eighth" => 8,
+                _ => 1
+            };
+            PortalController.SetResolution(resolution);
+        }
     }
 }
