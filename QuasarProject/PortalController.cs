@@ -176,7 +176,7 @@ namespace QuasarProject
                 var relativePos2 = VisibleThroughPortal.transform.InverseTransformPoint(VisibleThroughPortal.pairedPortal.transform.position);
                 var relativeRot1 = transform.InverseTransformRotation(playerCam.transform.rotation);
                 var relativeRot2 = VisibleThroughPortal.transform.InverseTransformRotation(VisibleThroughPortal.pairedPortal.transform.rotation);
-                cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos1 + relativePos2), pairedPortal.transform.TransformRotation(relativeRot1 * relativeRot2));
+                cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos1 - relativePos2), pairedPortal.transform.TransformRotation(relativeRot1 * relativeRot2));
             }
             else
             {
