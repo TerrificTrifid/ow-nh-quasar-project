@@ -85,7 +85,6 @@ namespace QuasarProject
                 // QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
                 gameObject.SetActive(true);
                 CreateRt();
-                trackedBodies.Clear();
                 if (VisibleThroughPortal) isVisibleThroughPortal = false;
             }
         }
@@ -99,6 +98,9 @@ namespace QuasarProject
                 gameObject.SetActive(false);
                 ReleaseRt();
                 trackedBodies.Clear();
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+                    foreach (var collider2 in IgnoreCollisionWith)
+                        Physics.IgnoreCollision(collider1, collider2, false);
                 if (VisibleThroughPortal) isVisibleThroughPortal = true;
             }
         }
@@ -111,7 +113,6 @@ namespace QuasarProject
                 // QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp activate {this}");
                 gameObject.SetActive(true);
                 CreateRt();
-                trackedBodies.Clear();
             }
         }
 
@@ -124,6 +125,9 @@ namespace QuasarProject
                 gameObject.SetActive(false);
                 ReleaseRt();
                 trackedBodies.Clear();
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+                    foreach (var collider2 in IgnoreCollisionWith)
+                        Physics.IgnoreCollision(collider1, collider2, false);
             }
         }
 
@@ -172,7 +176,7 @@ namespace QuasarProject
             if (trackedBodies.SafeAdd(body))
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
-                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true)) // BUG: might include probe for player?
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, true);
             }
@@ -184,7 +188,7 @@ namespace QuasarProject
             if (trackedBodies.QuickRemove(body))
             {
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
-                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true)) // BUG: might include probe for player?
+                foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, false);
             }
