@@ -26,15 +26,15 @@ namespace QuasarProject
         public Renderer[] OtherRenderersToDisable;
 
         public PortalController VisibleThroughPortal;
-
-
+        private bool isVisibleThroughPortal;
+        
         private float nearClipOffset = 0.05f;
         private float nearClipLimit = 0.2f;
 
         public void Awake()
         {
             // low res to not kill ur game fuck u
-            rt = new RenderTexture(Screen.width / 4, Screen.height / 4, 0);
+            rt = new RenderTexture(Screen.width / 2, Screen.height / 2, 0);
             rt.Create();
 
             portalRenderer = GetComponentInChildren<Renderer>();
@@ -47,6 +47,14 @@ namespace QuasarProject
 
             VolumeWhereActive.OnEntry += OnEntry;
             VolumeWhereActive.OnExit += OnExit;
+
+            if (VisibleThroughPortal && VisibleThroughPortal.VolumeWhereActive)
+            {
+                isVisibleThroughPortal = true; // let the main trigger control this by disabling, so it takes priority over vtp trigger
+                VisibleThroughPortal.VolumeWhereActive.OnEntry += OnOtherEntry;
+                VisibleThroughPortal.VolumeWhereActive.OnExit += OnOtherExit;
+            }
+
             gameObject.SetActive(false);
         }
 
@@ -71,10 +79,32 @@ namespace QuasarProject
                 QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
                 gameObject.SetActive(true);
                 trackedBodies.Clear();
+                isVisibleThroughPortal = false;
             }
         }
 
         private void OnExit(GameObject hitobj)
+        {
+            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            {
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
+                gameObject.SetActive(false);
+                trackedBodies.Clear();
+                isVisibleThroughPortal = true;
+            }
+        }
+
+        private void OnOtherEntry(GameObject hitobj)
+        {
+            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            {
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
+                gameObject.SetActive(true);
+                trackedBodies.Clear();
+            }
+        }
+
+        private void OnOtherExit(GameObject hitobj)
         {
             if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
             {
@@ -98,9 +128,21 @@ namespace QuasarProject
 
         public void Update()
         {
-            var relativePos = transform.InverseTransformPoint(playerCam.transform.position);
-            var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
-            cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
+            if (isVisibleThroughPortal)
+            {
+                var relativePos1 = transform.InverseTransformPoint(playerCam.transform.position);
+                var relativePos2 = VisibleThroughPortal.transform.InverseTransformPoint(VisibleThroughPortal.pairedPortal.transform.position);
+                var relativeRot1 = transform.InverseTransformRotation(playerCam.transform.rotation);
+                var relativeRot2 = VisibleThroughPortal.transform.InverseTransformRotation(VisibleThroughPortal.pairedPortal.transform.rotation);
+                cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos1 + relativePos2), pairedPortal.transform.TransformRotation(relativeRot1 * relativeRot2));
+            }
+            else
+            {
+                var relativePos = transform.InverseTransformPoint(playerCam.transform.position);
+                var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
+                cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
+            }
+
             cam.fieldOfView = playerCam.fieldOfView;
             if (SetNearClipPlane) _SetNearClipPlane();
             ProtectScreenFromClipping(playerCam.transform.position);
