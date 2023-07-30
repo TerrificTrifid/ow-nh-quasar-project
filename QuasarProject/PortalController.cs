@@ -204,7 +204,7 @@ namespace QuasarProject
 
             cam.fieldOfView = playerCam.fieldOfView;
             if (SetNearClipPlane) _SetNearClipPlane();
-            ProtectScreenFromClipping(playerCam.transform.position);
+            // ProtectScreenFromClipping(playerCam.transform.position);
             pairedPortal.portalRenderer.forceRenderingOff = true;
             if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
             foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = true;
