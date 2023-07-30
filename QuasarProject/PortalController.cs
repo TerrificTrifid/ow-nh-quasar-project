@@ -206,7 +206,8 @@ namespace QuasarProject
             }
 
             Gizmos.color = new Color(1f, 0.5f, 0f);
-            Gizmos.DrawLine(Vector3.zero, Vector3.forward * 4);
+            Gizmos.DrawLine(Vector3.forward * 0.06f, Vector3.forward * 4);
+            Gizmos.DrawLine(Vector3.forward * 0.06f, Vector3.up * 2 + Vector3.forward * 0.06f);
             Gizmos.color = Color.grey;
             Gizmos.DrawCube(Vector3.forward * -0.025f, new Vector3(4f, 4f, 0.051f));
             Gizmos.color = Color.grey / modifier;
