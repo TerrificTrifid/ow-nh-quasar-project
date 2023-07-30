@@ -12,18 +12,19 @@ namespace QuasarProject
     {
         private readonly List<OWRigidbody> trackedBodies = new();
 
-        public PortalController pairedPortal;//required
+        public PortalController pairedPortal; //required
         private Camera cam;
         private RenderTexture rt;
         private Renderer portalRenderer;
 
         private Camera playerCam;
 
-        public OWTriggerVolume VolumeWhereActive;//required
+        public OWTriggerVolume VolumeWhereActive; //required
 
         [Header("Hacks")]
         public bool SetNearClipPlane;
         public Renderer[] OtherRenderersToDisable;
+        public Collider IgnoreCollisionWith;
 
         public PortalController VisibleThroughPortal;
         private bool isVisibleThroughPortal;
@@ -45,8 +46,8 @@ namespace QuasarProject
             if (VisibleThroughPortal)
             {
                 isVisibleThroughPortal = true; // let the main trigger control this by disabling, so it takes priority over vtp trigger
-                VisibleThroughPortal.VolumeWhereActive.OnEntry += OnOtherEntry;
-                VisibleThroughPortal.VolumeWhereActive.OnExit += OnOtherExit;
+                VisibleThroughPortal.VolumeWhereActive.OnEntry += OnVtpEntry;
+                VisibleThroughPortal.VolumeWhereActive.OnExit += OnVtpExit;
             }
 
             gameObject.SetActive(false);
@@ -66,16 +67,17 @@ namespace QuasarProject
 
             if (VisibleThroughPortal)
             {
-                VisibleThroughPortal.VolumeWhereActive.OnEntry -= OnOtherEntry;
-                VisibleThroughPortal.VolumeWhereActive.OnExit -= OnOtherExit;
+                VisibleThroughPortal.VolumeWhereActive.OnEntry -= OnVtpEntry;
+                VisibleThroughPortal.VolumeWhereActive.OnExit -= OnVtpExit;
             }
         }
 
         private void OnEntry(GameObject hitobj)
         {
-            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            var body = hitobj.GetAttachedOWRigidbody();
+            if (body.CompareTag("Player"))
             {
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
+                // QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
                 gameObject.SetActive(true);
                 CreateRt();
                 trackedBodies.Clear();
@@ -85,9 +87,10 @@ namespace QuasarProject
 
         private void OnExit(GameObject hitobj)
         {
-            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            var body = hitobj.GetAttachedOWRigidbody();
+            if (body.CompareTag("Player"))
             {
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
+                // QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
                 gameObject.SetActive(false);
                 ReleaseRt();
                 trackedBodies.Clear();
@@ -95,22 +98,24 @@ namespace QuasarProject
             }
         }
 
-        private void OnOtherEntry(GameObject hitobj)
+        private void OnVtpEntry(GameObject hitobj)
         {
-            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            var body = hitobj.GetAttachedOWRigidbody();
+            if (body.CompareTag("Player"))
             {
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"player other activate {this}");
+                // QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp activate {this}");
                 gameObject.SetActive(true);
                 CreateRt();
                 trackedBodies.Clear();
             }
         }
 
-        private void OnOtherExit(GameObject hitobj)
+        private void OnVtpExit(GameObject hitobj)
         {
-            if (hitobj.GetAttachedOWRigidbody().CompareTag("Player"))
+            var body = hitobj.GetAttachedOWRigidbody();
+            if (body.CompareTag("Player"))
             {
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"player other deactivate {this}");
+                // QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp deactivate {this}");
                 gameObject.SetActive(false);
                 ReleaseRt();
                 trackedBodies.Clear();
@@ -158,14 +163,34 @@ namespace QuasarProject
 
         public void OnTriggerEnter(Collider other)
         {
-            if (trackedBodies.SafeAdd(other.GetAttachedOWRigidbody()))
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other.GetAttachedOWRigidbody()} enter {this}");
+            var body = other.GetAttachedOWRigidbody();
+            if (trackedBodies.SafeAdd(body))
+            {
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
+                if (IgnoreCollisionWith)
+                {
+                    foreach (var collider in body.GetComponentsInChildren<Collider>(true))
+                    {
+                        Physics.IgnoreCollision(collider, IgnoreCollisionWith, true);
+                    }
+                }
+            }
         }
 
         public void OnTriggerExit(Collider other)
         {
-            if (trackedBodies.QuickRemove(other.GetAttachedOWRigidbody()))
-                QuasarProject.Instance.ModHelper.Console.WriteLine($"{other.GetAttachedOWRigidbody()} exit {this}");
+            var body = other.GetAttachedOWRigidbody();
+            if (trackedBodies.QuickRemove(body))
+            {
+                QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
+                if (IgnoreCollisionWith)
+                {
+                    foreach (var collider in body.GetComponentsInChildren<Collider>(true))
+                    {
+                        Physics.IgnoreCollision(collider, IgnoreCollisionWith, false);
+                    }
+                }
+            }
         }
 
         public void Update()
