@@ -147,6 +147,9 @@ namespace QuasarProject
         {
             if (rt == null) return;
 
+            cam.targetTexture = null;
+            portalRenderer.material.SetTexture("_MainTex", null);
+
             rt.Release();
             rt = null;
         }
