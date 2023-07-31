@@ -49,8 +49,18 @@ namespace QuasarProject
                 rotateTransform._degreesPerSecond = -1.5f;
                 
                 // for volumetric
-                foreach (var camera in Resources.FindObjectsOfTypeAll<Camera>()) 
-                    camera.gameObject.AddComponent<VolumetricLightRenderer>();
+                var gos = new[]
+                {
+                    Locator.GetPlayerCamera().gameObject,
+                    Locator.GetProbe().GetForwardCamera().gameObject,
+                    Locator.GetProbe().GetReverseCamera().gameObject,
+                    Locator.GetProbe().GetRotatingCamera().gameObject,
+                    Locator.GetToolModeSwapper().GetProbeLauncher()._preLaunchCamera.gameObject
+                };
+                foreach (var go in gos)
+                {
+                    go.GetAddComponent<VolumetricLightRenderer>();
+                }
             });
         }
 
