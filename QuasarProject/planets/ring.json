@@ -204,6 +204,18 @@
 				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/LabExterior/TemporaryGeometry/CREDITS",
 				"isRelativeToParent": true
 			}
+		],
+		"interferenceVolumes": [
+			{
+				"radius": 1000,
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector",
+				"isRelativeToParent": true
+			}
 		]
 	}
 }
