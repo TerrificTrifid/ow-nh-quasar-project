@@ -47,6 +47,10 @@ namespace QuasarProject
                 var rotateTransform = GameObject.Find("/Skybox").AddComponent<RotateTransform>();
                 rotateTransform._localAxis = Vector3.up;
                 rotateTransform._degreesPerSecond = -1.5f;
+                
+                // for volumetric
+                foreach (var camera in Resources.FindObjectsOfTypeAll<Camera>()) 
+                    camera.gameObject.AddComponent<VolumetricLightRenderer>();
             });
         }
 
