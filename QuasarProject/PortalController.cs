@@ -85,6 +85,7 @@ namespace QuasarProject
                 // QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
                 gameObject.SetActive(true);
                 CreateRt();
+
                 if (VisibleThroughPortal) isVisibleThroughPortal = false;
             }
         }
@@ -101,6 +102,9 @@ namespace QuasarProject
                 foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, false);
+                if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+                    highSpeedImpactSensor.enabled = true;
+
                 if (VisibleThroughPortal) isVisibleThroughPortal = true;
             }
         }
@@ -128,6 +132,8 @@ namespace QuasarProject
                 foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, false);
+                if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+                    highSpeedImpactSensor.enabled = true;
             }
         }
 
@@ -179,6 +185,8 @@ namespace QuasarProject
                 foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, true);
+                if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+                    highSpeedImpactSensor.enabled = false;
             }
         }
 
@@ -191,6 +199,8 @@ namespace QuasarProject
                 foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
                     foreach (var collider2 in IgnoreCollisionWith)
                         Physics.IgnoreCollision(collider1, collider2, false);
+                if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+                    highSpeedImpactSensor.enabled = true;
             }
         }
 
