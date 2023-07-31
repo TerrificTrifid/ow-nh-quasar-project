@@ -240,10 +240,7 @@ namespace QuasarProject
         {
             // use portal renderer for proper direction
             var pos = body.CompareTag("Player") ? playerCam.transform.position : body.GetPosition();
-            var relativePos = portalRenderer.transform.InverseTransformPoint(pos);
-
-            // why does this have to be flipped backwards idk
-            return Vector3.Dot(relativePos, Vector3.forward) < 0;
+            return Vector3.Dot(pos - transform.position, portalRenderer.transform.forward) < 0;
         }
 
         private void ReceiveWarpedBody(OWRigidbody body)
