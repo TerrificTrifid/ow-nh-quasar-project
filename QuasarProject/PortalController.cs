@@ -324,17 +324,17 @@ namespace QuasarProject
             if (!VolumeWhereActive || !pairedPortal)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawCube(Vector3.zero, new Vector3(4f, 4f, 0.101f));
+                Gizmos.DrawCube(Vector3.zero, new Vector3(4f, 4f, 1.01f));
                 return;
             }
 
             Gizmos.color = new Color(1f, 0.5f, 0f);
-            Gizmos.DrawLine(Vector3.forward * 0.06f, Vector3.forward * 4);
-            Gizmos.DrawLine(Vector3.forward * 0.06f, Vector3.up * 2 + Vector3.forward * 0.06f);
+            Gizmos.DrawLine(Vector3.forward * 0.26f, Vector3.forward * 4);
+            Gizmos.DrawLine(Vector3.forward * 0.26f, Vector3.up * 2 + Vector3.forward * 0.26f);
             Gizmos.color = Color.grey;
-            Gizmos.DrawCube(Vector3.forward * -0.025f, new Vector3(4f, 4f, 0.051f));
-            Gizmos.color = Color.grey / modifier;
-            Gizmos.DrawWireCube(Vector3.forward * -0.25f, new Vector3(4f, 4f, 0.5f));
+            Gizmos.DrawCube(Vector3.forward * -0.5f, new Vector3(4f, 4f, 0.501f));
+            //Gizmos.color = Color.grey / modifier;
+            //Gizmos.DrawWireCube(Vector3.forward * -0.25f, new Vector3(4f, 4f, 0.5f));
 
             Gizmos.matrix = Matrix4x4.identity;
             Gizmos.color = Color.yellow / modifier;
