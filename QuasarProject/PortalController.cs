@@ -32,9 +32,6 @@ public class PortalController : MonoBehaviour
 	public PortalController VisibleThroughPortal;
 	private bool isVisibleThroughPortal;
 
-	private const float nearClipOffset = 0.05f;
-	private const float nearClipLimit = 0.2f;
-
 	private void Awake()
 	{
 		portalRenderer = GetComponentInChildren<Renderer>();
@@ -107,8 +104,6 @@ public class PortalController : MonoBehaviour
 					Physics.IgnoreCollision(collider1, collider2, false);
 			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 				highSpeedImpactSensor.enabled = true;
-			// if (body.TryGetComponent(out ProbeAnchor probeAnchor))
-			// 	probeAnchor.enabled = true;
 
 			if (VisibleThroughPortal) isVisibleThroughPortal = true;
 		}
@@ -142,8 +137,6 @@ public class PortalController : MonoBehaviour
 					Physics.IgnoreCollision(collider1, collider2, false);
 			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 				highSpeedImpactSensor.enabled = true;
-			// if (body.TryGetComponent(out ProbeAnchor probeAnchor))
-			// 	probeAnchor.enabled = true;
 		}
 	}
 
@@ -171,8 +164,6 @@ public class PortalController : MonoBehaviour
 
 		cam.targetTexture = rt;
 		portalRenderer.material.SetTexture("_MainTex", rt);
-
-		OWCamera.onAnyPreCull += Render;
 	}
 
 	private void ReleaseRt()
@@ -184,8 +175,6 @@ public class PortalController : MonoBehaviour
 
 		rt.Release();
 		rt = null;
-
-		OWCamera.onAnyPreCull -= Render;
 	}
 
 	#endregion
@@ -193,25 +182,25 @@ public class PortalController : MonoBehaviour
 	private void OnTriggerEnter(Collider other) => TrackBody(other.GetAttachedOWRigidbody());
 	private void OnTriggerExit(Collider other) => UntrackBody(other.GetAttachedOWRigidbody());
 
-	private void Render(OWCamera owCamera)
+	private void Update()
 	{
 		if (isVisibleThroughPortal)
 		{
 			// BUG: might not work if vtp stuff is rotated differently? test at some point
-			var relativePos1 = transform.InverseTransformPoint(owCamera.transform.position);
-			var relativeRot1 = transform.InverseTransformRotation(owCamera.transform.rotation);
+			var relativePos1 = transform.InverseTransformPoint(playerCam.transform.position);
+			var relativeRot1 = transform.InverseTransformRotation(playerCam.transform.rotation);
 			var relativePos2 = VisibleThroughPortal.transform.InverseTransformPoint(VisibleThroughPortal.pairedPortal.transform.position);
 			var relativeRot2 = VisibleThroughPortal.transform.InverseTransformRotation(VisibleThroughPortal.pairedPortal.transform.rotation);
 			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos1 - relativePos2), pairedPortal.transform.TransformRotation(relativeRot1 * relativeRot2));
 		}
 		else
 		{
-			var relativePos = transform.InverseTransformPoint(owCamera.transform.position);
-			var relativeRot = transform.InverseTransformRotation(owCamera.transform.rotation);
+			var relativePos = transform.InverseTransformPoint(playerCam.transform.position);
+			var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
 			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
 		}
 
-		cam.fieldOfView = owCamera.fieldOfView;
+		cam.fieldOfView = playerCam.fieldOfView;
 		if (SetNearClipPlane) _SetNearClipPlane();
 
 		pairedPortal.portalRenderer.forceRenderingOff = true;
@@ -225,10 +214,8 @@ public class PortalController : MonoBehaviour
 		if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = false;
 		foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = false;
 		foreach (var renderer in playerRenderers) renderer.forceRenderingOff = false;
-	}
 
-	private void LateUpdate()
-	{
+
 		// go backwards since we remove
 		for (var i = trackedBodies.Count - 1; i >= 0; i--)
 		{
@@ -254,8 +241,6 @@ public class PortalController : MonoBehaviour
 					Physics.IgnoreCollision(collider1, collider2, true);
 			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 				highSpeedImpactSensor.enabled = false;
-			if (body.TryGetComponent(out ProbeAnchor probeAnchor))
-				probeAnchor.enabled = false;
 		}
 	}
 
@@ -270,8 +255,6 @@ public class PortalController : MonoBehaviour
 					Physics.IgnoreCollision(collider1, collider2, false);
 			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 				highSpeedImpactSensor.enabled = true;
-			if (body.TryGetComponent(out ProbeAnchor probeAnchor))
-				probeAnchor.enabled = true;
 		}
 	}
 
@@ -326,6 +309,9 @@ public class PortalController : MonoBehaviour
 		}
 	}
 
+
+	private const float nearClipOffset = 0.05f;
+	private const float nearClipLimit = 0.2f;
 
 	private void OnDrawGizmos()
 	{
