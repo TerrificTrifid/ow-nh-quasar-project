@@ -39,8 +39,6 @@ namespace QuasarProject
             cam = GetComponentInChildren<Camera>();
             cam.enabled = false; // we render manually
 
-            portalRenderer.material.SetInt("displayMask", 1);
-
             VolumeWhereActive.OnEntry += OnEntry;
             VolumeWhereActive.OnExit += OnExit;
 
