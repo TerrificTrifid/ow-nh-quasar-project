@@ -257,6 +257,7 @@ public class PortalController : MonoBehaviour
 
 			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
 			// triggers are in FixedUpdate so we have to do this manually
+			// BUG: this breaks chamber 5				yes trifid i know please dont tell me im so tired of this stupid shit
 			OnTriggerExit(body.GetComponentInChildren<Collider>(true));
 			OnExit(body.gameObject);
 			pairedPortal.ReceiveWarpedBody(body);
