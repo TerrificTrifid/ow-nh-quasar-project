@@ -1,4 +1,5 @@
-﻿using NewHorizons;
+﻿using HarmonyLib;
+using NewHorizons;
 using NewHorizons.Utility;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ namespace QuasarProject
 {
     // referencing https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Core/Portal.cs
     [UsedInUnityProject]
+    [HarmonyPatch]
     public class PortalController : MonoBehaviour
     {
         private readonly List<OWRigidbody> trackedBodies = new();
@@ -349,6 +351,17 @@ namespace QuasarProject
             {
                 Gizmos.color = new Color(0.5f, 1f, 0.5f);
                 Gizmos.DrawWireCube(box.center, box.size);
+            }
+        }
+
+
+        // increase align rate for portals
+        [HarmonyPostfix, HarmonyPatch(typeof(AlignPlayerWithForce), nameof(AlignPlayerWithForce.StartAlignment))]
+        private static void AlignPlayerWithForce_StartAlignment(AlignPlayerWithForce __instance)
+        {
+            if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
+            {
+                __instance._degreesPerSecond *= 2;
             }
         }
     }
