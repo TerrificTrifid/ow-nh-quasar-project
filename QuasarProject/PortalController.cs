@@ -76,68 +76,96 @@ public class PortalController : MonoBehaviour
 
 	private void OnEntry(GameObject hitobj)
 	{
+		if (gameObject.activeSelf) return;
 		var body = hitobj.GetAttachedOWRigidbody();
-		if (body.CompareTag("Player"))
-		{
-			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
+		if (!body.CompareTag("Player")) return;
 
-			gameObject.SetActive(true);
-			CreateRt();
+		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
 
-			if (VisibleThroughPortal) isVisibleThroughPortal = false;
-		}
+		gameObject.SetActive(true);
+		CreateRt();
+
+		if (VisibleThroughPortal) isVisibleThroughPortal = false;
 	}
 
 	private void OnExit(GameObject hitobj)
 	{
+		if (!gameObject.activeSelf) return;
 		var body = hitobj.GetAttachedOWRigidbody();
-		if (body.CompareTag("Player"))
-		{
-			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
+		if (!body.CompareTag("Player")) return;
 
-			gameObject.SetActive(false);
-			ReleaseRt();
-			trackedBodies.Clear();
+		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
 
-			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
-				foreach (var collider2 in IgnoreCollisionWith)
-					Physics.IgnoreCollision(collider1, collider2, false);
-			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
-				highSpeedImpactSensor.enabled = true;
+		gameObject.SetActive(false);
+		ReleaseRt();
+		trackedBodies.Clear();
 
-			if (VisibleThroughPortal) isVisibleThroughPortal = true;
-		}
+		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+			foreach (var collider2 in IgnoreCollisionWith)
+				Physics.IgnoreCollision(collider1, collider2, false);
+		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+			highSpeedImpactSensor.enabled = true;
+
+		if (VisibleThroughPortal) isVisibleThroughPortal = true;
 	}
 
 	private void OnVtpEntry(GameObject hitobj)
 	{
+		if (gameObject.activeSelf) return;
 		var body = hitobj.GetAttachedOWRigidbody();
-		if (body.CompareTag("Player"))
-		{
-			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp activate {this}");
+		if (!body.CompareTag("Player")) return;
 
-			gameObject.SetActive(true);
-			CreateRt();
-		}
+		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp activate {this}");
+
+		gameObject.SetActive(true);
+		CreateRt();
 	}
 
 	private void OnVtpExit(GameObject hitobj)
 	{
+		if (!gameObject.activeSelf) return;
 		var body = hitobj.GetAttachedOWRigidbody();
-		if (body.CompareTag("Player"))
-		{
-			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp deactivate {this}");
+		if (!body.CompareTag("Player")) return;
 
-			gameObject.SetActive(false);
-			ReleaseRt();
-			trackedBodies.Clear();
+		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp deactivate {this}");
 
-			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
-				foreach (var collider2 in IgnoreCollisionWith)
-					Physics.IgnoreCollision(collider1, collider2, false);
-			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
-				highSpeedImpactSensor.enabled = true;
-		}
+		gameObject.SetActive(false);
+		ReleaseRt();
+		trackedBodies.Clear();
+
+		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+			foreach (var collider2 in IgnoreCollisionWith)
+				Physics.IgnoreCollision(collider1, collider2, false);
+		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+			highSpeedImpactSensor.enabled = true;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		var body = other.GetAttachedOWRigidbody();
+		if (!trackedBodies.SafeAdd(body)) return;
+
+		QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
+
+		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+			foreach (var collider2 in IgnoreCollisionWith)
+				Physics.IgnoreCollision(collider1, collider2, true);
+		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+			highSpeedImpactSensor.enabled = false;
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		var body = other.GetAttachedOWRigidbody();
+		if (!trackedBodies.QuickRemove(body)) return;
+
+		QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
+
+		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
+			foreach (var collider2 in IgnoreCollisionWith)
+				Physics.IgnoreCollision(collider1, collider2, false);
+		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
+			highSpeedImpactSensor.enabled = true;
 	}
 
 	#region resolution stuff
@@ -178,9 +206,6 @@ public class PortalController : MonoBehaviour
 	}
 
 	#endregion
-
-	private void OnTriggerEnter(Collider other) => TrackBody(other.GetAttachedOWRigidbody());
-	private void OnTriggerExit(Collider other) => UntrackBody(other.GetAttachedOWRigidbody());
 
 	private void Update()
 	{
@@ -223,38 +248,12 @@ public class PortalController : MonoBehaviour
 			if (!IsPassedThrough(body)) continue;
 
 			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
-			// trigger is on physics time so have to do this manually
-			UntrackBody(body);
+			// triggers are in FixedUpdate so we have to do this manually
+			OnTriggerExit(body.GetComponentInChildren<Collider>(true));
+			OnExit(body.gameObject);
 			pairedPortal.ReceiveWarpedBody(body);
-			pairedPortal.TrackBody(body);
-		}
-	}
-
-	private void TrackBody(OWRigidbody body)
-	{
-		if (trackedBodies.SafeAdd(body))
-		{
-			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
-
-			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
-				foreach (var collider2 in IgnoreCollisionWith)
-					Physics.IgnoreCollision(collider1, collider2, true);
-			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
-				highSpeedImpactSensor.enabled = false;
-		}
-	}
-
-	private void UntrackBody(OWRigidbody body)
-	{
-		if (trackedBodies.QuickRemove(body))
-		{
-			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
-
-			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
-				foreach (var collider2 in IgnoreCollisionWith)
-					Physics.IgnoreCollision(collider1, collider2, false);
-			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
-				highSpeedImpactSensor.enabled = true;
+			pairedPortal.OnTriggerEnter(body.GetComponentInChildren<Collider>(true));
+			pairedPortal.OnEntry(body.gameObject);
 		}
 	}
 
