@@ -105,6 +105,8 @@ public class PortalController : MonoBehaviour
 				Physics.IgnoreCollision(collider1, collider2, false);
 		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 			highSpeedImpactSensor.enabled = true;
+		if (body.TryGetComponent(out ProbeAnchor probeAnchor))
+			probeAnchor.enabled = true;
 
 		if (VisibleThroughPortal) isVisibleThroughPortal = true;
 	}
@@ -138,6 +140,8 @@ public class PortalController : MonoBehaviour
 				Physics.IgnoreCollision(collider1, collider2, false);
 		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 			highSpeedImpactSensor.enabled = true;
+		if (body.TryGetComponent(out ProbeAnchor probeAnchor))
+			probeAnchor.enabled = true;
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -152,6 +156,8 @@ public class PortalController : MonoBehaviour
 				Physics.IgnoreCollision(collider1, collider2, true);
 		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 			highSpeedImpactSensor.enabled = false;
+		if (body.TryGetComponent(out ProbeAnchor probeAnchor))
+			probeAnchor.enabled = false;
 	}
 
 	private void OnTriggerExit(Collider other)
@@ -166,6 +172,8 @@ public class PortalController : MonoBehaviour
 				Physics.IgnoreCollision(collider1, collider2, false);
 		if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 			highSpeedImpactSensor.enabled = true;
+		if (body.TryGetComponent(out ProbeAnchor probeAnchor))
+			probeAnchor.enabled = true;
 	}
 
 	#region resolution stuff
