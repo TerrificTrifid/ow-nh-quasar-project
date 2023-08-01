@@ -216,8 +216,10 @@ public class PortalController : MonoBehaviour
 
 		if (trackedBodies.Count <= 0) return;
 
-		foreach (var body in trackedBodies)
+		// go backwards since we remove
+		for (var i = trackedBodies.Count - 1; i >= 0; i--)
 		{
+			var body = trackedBodies[i];
 			if (!IsPassedThrough(body)) continue;
 
 			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
