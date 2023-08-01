@@ -35,7 +35,7 @@ public class PortalController : MonoBehaviour
 	private const float nearClipOffset = 0.05f;
 	private const float nearClipLimit = 0.2f;
 
-	public void Awake()
+	private void Awake()
 	{
 		portalRenderer = GetComponentInChildren<Renderer>();
 		cam = GetComponentInChildren<Camera>();
@@ -52,7 +52,7 @@ public class PortalController : MonoBehaviour
 		}
 	}
 
-	public void Start()
+	private void Start()
 	{
 		if (!playerCam)
 		{
@@ -63,7 +63,7 @@ public class PortalController : MonoBehaviour
 		gameObject.SetActive(false);
 	}
 
-	public void OnDestroy()
+	private void OnDestroy()
 	{
 		ReleaseRt();
 
@@ -83,6 +83,7 @@ public class PortalController : MonoBehaviour
 		if (body.CompareTag("Player"))
 		{
 			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
+
 			gameObject.SetActive(true);
 			CreateRt();
 
@@ -96,16 +97,18 @@ public class PortalController : MonoBehaviour
 		if (body.CompareTag("Player"))
 		{
 			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
+
 			gameObject.SetActive(false);
 			ReleaseRt();
 			trackedBodies.Clear();
+
 			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 				foreach (var collider2 in IgnoreCollisionWith)
 					Physics.IgnoreCollision(collider1, collider2, false);
 			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 				highSpeedImpactSensor.enabled = true;
-			if (body.TryGetComponent(out ProbeAnchor probeAnchor))
-				probeAnchor.enabled = true;
+			// if (body.TryGetComponent(out ProbeAnchor probeAnchor))
+			// 	probeAnchor.enabled = true;
 
 			if (VisibleThroughPortal) isVisibleThroughPortal = true;
 		}
@@ -117,6 +120,7 @@ public class PortalController : MonoBehaviour
 		if (body.CompareTag("Player"))
 		{
 			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp activate {this}");
+
 			gameObject.SetActive(true);
 			CreateRt();
 		}
@@ -128,16 +132,18 @@ public class PortalController : MonoBehaviour
 		if (body.CompareTag("Player"))
 		{
 			// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp deactivate {this}");
+
 			gameObject.SetActive(false);
 			ReleaseRt();
 			trackedBodies.Clear();
+
 			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 				foreach (var collider2 in IgnoreCollisionWith)
 					Physics.IgnoreCollision(collider1, collider2, false);
 			if (body.TryGetComponent(out HighSpeedImpactSensor highSpeedImpactSensor))
 				highSpeedImpactSensor.enabled = true;
-			if (body.TryGetComponent(out ProbeAnchor probeAnchor))
-				probeAnchor.enabled = true;
+			// if (body.TryGetComponent(out ProbeAnchor probeAnchor))
+			// 	probeAnchor.enabled = true;
 		}
 	}
 
@@ -165,6 +171,8 @@ public class PortalController : MonoBehaviour
 
 		cam.targetTexture = rt;
 		portalRenderer.material.SetTexture("_MainTex", rt);
+
+		OWCamera.onAnyPreCull += Render;
 	}
 
 	private void ReleaseRt()
@@ -176,46 +184,51 @@ public class PortalController : MonoBehaviour
 
 		rt.Release();
 		rt = null;
+
+		OWCamera.onAnyPreCull -= Render;
 	}
 
 	#endregion
 
-	public void OnTriggerEnter(Collider other) => TrackBody(other.GetAttachedOWRigidbody());
-	public void OnTriggerExit(Collider other) => UntrackBody(other.GetAttachedOWRigidbody());
+	private void OnTriggerEnter(Collider other) => TrackBody(other.GetAttachedOWRigidbody());
+	private void OnTriggerExit(Collider other) => UntrackBody(other.GetAttachedOWRigidbody());
 
-	public void Update()
+	private void Render(OWCamera owCamera)
 	{
 		if (isVisibleThroughPortal)
 		{
 			// BUG: might not work if vtp stuff is rotated differently? test at some point
-			var relativePos1 = transform.InverseTransformPoint(playerCam.transform.position);
+			var relativePos1 = transform.InverseTransformPoint(owCamera.transform.position);
+			var relativeRot1 = transform.InverseTransformRotation(owCamera.transform.rotation);
 			var relativePos2 = VisibleThroughPortal.transform.InverseTransformPoint(VisibleThroughPortal.pairedPortal.transform.position);
-			var relativeRot1 = transform.InverseTransformRotation(playerCam.transform.rotation);
 			var relativeRot2 = VisibleThroughPortal.transform.InverseTransformRotation(VisibleThroughPortal.pairedPortal.transform.rotation);
 			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos1 - relativePos2), pairedPortal.transform.TransformRotation(relativeRot1 * relativeRot2));
 		}
 		else
 		{
-			var relativePos = transform.InverseTransformPoint(playerCam.transform.position);
-			var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
+			var relativePos = transform.InverseTransformPoint(owCamera.transform.position);
+			var relativeRot = transform.InverseTransformRotation(owCamera.transform.rotation);
 			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
 		}
 
-		cam.fieldOfView = playerCam.fieldOfView;
+		cam.fieldOfView = owCamera.fieldOfView;
 		if (SetNearClipPlane) _SetNearClipPlane();
-		// ProtectScreenFromClipping(playerCam.transform.position);
+
 		pairedPortal.portalRenderer.forceRenderingOff = true;
 		if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
 		foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = true;
 		foreach (var renderer in playerRenderers) renderer.forceRenderingOff = true;
+
 		cam.Render();
+
 		pairedPortal.portalRenderer.forceRenderingOff = false;
 		if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = false;
 		foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = false;
 		foreach (var renderer in playerRenderers) renderer.forceRenderingOff = false;
+	}
 
-		if (trackedBodies.Count <= 0) return;
-
+	private void LateUpdate()
+	{
 		// go backwards since we remove
 		for (var i = trackedBodies.Count - 1; i >= 0; i--)
 		{
@@ -235,6 +248,7 @@ public class PortalController : MonoBehaviour
 		if (trackedBodies.SafeAdd(body))
 		{
 			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
+
 			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 				foreach (var collider2 in IgnoreCollisionWith)
 					Physics.IgnoreCollision(collider1, collider2, true);
@@ -250,6 +264,7 @@ public class PortalController : MonoBehaviour
 		if (trackedBodies.QuickRemove(body))
 		{
 			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
+
 			foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 				foreach (var collider2 in IgnoreCollisionWith)
 					Physics.IgnoreCollision(collider1, collider2, false);
@@ -282,21 +297,6 @@ public class PortalController : MonoBehaviour
 		body.SetAngularVelocity(transform.TransformVector(relativeAngularVel));
 	}
 
-
-	// Sets the thickness of the portal screen so as not to clip with camera near plane when player goes through
-	float ProtectScreenFromClipping(Vector3 viewPoint)
-	{
-		float halfHeight = playerCam.nearClipPlane * Mathf.Tan(playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
-		float halfWidth = halfHeight * playerCam.aspect;
-		float dstToNearClipPlaneCorner = new Vector3(halfWidth, halfHeight, playerCam.nearClipPlane).magnitude;
-		float screenThickness = dstToNearClipPlaneCorner;
-
-		Transform screenT = portalRenderer.transform;
-		bool camFacingSameDirAsPortal = Vector3.Dot(transform.forward, transform.position - viewPoint) > 0;
-		screenT.localScale = new Vector3(screenT.localScale.x, screenT.localScale.y, screenThickness);
-		screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f);
-		return screenThickness;
-	}
 
 	// Use custom projection matrix to align portal camera's near clip plane with the surface of the portal
 	// Note that this affects precision of the depth buffer, which can cause issues with effects like screenspace AO
