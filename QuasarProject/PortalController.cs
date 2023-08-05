@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using NewHorizons;
 using NewHorizons.Utility;
+using NewHorizons.Utility.OWML;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -80,7 +81,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player activate {this}");
+		NHLogger.LogVerbose($"player activate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(true);
 		CreateRt();
@@ -94,7 +95,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player deactivate {this}");
+		NHLogger.LogVerbose($"player deactivate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(false);
 		ReleaseRt();
@@ -117,7 +118,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp activate {this}");
+		NHLogger.LogVerbose($"player vtp activate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(true);
 		CreateRt();
@@ -129,7 +130,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		// QuasarProject.Instance.ModHelper.Console.WriteLine($"player vtp deactivate {this}");
+		NHLogger.LogVerbose($"player vtp deactivate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(false);
 		ReleaseRt();
@@ -149,7 +150,7 @@ public class PortalController : MonoBehaviour
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.SafeAdd(body)) return;
 
-		//QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
+		NHLogger.LogVerbose($"{body} enter \"{transform.GetPath()}\"");
 
 		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 			foreach (var collider2 in IgnoreCollisionWith)
@@ -165,7 +166,7 @@ public class PortalController : MonoBehaviour
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.QuickRemove(body)) return;
 
-		//QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
+		NHLogger.LogVerbose($"{body} exit \"{transform.GetPath()}\"");
 
 		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 			foreach (var collider2 in IgnoreCollisionWith)
@@ -255,7 +256,7 @@ public class PortalController : MonoBehaviour
 			var body = trackedBodies[i];
 			if (!IsPassedThrough(body)) continue;
 
-			//QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
+			NHLogger.LogVerbose($"{body} tp \"{transform.GetPath()}\" -> \"{pairedPortal.transform.GetPath()}\"");
 			// triggers are in FixedUpdate so we have to do this manually
 			// BUG: this breaks chamber 5
 			OnTriggerExit(body.GetComponentInChildren<Collider>(true));
