@@ -81,7 +81,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		NHLogger.LogVerbose($"player activate \"{transform.GetPath()}\"");
+		NHLogger.LogVerbose($"activate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(true);
 		CreateRt();
@@ -95,7 +95,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		NHLogger.LogVerbose($"player deactivate \"{transform.GetPath()}\"");
+		NHLogger.LogVerbose($"deactivate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(false);
 		ReleaseRt();
@@ -118,7 +118,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		NHLogger.LogVerbose($"player vtp activate \"{transform.GetPath()}\"");
+		NHLogger.LogVerbose($"vtp activate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(true);
 		CreateRt();
@@ -130,7 +130,7 @@ public class PortalController : MonoBehaviour
 		var body = hitobj.GetAttachedOWRigidbody();
 		if (!body.CompareTag("Player")) return;
 
-		NHLogger.LogVerbose($"player vtp deactivate \"{transform.GetPath()}\"");
+		NHLogger.LogVerbose($"vtp deactivate \"{transform.GetPath()}\"");
 
 		gameObject.SetActive(false);
 		ReleaseRt();
@@ -150,7 +150,7 @@ public class PortalController : MonoBehaviour
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.SafeAdd(body)) return;
 
-		NHLogger.LogVerbose($"{body} enter \"{transform.GetPath()}\"");
+		NHLogger.LogVerbose($"\"{body.name}\" enter \"{transform.GetPath()}\"");
 
 		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 			foreach (var collider2 in IgnoreCollisionWith)
@@ -166,7 +166,7 @@ public class PortalController : MonoBehaviour
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.QuickRemove(body)) return;
 
-		NHLogger.LogVerbose($"{body} exit \"{transform.GetPath()}\"");
+		NHLogger.LogVerbose($"\"{body.name}\" exit \"{transform.GetPath()}\"");
 
 		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 			foreach (var collider2 in IgnoreCollisionWith)
@@ -256,7 +256,7 @@ public class PortalController : MonoBehaviour
 			var body = trackedBodies[i];
 			if (!IsPassedThrough(body)) continue;
 
-			NHLogger.LogVerbose($"{body} tp \"{transform.GetPath()}\" -> \"{pairedPortal.transform.GetPath()}\"");
+			NHLogger.LogVerbose($"\"{body.name}\" tp \"{transform.GetPath()}\" -> \"{pairedPortal.transform.GetPath()}\"");
 			// triggers are in FixedUpdate so we have to do this manually
 			// BUG: this breaks chamber 5
 			var someCollider = body.GetComponentInChildren<Collider>(true);
