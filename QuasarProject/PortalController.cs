@@ -38,6 +38,7 @@ public class PortalController : MonoBehaviour
 		portalRenderer = GetComponentInChildren<Renderer>();
 		cam = GetComponentInChildren<Camera>();
 		cam.enabled = false; // we render manually
+		cam.gameObject.AddComponent<VolumetricLightRenderer>(); // could add this in prefab, but eh
 
 		VolumeWhereActive.OnEntry += OnEntry;
 		VolumeWhereActive.OnExit += OnExit;

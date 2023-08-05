@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using NewHorizons;
+using NewHorizons.Utility.OWML;
 using OWML.Common;
 using OWML.ModHelper;
 using System.IO;
@@ -49,8 +50,22 @@ namespace QuasarProject
                 rotateTransform._degreesPerSecond = -1.5f;
                 
                 // for volumetric
-                foreach (var camera in Resources.FindObjectsOfTypeAll<Camera>()) 
-                    camera.gameObject.AddComponent<VolumetricLightRenderer>();
+                Delay.FireOnNextUpdate(() =>
+                {
+                    // copied from eots lol
+                    var gos = new[]
+                    {
+                        Locator.GetPlayerCamera().gameObject,
+                        Locator.GetProbe().GetForwardCamera().gameObject,
+                        Locator.GetProbe().GetReverseCamera().gameObject,
+                        Locator.GetProbe().GetRotatingCamera().gameObject,
+                        Locator.GetToolModeSwapper().GetProbeLauncher()._preLaunchCamera.gameObject
+                    };
+                    foreach (var go in gos)
+                    {
+                        go.GetAddComponent<VolumetricLightRenderer>();
+                    }
+                });
             });
         }
 
