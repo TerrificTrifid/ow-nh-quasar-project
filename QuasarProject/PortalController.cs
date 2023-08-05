@@ -149,7 +149,7 @@ public class PortalController : MonoBehaviour
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.SafeAdd(body)) return;
 
-		QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
+		//QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} enter {this}");
 
 		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 			foreach (var collider2 in IgnoreCollisionWith)
@@ -165,7 +165,7 @@ public class PortalController : MonoBehaviour
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.QuickRemove(body)) return;
 
-		QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
+		//QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} exit {this}");
 
 		foreach (var collider1 in body.GetComponentsInChildren<Collider>(true))
 			foreach (var collider2 in IgnoreCollisionWith)
@@ -255,9 +255,9 @@ public class PortalController : MonoBehaviour
 			var body = trackedBodies[i];
 			if (!IsPassedThrough(body)) continue;
 
-			QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
+			//QuasarProject.Instance.ModHelper.Console.WriteLine($"{body} tp {this} -> {pairedPortal}");
 			// triggers are in FixedUpdate so we have to do this manually
-			// BUG: this breaks chamber 5				yes trifid i know please dont tell me im so tired of this stupid shit
+			// BUG: this breaks chamber 5
 			OnTriggerExit(body.GetComponentInChildren<Collider>(true));
 			OnExit(body.gameObject);
 			pairedPortal.ReceiveWarpedBody(body);
@@ -369,7 +369,7 @@ public class PortalController : MonoBehaviour
 	{
 		if (QuasarProject.Instance.NewHorizons.GetCurrentStarSystem() == "Trifid.QuasarProject")
 		{
-			__instance._degreesPerSecond *= 2;
+			__instance._degreesPerSecond *= 1.5f;
 		}
 	}
 }
