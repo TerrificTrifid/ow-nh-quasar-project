@@ -258,7 +258,6 @@ public class PortalController : MonoBehaviour
 
 			NHLogger.LogVerbose($"\"{body.name}\" tp \"{transform.GetPath()}\" -> \"{pairedPortal.transform.GetPath()}\"");
 			// triggers are in FixedUpdate so we have to do this manually
-			// BUG: this breaks chamber 5
 			var someCollider = body.GetComponentInChildren<Collider>(true);
 			OnTriggerExit(someCollider);
 			VolumeWhereActive.OnTriggerExit(someCollider);
