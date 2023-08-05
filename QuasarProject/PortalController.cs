@@ -259,11 +259,12 @@ public class PortalController : MonoBehaviour
 			NHLogger.LogVerbose($"{body} tp \"{transform.GetPath()}\" -> \"{pairedPortal.transform.GetPath()}\"");
 			// triggers are in FixedUpdate so we have to do this manually
 			// BUG: this breaks chamber 5
-			OnTriggerExit(body.GetComponentInChildren<Collider>(true));
-			OnExit(body.gameObject);
+			var someCollider = body.GetComponentInChildren<Collider>(true);
+			OnTriggerExit(someCollider);
+			VolumeWhereActive.OnTriggerExit(someCollider);
 			pairedPortal.ReceiveWarpedBody(body);
-			pairedPortal.OnTriggerEnter(body.GetComponentInChildren<Collider>(true));
-			pairedPortal.OnEntry(body.gameObject);
+			pairedPortal.VolumeWhereActive.OnTriggerEnter(someCollider);
+			pairedPortal.OnTriggerEnter(someCollider);
 		}
 	}
 
