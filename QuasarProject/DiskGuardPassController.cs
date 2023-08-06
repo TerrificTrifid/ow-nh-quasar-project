@@ -11,7 +11,8 @@ public class DiskGuardPassController : MonoBehaviour
 
 	private DiskGuardPassEffect[] _effects;
 
-	private void Awake()
+	// do in start to wait for other objects to be built
+	private void Start()
 	{
 		_effects = FindObjectsOfType<DiskGuardPassEffect>();
 	}
