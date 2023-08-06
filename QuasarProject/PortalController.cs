@@ -291,23 +291,26 @@ public class PortalController : MonoBehaviour
 	}
 
 
+	private const float nearClipOffset = 0.05f;
+	private const float nearClipLimit = 0.2f;
+
 	// Use custom projection matrix to align portal camera's near clip plane with the surface of the portal
 	// Note that this affects precision of the depth buffer, which can cause issues with effects like screenspace AO
-	void _SetNearClipPlane()
+	private void _SetNearClipPlane()
 	{
 		// Learning resource:
 		// http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
-		Transform clipPlane = transform;
-		int dot = Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - cam.transform.position));
+		var clipPlane = transform;
+		var dot = Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - cam.transform.position));
 
-		Vector3 camSpacePos = cam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
-		Vector3 camSpaceNormal = cam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
-		float camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset;
+		var camSpacePos = cam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
+		var camSpaceNormal = cam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
+		var camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset;
 
 		// Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
 		if (Mathf.Abs(camSpaceDst) > nearClipLimit)
 		{
-			Vector4 clipPlaneCameraSpace = new Vector4(camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
+			var clipPlaneCameraSpace = new Vector4(camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
 
 			// Update projection based on new clip plane
 			// Calculate matrix with player cam so that player camera settings (fov, etc) are used
@@ -319,9 +322,6 @@ public class PortalController : MonoBehaviour
 		}
 	}
 
-
-	private const float nearClipOffset = 0.05f;
-	private const float nearClipLimit = 0.2f;
 
 	private void OnDrawGizmos()
 	{
