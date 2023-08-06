@@ -20,12 +20,13 @@ public class DiskGuardPassEffect : MonoBehaviour
 		_light = GetComponent<Light>();
 		_renderer = GetComponent<Renderer>();
 		_isDefault = true;
-		_isAmbientLight = _light?.cookie;
 
 		if (_light)
 		{
 			_defaultColor = _light.color;
 			_defaultIntensity = _light.intensity;
+
+			_isAmbientLight = _light.type == LightType.Point && _light.cookie;
 		}
 		else if (_renderer)
 		{
@@ -38,9 +39,12 @@ public class DiskGuardPassEffect : MonoBehaviour
 		if (t == 0)
 		{
 			if (_isDefault) return;
-			else _isDefault = true;
+			_isDefault = true;
 		}
-		else _isDefault = false;
+		else
+		{
+			_isDefault = false;
+		}
 
 		var color = Color.Lerp(_defaultColor, PassColor, t);
 		var intensity = Mathf.Lerp(_defaultIntensity, PassIntensity, t);
