@@ -4,7 +4,7 @@
   "author": "Trifid, JohnCorby, Turtle, Tetraminus",
   "name": "The Quasar Project",
   "uniqueName": "Trifid.QuasarProject",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "owmlVersion": "2.9.3",
   "dependencies": ["xen.NewHorizons", "JohnCorby.OWFixPluginTypesSerialization"]
 }
