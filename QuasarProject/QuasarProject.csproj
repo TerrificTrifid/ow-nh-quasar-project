@@ -16,8 +16,7 @@
     <PackageReference Include="OWML" Version="2.9.5" />
     <PackageReference Include="OuterWildsGameLibs" Version="1.1.13.457" />
 
-    <Reference Include="NewHorizons">
-      <HintPath>$(OuterWildsModsDirectory)\xen.NewHorizons\NewHorizons.dll</HintPath>
+    <Reference Include="NewHorizons.dll">
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.ProBuilder.dll" />
