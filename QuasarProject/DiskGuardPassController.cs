@@ -9,27 +9,27 @@ public class DiskGuardPassController : MonoBehaviour
 	public Transform[] Points;
 	public AnimationCurve DistanceCurve;
 
-	private DiskGuardLight[] _lights;
+	private DiskGuardPassEffect[] _effects;
 
 	private void Awake()
 	{
-		_lights = FindObjectsOfType<DiskGuardLight>();
+		_effects = FindObjectsOfType<DiskGuardPassEffect>();
 	}
 
 	private void Update()
 	{
-		foreach (var light in _lights)
+		foreach (var effect in _effects)
 		{
 			var minDistance = float.PositiveInfinity;
 
 			foreach (var point in Points)
 			{
-				var distance = Vector3.Distance(light.transform.position, point.position);
+				var distance = Vector3.Distance(effect.transform.position, point.position);
 				if (distance < minDistance) minDistance = distance;
 			}
 
 			var t = DistanceCurve.Evaluate(minDistance);
-			light.UpdateValues(t);
+			effect.UpdateValues(t);
 		}
 	}
 }
