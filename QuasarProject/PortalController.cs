@@ -284,10 +284,13 @@ public class PortalController : MonoBehaviour
 		var relativeVel = pairedPortal.transform.InverseTransformVector(body.GetVelocity());
 		var relativeAngularVel = pairedPortal.transform.InverseTransformVector(body.GetAngularVelocity());
 
-		body.WarpToPositionRotation(transform.TransformPoint(relativePos), transform.TransformRotation(relativeRot));
+		body.SetPosition(transform.TransformPoint(relativePos));
+		body.SetRotation(transform.TransformRotation(relativeRot));
 
 		body.SetVelocity(transform.TransformVector(relativeVel));
 		body.SetAngularVelocity(transform.TransformVector(relativeAngularVel));
+
+		if (!Physics.autoSyncTransforms) Physics.SyncTransforms();
 	}
 
 
