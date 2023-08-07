@@ -10,10 +10,11 @@ public class DiskGuardPassEffect : MonoBehaviour
 	private float _defaultIntensity;
 	public Color PassColor;
 	public float PassIntensity;
+	public Light PassAmbientLight;
 
 	private Light _light;
 	private Renderer _renderer;
-	private bool _isDefault, _isAmbientLight;
+	private bool _isDefault;
 
 	private void Awake()
 	{
@@ -25,9 +26,7 @@ public class DiskGuardPassEffect : MonoBehaviour
 		{
 			_defaultColor = _light.color;
 			_defaultIntensity = _light.intensity;
-
-			_isAmbientLight = _light.type == LightType.Point && _light.cookie;
-		}
+        }
 		else if (_renderer)
 		{
 			_defaultColor = _renderer.material.color;
@@ -46,17 +45,22 @@ public class DiskGuardPassEffect : MonoBehaviour
 			_isDefault = false;
 		}
 
-		var color = Color.Lerp(_defaultColor, PassColor, t);
-		var intensity = Mathf.Lerp(_defaultIntensity, PassIntensity, t);
-
 		if (_light)
 		{
-			if (!_isAmbientLight) _light.color = color;
-			_light.intensity = intensity;
+			_light.intensity = Mathf.Lerp(_defaultIntensity, PassIntensity, t);
+            if (PassAmbientLight)
+			{
+				var t2 = Mathf.Lerp(t, 1 - t, 1 - t);
+				PassAmbientLight.intensity = Mathf.Lerp(_defaultIntensity, PassIntensity, t2);
+            }
+			else
+			{
+                _light.color = Color.Lerp(_defaultColor, PassColor, t);
+            }
 		}
 		else if (_renderer)
 		{
-			_renderer.material.color = color;
-		}
+			_renderer.material.color = Color.Lerp(_defaultColor, PassColor, t);
+        }
 	}
 }
