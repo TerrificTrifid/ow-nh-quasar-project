@@ -71,8 +71,8 @@ public class DiskGuardPassEffect : MonoBehaviour
 
 		if (_isPlayer)
 		{
-			var rumble = Mathf.Lerp(0, 1, t);
-			RumbleManager.Modify(_rumbleId, rumble, rumble);
+			var rumble = Mathf.Lerp(0, 0.2f, t);
+			RumbleManager.Modify(_rumbleId, rumble, 0);
 		}
 		else if (_light)
 		{
