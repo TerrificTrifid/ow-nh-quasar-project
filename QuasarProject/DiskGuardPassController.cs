@@ -1,4 +1,6 @@
 ﻿using NewHorizons;
+using NewHorizons.Utility.OWML;
+using System;
 using UnityEngine;
 
 namespace QuasarProject;
@@ -14,7 +16,11 @@ public class DiskGuardPassController : MonoBehaviour
 	// do in start to wait for other objects to be built
 	private void Start()
 	{
-		_effects = FindObjectsOfType<DiskGuardPassEffect>();
+		// delay to get the player one
+		Delay.FireOnNextUpdate(() =>
+		{
+			_effects = FindObjectsOfType<DiskGuardPassEffect>();
+		});
 	}
 
 	private void Update()
