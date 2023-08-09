@@ -15,9 +15,11 @@ public class DiskGuardPassController : MonoBehaviour
 	// do in start to wait for other objects to be built
 	private void Start()
 	{
+		enabled = false;
 		// delay to get the player one
 		Delay.FireOnNextUpdate(() =>
 		{
+			enabled = true;
 			_effects = FindObjectsOfType<DiskGuardPassEffect>();
 		});
 	}
