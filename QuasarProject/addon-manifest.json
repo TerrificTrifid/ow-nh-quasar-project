@@ -5,5 +5,7 @@
         "JohnCorby#Programmer",
         "Turtle#Composer",
         "Tetraminus#Programmer"
-    ]
+    ],
+    "popupMessage": "The Quasar Project has a certain mechanic that is graphically intensive; when you reach it, you can adjust its quality in the mod settings.",
+    "repeatPopup": false
 }
