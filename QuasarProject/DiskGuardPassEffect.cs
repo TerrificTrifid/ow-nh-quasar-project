@@ -14,19 +14,27 @@ public class DiskGuardPassEffect : MonoBehaviour
 	public Light PassAmbientLight;
 	public float PassVolume;
 
+	private bool _isPlayer;
 	private Light _light;
 	private Renderer _renderer;
 	private AudioSource _audioSource;
 	private bool _isDefault;
 
+	private static uint _rumbleId;
+
 	private void Awake()
 	{
+		_isPlayer = gameObject.CompareTag("Player");
 		_light = GetComponent<Light>();
 		_renderer = GetComponent<Renderer>();
 		_audioSource = GetComponent<AudioSource>();
 		_isDefault = true;
 
-		if (_light)
+		if (_isPlayer)
+		{
+			_rumbleId = RumbleManager.Steady(0, 0);
+		}
+		else if (_light)
 		{
 			_defaultColor = _light.color;
 			_defaultIntensity = _light.intensity;
@@ -38,6 +46,14 @@ public class DiskGuardPassEffect : MonoBehaviour
 		else if (_audioSource)
 		{
 			_defaultVolume = _audioSource.volume;
+		}
+	}
+
+	private void OnDestroy()
+	{
+		if (_isPlayer)
+		{
+			RumbleManager.Release(_rumbleId);
 		}
 	}
 
@@ -53,7 +69,12 @@ public class DiskGuardPassEffect : MonoBehaviour
 			_isDefault = false;
 		}
 
-		if (_light)
+		if (_isPlayer)
+		{
+			var rumble = Mathf.Lerp(0, 1, t);
+			RumbleManager.Modify(_rumbleId, rumble, rumble);
+		}
+		else if (_light)
 		{
 			_light.intensity = Mathf.Lerp(_defaultIntensity, PassIntensity, t);
 			if (PassAmbientLight)

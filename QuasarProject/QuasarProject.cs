@@ -66,6 +66,9 @@ namespace QuasarProject
                         go.GetAddComponent<VolumetricLightRenderer>();
                     }
                 });
+                
+                // rumble support
+                Locator.GetPlayerBody().gameObject.AddComponent<DiskGuardPassEffect>();
             });
         }
 
