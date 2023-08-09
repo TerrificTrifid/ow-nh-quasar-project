@@ -49,9 +49,9 @@ public class QuasarProject : ModBehaviour
 			rotateTransform._localAxis = Vector3.up;
 			rotateTransform._degreesPerSecond = -1.5f;
 
-			// for volumetric
 			Delay.FireOnNextUpdate(() =>
 			{
+				// for volumetric
 				// copied from eots lol
 				var gos = new[]
 				{
@@ -62,10 +62,10 @@ public class QuasarProject : ModBehaviour
 					Locator.GetToolModeSwapper().GetProbeLauncher()._preLaunchCamera.gameObject
 				};
 				foreach (var go in gos) go.GetAddComponent<VolumetricLightRenderer>();
-			});
 
-			// rumble support
-			Locator.GetPlayerBody().gameObject.AddComponent<DiskGuardPassEffect>();
+				// rumble support
+				Locator.GetPlayerBody().gameObject.AddComponent<DiskGuardPassEffect>();
+			});
 		});
 	}
 
