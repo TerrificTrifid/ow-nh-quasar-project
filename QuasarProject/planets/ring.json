@@ -90,6 +90,7 @@
 			},
 			{
 				"type": "whiteHole",
+				"uniqueID": "QP_Probe1BH",
 				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole",
 				"isRelativeToParent": true,
 				"position": {
@@ -108,6 +109,7 @@
 			},
 			{
 				"type": "whiteHole",
+				"uniqueID": "QP_Probe2BH",
 				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (1)",
 				"isRelativeToParent": true,
 				"position": {
@@ -126,6 +128,7 @@
 			},
 			{
 				"type": "whiteHole",
+				"uniqueID": "QP_Probe3BH",
 				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (2)",
 				"isRelativeToParent": true,
 				"position": {
@@ -144,6 +147,7 @@
 			},
 			{
 				"type": "whiteHole",
+				"uniqueID": "QP_Probe4BH",
 				"parentPath": "Sector/Ring_v1/Sectors/SectorPivot (64)/Sector/LabSector/Structures/UmbelsLab/LowLevel/Bay 1/Pivot/ProbeWhiteHole (3)",
 				"isRelativeToParent": true,
 				"position": {
