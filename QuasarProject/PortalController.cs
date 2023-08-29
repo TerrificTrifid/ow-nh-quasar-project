@@ -282,8 +282,9 @@ public class PortalController : MonoBehaviour
 
 	private bool IsPassedThrough(OWRigidbody body)
 	{
+		// use portal renderer for proper direction
 		var pos = body.CompareTag("Player") ? playerCam.transform.position : body.GetPosition();
-		return Vector3.Dot(pos - transform.position, transform.forward) < 0;
+		return Vector3.Dot(pos - transform.position, portalRenderer.transform.forward) < 0;
 	}
 
 	private void ReceiveWarpedBody(OWRigidbody body)
@@ -306,10 +307,12 @@ public class PortalController : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
+		if (!portalRenderer)
+			portalRenderer = GetComponentInChildren<Renderer>();
 		var modifier = OWGizmos.IsDirectlySelected(gameObject) ? 1 : 2;
 
 		// required things error checking
-		Gizmos.matrix = transform.localToWorldMatrix;
+		Gizmos.matrix = Matrix4x4.TRS(portalRenderer.transform.position, portalRenderer.transform.rotation, transform.lossyScale);
 		if (!VolumeWhereActive || !pairedPortal)
 		{
 			Gizmos.color = Color.red;
