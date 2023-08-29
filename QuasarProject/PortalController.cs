@@ -9,7 +9,7 @@ namespace QuasarProject;
 
 // https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Core/Portal.cs
 // https://danielilett.com/2019-12-14-tut4-2-portal-rendering/
-// TODO: do flip 180 properly, remove portal pair bs, do vtp properly using recursive portal code
+// TODO: merge portal a/b, remove portal pair bs
 // TODO: early z reject? would this make it faster
 // TODO: share render texture/camera with OnWillRenderObject/OnRenderObject? is this possible?
 // TODO: can we get it rendering for the probe properly? can we make aspect ratio stuff work for this?
@@ -35,6 +35,8 @@ public class PortalController : MonoBehaviour
 
 	public PortalController VisibleThroughPortal;
 	private bool isVisibleThroughPortal;
+
+	private static Quaternion halfTurn = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 
 	private void Awake()
 	{
@@ -224,22 +226,23 @@ public class PortalController : MonoBehaviour
 
 	private void Update()
 	{
+		// move to player cam
+		cam.transform.SetPositionAndRotation(playerCam.transform.position, playerCam.transform.rotation);
 		if (isVisibleThroughPortal)
 		{
-			var relativePos1 = transform.InverseTransformPoint(playerCam.transform.position);
-			var relativeRot1 = transform.InverseTransformRotation(playerCam.transform.rotation);
-			var relativePos2 = VisibleThroughPortal.transform.InverseTransformPoint(VisibleThroughPortal.pairedPortal.transform.position);
-			var relativeRot2 = VisibleThroughPortal.transform.InverseTransformRotation(VisibleThroughPortal.pairedPortal.transform.rotation);
-			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos1 - relativePos2), pairedPortal.transform.TransformRotation(relativeRot1 * relativeRot2));
+			// move from vtp portal to this portal
+			var relativePos = VisibleThroughPortal.transform.InverseTransformPoint(cam.transform.position);
+			var relativeRot = VisibleThroughPortal.transform.InverseTransformRotation(cam.transform.rotation);
+			cam.transform.SetPositionAndRotation(transform.TransformPoint(halfTurn * relativePos), transform.TransformRotation(halfTurn * relativeRot));
 		}
-		else
 		{
-			var relativePos = transform.InverseTransformPoint(playerCam.transform.position);
-			var relativeRot = transform.InverseTransformRotation(playerCam.transform.rotation);
-			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(relativePos), pairedPortal.transform.TransformRotation(relativeRot));
+			// move from this portal to paired portal
+			var relativePos = transform.InverseTransformPoint(cam.transform.position);
+			var relativeRot = transform.InverseTransformRotation(cam.transform.rotation);
+			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(halfTurn * relativePos), pairedPortal.transform.TransformRotation(halfTurn * relativeRot));
 		}
 
-		cam.fieldOfView = playerCam.fieldOfView;
+		cam.projectionMatrix = playerCam.projectionMatrix;
 
 		pairedPortal.portalRenderer.forceRenderingOff = true;
 		if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
@@ -273,25 +276,23 @@ public class PortalController : MonoBehaviour
 
 	private bool IsPassedThrough(OWRigidbody body)
 	{
-		// use portal renderer for proper direction
 		var pos = body.CompareTag("Player") ? playerCam.transform.position : body.GetPosition();
-		return Vector3.Dot(pos - transform.position, portalRenderer.transform.forward) < 0;
+		return Vector3.Dot(pos - transform.position, transform.forward) < 0;
 	}
 
 	private void ReceiveWarpedBody(OWRigidbody body)
 	{
 		var relativePos = pairedPortal.transform.InverseTransformPoint(body.GetPosition());
-		// relativePos += Vector3.forward * .1f; // push you thru the portal a bit more
 		var relativeRot = pairedPortal.transform.InverseTransformRotation(body.GetRotation());
 
-		var relativeVel = pairedPortal.transform.InverseTransformVector(body.GetVelocity());
-		var relativeAngularVel = pairedPortal.transform.InverseTransformVector(body.GetAngularVelocity());
+		var relativeVel = pairedPortal.transform.InverseTransformDirection(body.GetVelocity());
+		var relativeAngularVel = pairedPortal.transform.InverseTransformDirection(body.GetAngularVelocity());
 
-		body.SetPosition(transform.TransformPoint(relativePos));
-		body.SetRotation(transform.TransformRotation(relativeRot));
+		body.SetPosition(transform.TransformPoint(halfTurn * relativePos));
+		body.SetRotation(transform.TransformRotation(halfTurn * relativeRot));
 
-		body.SetVelocity(transform.TransformVector(relativeVel));
-		body.SetAngularVelocity(transform.TransformVector(relativeAngularVel));
+		body.SetVelocity(transform.TransformVector(halfTurn * relativeVel));
+		body.SetAngularVelocity(transform.TransformVector(halfTurn * relativeAngularVel));
 
 		if (!Physics.autoSyncTransforms) Physics.SyncTransforms();
 	}
@@ -299,12 +300,10 @@ public class PortalController : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
-		if (!portalRenderer)
-			portalRenderer = GetComponentInChildren<Renderer>();
 		var modifier = OWGizmos.IsDirectlySelected(gameObject) ? 1 : 2;
 
 		// required things error checking
-		Gizmos.matrix = Matrix4x4.TRS(portalRenderer.transform.position, portalRenderer.transform.rotation, transform.lossyScale);
+		Gizmos.matrix = transform.localToWorldMatrix;
 		if (!VolumeWhereActive || !pairedPortal)
 		{
 			Gizmos.color = Color.red;
