@@ -250,15 +250,25 @@ public class PortalController : MonoBehaviour
 
 		cam.projectionMatrix = playerCam.projectionMatrix;
 
+		portalRenderer.forceRenderingOff = true;
 		pairedPortal.portalRenderer.forceRenderingOff = true;
-		if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
+		if (isVisibleThroughPortal)
+		{
+			VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
+			VisibleThroughPortal.pairedPortal.portalRenderer.forceRenderingOff = true;
+		}
 		foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = true;
 		foreach (var renderer in playerRenderers) renderer.forceRenderingOff = true;
 
 		cam.Render();
 
+		portalRenderer.forceRenderingOff = false;
 		pairedPortal.portalRenderer.forceRenderingOff = false;
-		if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = false;
+		if (isVisibleThroughPortal)
+		{
+			VisibleThroughPortal.portalRenderer.forceRenderingOff = false;
+			VisibleThroughPortal.pairedPortal.portalRenderer.forceRenderingOff = false;
+		}
 		foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = false;
 		foreach (var renderer in playerRenderers) renderer.forceRenderingOff = false;
 
