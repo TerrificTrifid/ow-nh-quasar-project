@@ -2,13 +2,13 @@
 using NewHorizons;
 using NewHorizons.Utility;
 using NewHorizons.Utility.OWML;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace QuasarProject;
 
-// referencing https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Core/Portal.cs
+// https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Core/Portal.cs
+// https://danielilett.com/2019-12-14-tut4-2-portal-rendering/
 [UsedInUnityProject]
 [HarmonyPatch]
 public class PortalController : MonoBehaviour
@@ -27,7 +27,6 @@ public class PortalController : MonoBehaviour
 	public Collider[] IgnoreCollisionWith;
 
 	[Header("Hacks")]
-	public bool SetNearClipPlane;
 	public Renderer[] OtherRenderersToDisable;
 
 	public PortalController VisibleThroughPortal;
@@ -148,6 +147,7 @@ public class PortalController : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		if (!gameObject.activeSelf) return;
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.SafeAdd(body)) return;
 
@@ -164,6 +164,7 @@ public class PortalController : MonoBehaviour
 
 	private void OnTriggerExit(Collider other)
 	{
+		if (!gameObject.activeSelf) return;
 		var body = other.GetAttachedOWRigidbody();
 		if (!trackedBodies.QuickRemove(body)) return;
 
@@ -236,7 +237,6 @@ public class PortalController : MonoBehaviour
 		}
 
 		cam.fieldOfView = playerCam.fieldOfView;
-		if (SetNearClipPlane) _SetNearClipPlane();
 
 		pairedPortal.portalRenderer.forceRenderingOff = true;
 		if (isVisibleThroughPortal) VisibleThroughPortal.portalRenderer.forceRenderingOff = true;
@@ -291,38 +291,6 @@ public class PortalController : MonoBehaviour
 		body.SetAngularVelocity(transform.TransformVector(relativeAngularVel));
 
 		if (!Physics.autoSyncTransforms) Physics.SyncTransforms();
-	}
-
-
-	private const float nearClipOffset = 0.05f;
-	private const float nearClipLimit = 0.2f;
-
-	// Use custom projection matrix to align portal camera's near clip plane with the surface of the portal
-	// Note that this affects precision of the depth buffer, which can cause issues with effects like screenspace AO
-	private void _SetNearClipPlane()
-	{
-		// Learning resource:
-		// http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
-		var clipPlane = transform;
-		var dot = Math.Sign(Vector3.Dot(clipPlane.forward, transform.position - cam.transform.position));
-
-		var camSpacePos = cam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
-		var camSpaceNormal = cam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
-		var camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset;
-
-		// Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
-		if (Mathf.Abs(camSpaceDst) > nearClipLimit)
-		{
-			var clipPlaneCameraSpace = new Vector4(camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
-
-			// Update projection based on new clip plane
-			// Calculate matrix with player cam so that player camera settings (fov, etc) are used
-			cam.projectionMatrix = playerCam.CalculateObliqueMatrix(clipPlaneCameraSpace);
-		}
-		else
-		{
-			cam.projectionMatrix = playerCam.projectionMatrix;
-		}
 	}
 
 
