@@ -9,7 +9,6 @@ namespace QuasarProject;
 
 // https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Core/Portal.cs
 // https://danielilett.com/2019-12-14-tut4-2-portal-rendering/
-// TODO: merge portal a/b, remove portal pair bs
 // TODO: early z reject? would this make it faster
 // TODO: share render texture/camera with OnWillRenderObject/OnRenderObject? is this possible?
 // TODO: can we get it rendering for the probe properly? can we make aspect ratio stuff work for this?
