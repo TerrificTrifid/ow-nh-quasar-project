@@ -9,6 +9,10 @@ namespace QuasarProject;
 
 // https://github.com/SebLague/Portals/blob/master/Assets/Scripts/Core/Portal.cs
 // https://danielilett.com/2019-12-14-tut4-2-portal-rendering/
+// TODO: do flip 180 properly, remove portal pair bs, do vtp properly using recursive portal code
+// TODO: early z reject? would this make it faster
+// TODO: share render texture/camera with OnWillRenderObject/OnRenderObject? is this possible?
+// TODO: can we get it rendering for the probe properly? can we make aspect ratio stuff work for this?
 [UsedInUnityProject]
 [HarmonyPatch]
 public class PortalController : MonoBehaviour
@@ -222,7 +226,6 @@ public class PortalController : MonoBehaviour
 	{
 		if (isVisibleThroughPortal)
 		{
-			// BUG: might not work if vtp stuff is rotated differently? test at some point
 			var relativePos1 = transform.InverseTransformPoint(playerCam.transform.position);
 			var relativeRot1 = transform.InverseTransformRotation(playerCam.transform.rotation);
 			var relativePos2 = VisibleThroughPortal.transform.InverseTransformPoint(VisibleThroughPortal.pairedPortal.transform.position);
