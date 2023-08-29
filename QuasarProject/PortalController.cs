@@ -282,9 +282,8 @@ public class PortalController : MonoBehaviour
 
 	private bool IsPassedThrough(OWRigidbody body)
 	{
-		// use portal renderer for proper direction
 		var pos = body.CompareTag("Player") ? playerCam.transform.position : body.GetPosition();
-		return Vector3.Dot(pos - transform.position, portalRenderer.transform.forward) < 0;
+		return Vector3.Dot(pos - transform.position, transform.forward) < 0;
 	}
 
 	private void ReceiveWarpedBody(OWRigidbody body)
@@ -307,26 +306,22 @@ public class PortalController : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
-		if (!portalRenderer)
-			portalRenderer = GetComponentInChildren<Renderer>();
 		var modifier = OWGizmos.IsDirectlySelected(gameObject) ? 1 : 2;
 
 		// required things error checking
-		Gizmos.matrix = Matrix4x4.TRS(portalRenderer.transform.position, portalRenderer.transform.rotation, transform.lossyScale);
+		Gizmos.matrix = transform.localToWorldMatrix;
 		if (!VolumeWhereActive || !pairedPortal)
 		{
 			Gizmos.color = Color.red;
-			Gizmos.DrawCube(Vector3.zero, new Vector3(4f, 4f, 1.01f));
+			Gizmos.DrawCube(Vector3.zero, new Vector3(4f, 4f, 1f));
 			return;
 		}
 
 		Gizmos.color = new Color(1f, 0.5f, 0f);
-		Gizmos.DrawLine(Vector3.forward * 0.26f, Vector3.forward * 4);
-		Gizmos.DrawLine(Vector3.forward * 0.26f, Vector3.up * 2 + Vector3.forward * 0.26f);
+		Gizmos.DrawLine(Vector3.zero, Vector3.forward * 4);
+		Gizmos.DrawLine(Vector3.zero, Vector3.up * 2);
 		Gizmos.color = Color.grey;
-		Gizmos.DrawCube(Vector3.forward * -0.5f, new Vector3(4f, 4f, 0.501f));
-		//Gizmos.color = Color.grey / modifier;
-		//Gizmos.DrawWireCube(Vector3.forward * -0.25f, new Vector3(4f, 4f, 0.5f));
+		Gizmos.DrawCube(Vector3.forward * -0.75f, new Vector3(4f, 4f, 0.5f));
 
 		Gizmos.matrix = Matrix4x4.identity;
 		Gizmos.color = Color.yellow / modifier;
