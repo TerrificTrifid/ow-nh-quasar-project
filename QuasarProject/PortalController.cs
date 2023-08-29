@@ -230,16 +230,22 @@ public class PortalController : MonoBehaviour
 		cam.transform.SetPositionAndRotation(playerCam.transform.position, playerCam.transform.rotation);
 		if (isVisibleThroughPortal)
 		{
-			// move from vtp portal to this portal
+			// move from vtp portal to vtp paired portal
 			var relativePos = VisibleThroughPortal.transform.InverseTransformPoint(cam.transform.position);
 			var relativeRot = VisibleThroughPortal.transform.InverseTransformRotation(cam.transform.rotation);
-			cam.transform.SetPositionAndRotation(transform.TransformPoint(halfTurn * relativePos), transform.TransformRotation(halfTurn * relativeRot));
+			cam.transform.SetPositionAndRotation(
+				VisibleThroughPortal.pairedPortal.transform.TransformPoint(halfTurn * relativePos),
+				VisibleThroughPortal.pairedPortal.transform.TransformRotation(halfTurn * relativeRot)
+			);
 		}
 		{
 			// move from this portal to paired portal
 			var relativePos = transform.InverseTransformPoint(cam.transform.position);
 			var relativeRot = transform.InverseTransformRotation(cam.transform.rotation);
-			cam.transform.SetPositionAndRotation(pairedPortal.transform.TransformPoint(halfTurn * relativePos), pairedPortal.transform.TransformRotation(halfTurn * relativeRot));
+			cam.transform.SetPositionAndRotation(
+				pairedPortal.transform.TransformPoint(halfTurn * relativePos),
+				pairedPortal.transform.TransformRotation(halfTurn * relativeRot)
+			);
 		}
 
 		cam.projectionMatrix = playerCam.projectionMatrix;
