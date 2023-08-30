@@ -43,6 +43,7 @@ public class PortalController : MonoBehaviour
 		cam = GetComponentInChildren<Camera>();
 		cam.enabled = false; // we render manually
 		cam.gameObject.AddComponent<VolumetricLightRenderer>(); // could add this in prefab, but eh
+		cam.cameraType = CameraType.Preview; // so it doesnt do proxy shadows
 
 		VolumeWhereActive.OnEntry += OnEntry;
 		VolumeWhereActive.OnExit += OnExit;
