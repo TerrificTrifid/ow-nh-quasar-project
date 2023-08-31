@@ -245,7 +245,7 @@ public class PortalController : MonoBehaviour
 			);
 		}
 
-		cam.projectionMatrix = playerCam.projectionMatrix;
+		cam.fieldOfView = playerCam.fieldOfView;
 
 		portalRenderer.forceRenderingOff = true;
 		pairedPortal.portalRenderer.forceRenderingOff = true;
