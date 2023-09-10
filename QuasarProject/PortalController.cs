@@ -38,6 +38,7 @@ public class PortalController : MonoBehaviour
 	{
 		portalRenderer = GetComponentInChildren<Renderer>();
 		cam = GetComponentInChildren<Camera>();
+		cam.depthTextureMode = DepthTextureMode.Depth;
 		cam.enabled = false; // we render manually
 		cam.gameObject.AddComponent<VolumetricLightRenderer>(); // could add this in prefab, but eh
 		cam.cameraType = CameraType.Preview; // so it doesnt do proxy shadows
@@ -201,7 +202,8 @@ public class PortalController : MonoBehaviour
 	{
 		if (rt != null) return;
 
-		rt = new RenderTexture(Screen.width / _resolution, Screen.height / _resolution, 0);
+		rt = new RenderTexture(Screen.width / _resolution, Screen.height / _resolution, 24, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.sRGB);
+		rt.useDynamicScale = true;
 		rt.Create();
 
 		cam.targetTexture = rt;
