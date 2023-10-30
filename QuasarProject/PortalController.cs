@@ -226,6 +226,28 @@ public class PortalController : MonoBehaviour
 
 	private void Update()
 	{
+		Render();
+
+		// go backwards since we remove
+		for (var i = trackedBodies.Count - 1; i >= 0; i--)
+		{
+			var body = trackedBodies[i];
+			if (!IsPassedThrough(body)) continue;
+
+			NHLogger.LogVerbose($"\"{body.name}\" tp \"{transform.GetPath()}\" -> \"{pairedPortal.transform.GetPath()}\"");
+			// triggers are in FixedUpdate so we have to do this manually
+			var someCollider = body.GetComponentInChildren<Collider>(true);
+			OnTriggerExit(someCollider);
+			VolumeWhereActive.OnTriggerExit(someCollider);
+			pairedPortal.ReceiveWarpedBody(body);
+			pairedPortal.VolumeWhereActive.OnTriggerEnter(someCollider);
+			pairedPortal.OnTriggerEnter(someCollider);
+			pairedPortal.Render(); // otherwise itll be black on the other side for 1 frame
+		}
+	}
+
+	private void Render()
+	{
 		// move to player cam
 		cam.transform.SetPositionAndRotation(playerCam.transform.position, playerCam.transform.rotation);
 		if (isVisibleThroughPortal)
@@ -271,23 +293,6 @@ public class PortalController : MonoBehaviour
 		}
 		foreach (var renderer in OtherRenderersToDisable) renderer.forceRenderingOff = false;
 		foreach (var renderer in playerRenderers) renderer.forceRenderingOff = false;
-
-
-		// go backwards since we remove
-		for (var i = trackedBodies.Count - 1; i >= 0; i--)
-		{
-			var body = trackedBodies[i];
-			if (!IsPassedThrough(body)) continue;
-
-			NHLogger.LogVerbose($"\"{body.name}\" tp \"{transform.GetPath()}\" -> \"{pairedPortal.transform.GetPath()}\"");
-			// triggers are in FixedUpdate so we have to do this manually
-			var someCollider = body.GetComponentInChildren<Collider>(true);
-			OnTriggerExit(someCollider);
-			VolumeWhereActive.OnTriggerExit(someCollider);
-			pairedPortal.ReceiveWarpedBody(body);
-			pairedPortal.VolumeWhereActive.OnTriggerEnter(someCollider);
-			pairedPortal.OnTriggerEnter(someCollider);
-		}
 	}
 
 	private bool IsPassedThrough(OWRigidbody body)
