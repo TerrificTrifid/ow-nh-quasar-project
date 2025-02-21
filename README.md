@@ -5,7 +5,8 @@
 ![Downloads](https://img.shields.io/github/downloads/TerrificTrifid/ow-nh-quasar-project/total)
 ![Downloads of newest version](https://img.shields.io/github/downloads/TerrificTrifid/ow-nh-quasar-project/latest/total)
 
-A demo of an upcoming story mod, as an entry in the summer jam. Looks like something just crashed near the village!
+This was a demo of an upcoming story mod, as an entry in the summer jam. Unfortunately, the full mod ceased development.
+Looks like something just crashed near the village!
 
 ## Contributors
 - [Trifid](https://github.com/TerrificTrifid) - Creator
