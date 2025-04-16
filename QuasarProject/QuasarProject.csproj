@@ -19,7 +19,6 @@
     <Reference Include="NewHorizons.dll">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.ProBuilder.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="default-config.json">
