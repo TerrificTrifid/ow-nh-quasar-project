@@ -197,7 +197,9 @@
 	"Volumes": {
 		"creditsVolume": [
 			{
-				"gameOverText": "To be continued...",
+				"gameOver": {
+					"creditsType": "none"
+				},
 				"deathType": "timeLoop",
 				"radius": 200,
 				"position": {
